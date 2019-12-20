@@ -1,0 +1,50 @@
+{
+  "name": "cusdeb-web-client",
+  "version": "1.0.0",
+  "description": "CusDeb Web Client is a web client which relies on such CusDeb services as CusDeb API, Black Magic, Dominion and Orion.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack-dev-server --open --mode development",
+    "build": "webpack --mode production"
+  },
+  "keywords": [],
+  "author": "Denis Gavrilyuk",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@babel/core": "^7.7.2",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/preset-env": "^7.7.1",
+    "@babel/preset-react": "^7.7.0",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.2.0",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "prop-types": "^15.7.2",
+    "style-loader": "^1.0.0",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.25",
+    "@fortawesome/free-solid-svg-icons": "^5.11.2",
+    "@fortawesome/react-fontawesome": "^0.1.7",
+    "admin-lte": "^3.0.1",
+    "axios": "^0.19.0",
+    "babel-polyfill": "^6.26.0",
+    "bootstrap": "^4.3.1",
+    "bootstrap-datepicker": "^1.9.0",
+    "daterangepicker": "^3.0.5",
+    "icheck-bootstrap": "^3.0.1",
+    "jquery": "^3.4.1",
+    "jquery-knob": "^1.2.11",
+    "jquery-sortable": "^0.9.13",
+    "jquery-ui": "^1.12.1",
+    "jqvmap": "^1.5.1",
+    "knob": "^1.1.0",
+    "moment": "^2.24.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-router-dom": "^5.1.2"
+  }
+}
