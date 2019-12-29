@@ -1,4 +1,5 @@
 import Initialization from "modules/Builder/components/Initialization/Initialization";
+import PackageList from "modules/Builder/components/PackageList/PackageList";
 
 const routeBasePath = "/builder";
 const routes = [
@@ -15,7 +16,7 @@ const routes = [
     {
         path: `${routeBasePath}/packagelist`,
         title: "Package list",
-        main: "",
+        main: PackageList,
     },
     {
         path: `${routeBasePath}/usergroups`,
