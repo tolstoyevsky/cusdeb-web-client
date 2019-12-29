@@ -13,10 +13,21 @@ const InputGroup = props => (
                 </div>
             </div>
         )}
+
+        {props.appendElement && (
+            <div className="input-group-append">
+                {props.appendElement}
+            </div>
+        )}
     </div >
 )
 
 InputGroup.propTypes = {
+    appendElement: PropTypes.oneOfType([
+        PropTypes.array,
+        PropTypes.object,
+        PropTypes.string,
+    ]),
     faIcon: PropTypes.object,
     styleName: PropTypes.string,
 }

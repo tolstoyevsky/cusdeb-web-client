@@ -1,0 +1,21 @@
+.dependencies {
+  margin-top: 1.25rem;
+}
+
+.dependency-title {
+  float: unset;
+}
+
+.dependency-list {
+  margin-top: 1.25rem;
+  display: inline-block;
+}
+
+.package-item > a {
+  padding: 0 0.35rem;
+  cursor: pointer;
+}
+
+.package-item {
+  margin: 0 0.5rem;
+}
