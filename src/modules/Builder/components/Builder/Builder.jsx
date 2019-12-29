@@ -10,6 +10,8 @@ import {
 import SidebarPage from "common/containers/SidebarPage";
 import Button from "common/components/Button";
 
+import * as RPC from "api/rpc/blackmagic";
+
 import { routes, baseRouteIndex, baseRoute } from "./config";
 
 export default class Builder extends Component {
@@ -24,18 +26,46 @@ export default class Builder extends Component {
             nextButtonIsActive: true,
         };
 
+        this.waitExecutingState = false;
+        this.buildUUID;
+
         this.onNextBuildState = this.onNextBuildState.bind(this);
+        this.currentStateRef = React.createRef();
+        this.processStateData = this.processStateData.bind(this);
+    }
+
+    componentDidMount() {
+        RPC.connectToRpc();
     }
 
     onNextBuildState() {
-        let nextRouteIndex = this.state.prevRouteIndex + 1;
-        this.setState(() => ({
-            prevRouteIndex: nextRouteIndex,
-            prevRoute: this.state.currentRoute,
-            currentRoute: routes[nextRouteIndex].path,
+        if (!this.waitExecutingState) {
+            this.waitExecutingState = true;
 
-            nextButtonIsActive: nextRouteIndex < routes.length - 1 ? true : false,
-        }));
+            this.currentStateRef.current.executeState(stateData => {
+                this.processStateData(stateData);
+            });
+        }
+    }
+
+    processStateData(data) {
+        switch (data ? data.state : "") {
+            case "initialization":
+                this.buildUUID = data.buildUUID;
+                break;
+            default:
+                // To next state.   
+                this.waitExecutingState = false;
+
+                let nextRouteIndex = this.state.prevRouteIndex + 1;
+                this.setState(() => ({
+                    prevRouteIndex: nextRouteIndex,
+                    prevRoute: this.state.currentRoute,
+                    currentRoute: routes[nextRouteIndex].path,
+
+                    nextButtonIsActive: nextRouteIndex < routes.length - 1 ? true : false,
+                }));
+        }
     }
 
     render() {
@@ -73,7 +103,7 @@ export default class Builder extends Component {
                                             key={index}
                                             path={route.path}
                                             exact={true}
-                                            children={<route.main />}
+                                            children={<route.main ref={matchPath(this.state.currentRoute, route) ? this.currentStateRef : null} />}
                                         />
                                     ))}
                                 </Switch>
@@ -83,7 +113,7 @@ export default class Builder extends Component {
                                         <div className="col-md-9"></div>
                                         <div className="col-md-3">
                                             <Button styleName="btn-primary btn-block next-state"
-                                                    onClick={this.onNextBuildState}>Next</Button>
+                                                onClick={this.onNextBuildState}>Next</Button>
                                         </div>
                                     </div>
                                 )}

@@ -5,6 +5,11 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 const rootPath = path.resolve(__dirname, "./");
 const srcPath = path.resolve(rootPath, "./src");
 
+const BM_RPC_ADDR = process.env.BM_RPC_ADDR;
+
+if (!BM_RPC_ADDR)
+  throw new Error("The Black Magic RPC server address is not specified.");
+
 module.exports = {
   entry: [
     "babel-polyfill",
@@ -58,6 +63,9 @@ module.exports = {
     new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery'
+    }),
+    new webpack.DefinePlugin({
+      BM_RPC_ADDR: JSON.stringify(BM_RPC_ADDR),
     }),
   ],
   devServer: {
