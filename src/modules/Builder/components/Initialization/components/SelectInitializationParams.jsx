@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import Select from "common/components/Select";
 
-import * as API from "api/images";
+import * as API from "api/http/images";
 
 export default class SelectInitializationParams extends Component {
     static propTypes = {

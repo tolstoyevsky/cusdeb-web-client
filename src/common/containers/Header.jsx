@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
-import * as API from "api/users";
+import * as API from "api/http/users";
 
 export default class Header extends Component {
     static propType = {
