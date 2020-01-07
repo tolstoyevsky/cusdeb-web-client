@@ -6,7 +6,7 @@ import Input from "common/components/Input";
 import InputGroup from "common/components/InputGroup";
 
 import { setTokens } from "utils/localStorage";
-import * as API from "api/users";
+import * as API from "api/http/users";
 
 import { validSignInForm } from "./functions";
 import {

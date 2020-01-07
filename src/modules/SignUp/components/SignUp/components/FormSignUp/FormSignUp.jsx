@@ -5,7 +5,7 @@ import Button from "common/components/Button";
 import Input from "common/components/Input";
 import InputGroup from "common/components/InputGroup";
 
-import * as API from "api/users";
+import * as API from "api/http/users";
 
 import { validSignUpForm } from "./functions";
 import {
