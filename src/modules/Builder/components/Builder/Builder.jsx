@@ -79,7 +79,7 @@ export default class Builder extends Component {
                             let isActive = matchPath(this.state.currentRoute, item);
                             let additionalClass = isActive ? "active" : "";
                             return (
-                                <div className={"nav-link " + additionalClass} key={index}>{item.title()}</div>
+                                <div className={"nav-link " + additionalClass} key={index}>{item.title}</div>
                             )
                         })}>
                             <div className="content-header">
@@ -90,7 +90,7 @@ export default class Builder extends Component {
                                                 key={index}
                                                 path={route.path}
                                                 exact={true}
-                                                children={<h3><route.title /></h3>}
+                                                children={<h3>{route.title}</h3>}
                                             />
                                         ))}
                                     </Switch>
