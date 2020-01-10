@@ -54,7 +54,9 @@ export default class Select extends Component {
     render() {
         return (
             <div className="form-group">
-                <label>{this.props.label}</label>
+                {this.props.label && (
+                    <label>{this.props.label}</label>
+                )}
 
                 <select className="form-control" onChange={this.onChange} value={this.state.value}>
                     {this.props.options.map((item, index) => (
