@@ -6,10 +6,12 @@ export default class Select extends Component {
         label: PropTypes.string,
         onChange: PropTypes.func,
         options: PropTypes.arrayOf(PropTypes.object),
+        styleName: PropTypes.string,
     }
 
     static defaultProps = {
         options: [],
+        styleName: "",
     }
 
     constructor(props) {
@@ -58,7 +60,7 @@ export default class Select extends Component {
                     <label>{this.props.label}</label>
                 )}
 
-                <select className="form-control" onChange={this.onChange} value={this.state.value}>
+                <select className={"form-control " + this.props.styleName} onChange={this.onChange} value={this.state.value}>
                     {this.props.options.map((item, index) => (
                         <option value={item.value} key={index}>{item.text}</option>
                     ))}
