@@ -1,6 +1,8 @@
 import Configuration from "modules/Builder/components/Configuration/Configuration";
 import Initialization from "modules/Builder/components/Initialization/Initialization";
 import PackageList from "modules/Builder/components/PackageList/PackageList";
+import Users from "modules/Builder/components/Users/Users";
+
 import {
     faMicrochip,
     faList,
@@ -26,9 +28,9 @@ const routes = [
         icon_style: "",
     },
     {
-        path: `${routeBasePath}/usergroups`,
-        title: "User and groups",
-        main: "",
+        path: `${routeBasePath}/users`,
+        title: "Users",
+        main: Users,
         icon: faUsers,
         icon_style: "",
     },

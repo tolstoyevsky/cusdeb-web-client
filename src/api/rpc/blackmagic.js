@@ -9,6 +9,11 @@ const SEARCH_PACKAGES_RP = "search";
 const RESOLVE_PACKAGES_RP = "resolve";
 const GET_DEFAULT_CONFIGURATION_RP = "get_default_configuration";
 const SYNC_CONFIGURATION_RP = "sync_configuration";
+const GET_USERS_LIST_RP = "get_users_list";
+const GET_DEFAULT_ROOT_PASSWORD_RP = "get_default_root_password";
+const CHANGE_ROOT_PASSWORD_RP = "change_root_password";
+const GET_SHELLS_LIST_RP = "get_shells_list";
+const ADD_USER_RP = "add_user";
 
 let rpcClient;
 
@@ -49,4 +54,24 @@ export const fetchDefaultConfigurationParams = async () => (
 
 export const syncConfigurationParams = async (configuration) => (
     rpcClient.emit(SYNC_CONFIGURATION_RP, configuration)
+);
+
+export const fetchUsersList = async () => (
+    rpcClient.emit(GET_USERS_LIST_RP)
+);
+
+export const fetchDefaultRootPassword = async () => (
+    rpcClient.emit(GET_DEFAULT_ROOT_PASSWORD_RP)
+);
+
+export const changeRootPassword = async (rootPassword) => (
+    rpcClient.emit(CHANGE_ROOT_PASSWORD_RP, rootPassword)
+);
+
+export const fetchShellsList = async () => (
+    rpcClient.emit(GET_SHELLS_LIST_RP)
+);
+
+export const addUser = async (user) => (
+    rpcClient.emit(ADD_USER_RP, ...user)
 );
