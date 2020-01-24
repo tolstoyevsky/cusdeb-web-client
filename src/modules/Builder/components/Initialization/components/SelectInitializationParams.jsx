@@ -50,18 +50,29 @@ export default class SelectInitializationParams extends Component {
     formatDevices(devices) {
         return devices.map(item => ({
             value: item.id,
-            text: item.name.concat(" ", item.generation, " ", item.model),
+            text: this.formatDeviceTitle(item),
         }));
     }
 
     formatDeviceTitle(device) {
-        return device.name.concat(" ", device.generation, " ", device.model);
+        let title = "";
+        if (device.name) {
+            title = `${title} ${device.name}`;
+        }
+        if (device.generation) {
+            title = `${title} ${device.generation}`;
+        }
+        if (device.model) {
+            title = `${title} ${device.model}`;
+        }
+
+        return title.trim();
     }
 
     formatSupportedOs(supportedOs) {
         return supportedOs.map(item => ({
             value: item.id,
-            text: item.name.concat(" ", item.version, " ", item.codename, " (", item.port, ")")
+            text: this.formatOsTitle(item),
         }));
     }
 
@@ -73,8 +84,28 @@ export default class SelectInitializationParams extends Component {
     }
 
     formatOsTitle(os) {
-        let port = os.port == 'armhf' ? '32-bit' : '64-bit';
-        return os.name.concat(" ", os.version, " \"", os.codename, "\" (", port, ")");
+        let port;
+        if (os.port === "armhf") {
+            port = "32-bit";
+        } else if (os.port === "arm64") {
+            port = "64-bit";
+        }
+
+        let title = "";
+        if (os.name) {
+            title = `${title} ${os.name}`;
+        }
+        if (os.version) {
+            title = `${title} ${os.version}`;
+        }
+        if (os.codename) {
+            title = `${title} "${os.codename}"`;
+        }
+        if (port) {
+            title = `${title} (${port})`;
+        }
+
+        return title.trim();
     }
 
     onDeviceChange(value) {
