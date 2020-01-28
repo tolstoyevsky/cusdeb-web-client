@@ -8,6 +8,7 @@ import {
 
 import Builder from "modules/Builder/components/Builder/Builder";
 import Dashboard from "modules/Dashboard/components/Dashboard/Dashboard";
+import Error404 from "modules/Error404/components/Error404/Error404";
 import SignIn from "modules/SignIn/components/SignIn/SignIn";
 import SignUp from "modules/SignUp/components/SignUp/SignUp";
 
@@ -27,6 +28,8 @@ const Routes = (props) => {
                 <AuthRoute exact path="/dashboard" component={Dashboard} userIsAuth={userIsAuth} />
 
                 <AuthRoute path="/builder" component={Builder} userIsAuth={userIsAuth} />
+
+                <Route exact path="*" component={Error404} />
             </Switch>
         </Router>
     );
