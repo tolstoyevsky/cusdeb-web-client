@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { faUser, faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 
 import Button from "common/components/Button";
 import Input from "common/components/Input";
@@ -40,96 +40,107 @@ export default class FormSignUp extends Component {
     }
 
     onFieldsChange(fieldName, fieldValue) {
-        this.setState(() => ({
-            formData: Object.assign(this.state.formData, { [fieldName]: fieldValue }),
+        this.setState((prevState) => ({
+            formData: Object.assign(prevState.formData, { [fieldName]: fieldValue }),
         }));
     }
 
     onSubmit(event) {
         event.preventDefault();
 
-        let validateResult = validSignUpForm(this.state.formData);
+        const { formData } = this.state;
+        const { status, invalidFields, msg } = validSignUpForm(formData);
 
-        if (validateResult.status) {
-            API.signUp(this.state.formData)
-                .then(response => {
+        if (status) {
+            API.signUp(formData)
+                .then((response) => {
                     if (response.status === signUpSuccessCode) {
-                        window.location.href = '/dashboard';
+                        window.location.href = "/dashboard";
                     }
                 })
-                .catch(error => {
+                .catch((error) => {
                     if (error.response.status === signUpErrorCode) {
                         this.setState(() => ({
-                            errorMsg: error.response.data.message
+                            errorMsg: error.response.data.message,
                         }));
                     }
                 });
         } else {
-            this.setState(() => ({ errorMsg: validateResult.msg }));
-            for (let field in validateResult.invalidFields) {
-                let fieldStatus = validateResult.invalidFields[field];
-                this.setState(() => ({
-                    isValid: Object.assign(this.state.isValid, { [field]: fieldStatus })
+            this.setState(() => ({ errorMsg: msg }));
+            Object.keys(invalidFields).forEach((field) => {
+                const fieldStatus = invalidFields[field];
+                this.setState((prevState) => ({
+                    isValid: Object.assign(prevState.isValid, { [field]: fieldStatus }),
                 }));
-            }
+            });
         }
     }
 
     render() {
+        const { errorMsg, isValid, formData } = this.state;
+
         return (
             <form onSubmit={this.onSubmit}>
                 <InputGroup
                     styleName={defaultInputGroupSize}
-                    faIcon={faUser}>
+                    faIcon={faUser}
+                >
 
                     <Input
                         type="text"
                         name="username"
                         placeholder="Username"
                         onChange={this.onFieldsChange}
-                        isValid={this.state.isValid.username}
+                        isValid={isValid.username}
+                        value={formData.username}
                     />
                 </InputGroup>
                 <InputGroup
                     styleName={defaultInputGroupSize}
-                    faIcon={faEnvelope}>
+                    faIcon={faEnvelope}
+                >
 
                     <Input
                         type="email"
                         name="email"
                         placeholder="Email"
                         onChange={this.onFieldsChange}
-                        isValid={this.state.isValid.email}
+                        isValid={isValid.email}
+                        value={formData.email}
                     />
                 </InputGroup>
                 <InputGroup
                     styleName={defaultInputGroupSize}
-                    faIcon={faLock}>
+                    faIcon={faLock}
+                >
 
                     <Input
                         type="password"
                         name="password"
                         placeholder="Password"
                         onChange={this.onFieldsChange}
-                        isValid={this.state.isValid.password}
+                        isValid={isValid.password}
+                        value={formData.password}
                     />
                 </InputGroup>
                 <InputGroup
                     styleName={defaultInputGroupSize}
-                    faIcon={faLock}>
+                    faIcon={faLock}
+                >
 
                     <Input
                         type="password"
                         name="retypePassword"
                         placeholder="Retype password"
                         onChange={this.onFieldsChange}
-                        isValid={this.state.isValid.retypePassword}
+                        isValid={isValid.retypePassword}
+                        value={formData.retypePassword}
                     />
                 </InputGroup>
 
-                <div className="form-error-msg">{this.state.errorMsg}</div>
+                <div className="form-error-msg">{errorMsg}</div>
                 <Button styleName="btn-primary btn-block">Sign up</Button>
             </form>
-        )
+        );
     }
 }

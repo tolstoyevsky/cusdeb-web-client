@@ -1,37 +1,35 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Card = props => (
+const Card = ({
+    title, tools, additionalClasses, children, footer,
+}) => (
     <div className="card">
-        {(props.title || props.tools) && (
+        {(title || tools) && (
             <div className="card-header">
-                {props.title && (
-                    <div className="card-title">
-                        {props.title}
-                    </div>
+                {title && (
+                    <div className="card-title">{title}</div>
                 )}
-                {props.tools && (
-                    <div className="card-tools">
-                        {props.tools}
-                    </div>
+                {tools && (
+                    <div className="card-tools">{tools}</div>
                 )}
             </div>
         )}
 
-        <div className={"card-body " + props.additionalClasses}>
-            {props.children}
-        </div>
+        <div className={`card-body ${additionalClasses}`}>{children}</div>
 
-        {props.footer && (
-            <div className="card-footer">
-                {props.footer}
-            </div>
+        {footer && (
+            <div className="card-footer">{footer}</div>
         )}
     </div>
-)
+);
 
 Card.propTypes = {
     additionalClasses: PropTypes.string,
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node,
+    ]),
     footer: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.object),
         PropTypes.object,
@@ -45,10 +43,14 @@ Card.propTypes = {
         PropTypes.object,
         PropTypes.string,
     ]),
-}
+};
 
 Card.defaultProps = {
     additionalClasses: "",
-}
+    children: [],
+    footer: null,
+    title: null,
+    tools: null,
+};
 
 export default Card;

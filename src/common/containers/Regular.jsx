@@ -1,9 +1,10 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
+
+import { addBodyClass } from "utils/misk";
 
 import Footer from "./Footer";
 import Header from "./Header";
-
-import { addBodyClass } from "utils/misk";
 
 export default class Regular extends Component {
     componentDidMount() {
@@ -11,16 +12,24 @@ export default class Regular extends Component {
     }
 
     render() {
+        const { children } = this.props;
         return (
             <div className="wrapper">
                 <Header pushmenu={false} />
 
                 <div className="content-wrapper">
-                    {this.props.children}
+                    {children}
                 </div>
 
                 <Footer />
             </div>
-        )
+        );
     }
 }
+
+Regular.propTypes = {
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node,
+    ]).isRequired,
+};

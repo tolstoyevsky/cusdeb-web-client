@@ -2,20 +2,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 export default class Input extends Component {
-    static propTypes = {
-        id: PropTypes.string,
-        isValid: PropTypes.bool,
-        name: PropTypes.string,
-        onChange: PropTypes.func,
-        placeholder: PropTypes.string,
-        type: PropTypes.string.isRequired,
-        value: PropTypes.string,
-    }
-
-    static defaultProps = {
-        isValid: true,
-    }
-
     constructor(props) {
         super(props);
 
@@ -23,23 +9,43 @@ export default class Input extends Component {
     }
 
     onChange(event) {
-        if (this.props.onChange)
-            this.props.onChange(this.props.name, event.target.value);
+        const { onChange, name } = this.props;
+        const { value } = event.target;
+        onChange(name, value);
     }
 
     render() {
-        let isValidClass = this.props.isValid ? "" : "is-invalid";
+        const {
+            isValid, name, placeholder, type, value,
+        } = this.props;
+        const isValidClass = isValid ? "" : "is-invalid";
 
         return (
             <input
-                type={this.props.type}
-                className={"form-control " + isValidClass}
-                id={this.props.id}
-                placeholder={this.props.placeholder}
-                name={this.props.name}
-                value={this.props.value}
+                type={type}
+                className={`form-control ${isValidClass}`}
+                placeholder={placeholder}
+                name={name}
+                value={value}
                 onChange={this.onChange}
             />
         );
     }
 }
+
+Input.propTypes = {
+    isValid: PropTypes.bool,
+    name: PropTypes.string,
+    onChange: PropTypes.func,
+    placeholder: PropTypes.string,
+    type: PropTypes.string.isRequired,
+    value: PropTypes.string,
+};
+
+Input.defaultProps = {
+    isValid: true,
+    name: "",
+    onChange: () => { },
+    placeholder: "",
+    value: "",
+};

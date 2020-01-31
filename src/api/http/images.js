@@ -1,5 +1,6 @@
 import fetch from "utils/fetch";
 
+// There is a default export.
 export const listDevice = async () => (
-    await fetch.get('/init/list_devices/')
-)
+    fetch.get("/init/list_devices/")
+);

@@ -6,84 +6,14 @@ import Select from "common/components/Select";
 import * as API from "api/http/images";
 
 export default class SelectInitializationParams extends Component {
-    static propTypes = {
-        onChange: PropTypes.func.isRequired,
-    }
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            devices: [],
-            supportedOs: [],
-            buildTypes: [],
-
-            currentDevice: null,
-            currentOs: null,
-            currentBuildType: null,
-        }
-
-        this.onDeviceChange = this.onDeviceChange.bind(this);
-        this.onOsChange = this.onOsChange.bind(this);
-        this.onBuildTypeChange = this.onBuildTypeChange.bind(this);
-    }
-
-    componentDidMount() {
-        API.listDevice()
-            .then(response => {
-                let devices = response.data;
-                this.setState(() => ({
-                    devices: devices,
-                    currentDevice: devices[0],
-                }));
-            });
-    }
-
-    componentDidUpdate() {
-        this.props.onChange(
-            this.state.currentDevice ? this.formatDeviceTitle(this.state.currentDevice) : "",
-            this.state.currentOs ? this.formatOsTitle(this.state.currentOs) : "",
-            this.state.currentBuildType || "",
-        );
-    }
-
-    formatDevices(devices) {
-        return devices.map(item => ({
-            value: item.id,
-            text: this.formatDeviceTitle(item),
-        }));
-    }
-
-    formatDeviceTitle(device) {
-        let title = "";
-        if (device.name) {
-            title = `${title} ${device.name}`;
-        }
-        if (device.generation) {
-            title = `${title} ${device.generation}`;
-        }
-        if (device.model) {
-            title = `${title} ${device.model}`;
-        }
-
-        return title.trim();
-    }
-
-    formatSupportedOs(supportedOs) {
-        return supportedOs.map(item => ({
-            value: item.id,
-            text: this.formatOsTitle(item),
-        }));
-    }
-
-    formatBuildTypes(buildTypes) {
-        return buildTypes.map(item => ({
+    static formatBuildTypes(buildTypes) {
+        return buildTypes.map((item) => ({
             value: item,
             text: item,
         }));
     }
 
-    formatOsTitle(os) {
+    static formatOsTitle(os) {
         let port;
         if (os.port === "armhf") {
             port = "32-bit";
@@ -108,33 +38,105 @@ export default class SelectInitializationParams extends Component {
         return title.trim();
     }
 
+    static formatDeviceTitle(device) {
+        let title = "";
+        if (device.name) {
+            title = `${title} ${device.name}`;
+        }
+        if (device.generation) {
+            title = `${title} ${device.generation}`;
+        }
+        if (device.model) {
+            title = `${title} ${device.model}`;
+        }
+
+        return title.trim();
+    }
+
+    static formatSupportedOs(supportedOs) {
+        return supportedOs.map((item) => ({
+            value: item.id,
+            text: SelectInitializationParams.formatOsTitle(item),
+        }));
+    }
+
+    static formatDevices(devices) {
+        return devices.map((item) => ({
+            value: item.id,
+            text: SelectInitializationParams.formatDeviceTitle(item),
+        }));
+    }
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            devices: [],
+            supportedOs: [],
+            buildTypes: [],
+
+            currentDevice: null,
+            currentOs: null,
+            currentBuildType: null,
+        };
+
+        this.onDeviceChange = this.onDeviceChange.bind(this);
+        this.onOsChange = this.onOsChange.bind(this);
+        this.onBuildTypeChange = this.onBuildTypeChange.bind(this);
+    }
+
+    componentDidMount() {
+        API.listDevice()
+            .then((response) => {
+                const devices = response.data;
+                this.setState(() => ({
+                    devices,
+                    currentDevice: devices[0],
+                }));
+            });
+    }
+
+    componentDidUpdate() {
+        const { currentDevice, currentOs, currentBuildType } = this.state;
+        const { onChange } = this.props;
+        onChange(
+            currentDevice ? SelectInitializationParams.formatDeviceTitle(currentDevice) : "",
+            currentOs ? SelectInitializationParams.formatOsTitle(currentOs) : "",
+            currentBuildType || "",
+        );
+    }
+
     onDeviceChange(value) {
-        let currentDevice = this.state.devices.find(item => item.id == value);
+        const { devices } = this.state;
+        const currentDevice = devices.find((item) => item.id.toString() === value.toString());
         this.setState(() => ({
             supportedOs: currentDevice.os,
-            currentDevice: currentDevice,
+            currentDevice,
         }));
     }
 
     onOsChange(value) {
-        let currentOs = this.state.supportedOs.find(item => item.id == value);
+        const { supportedOs } = this.state;
+        const currentOs = supportedOs.find((item) => item.id.toString() === value.toString());
         this.setState(() => ({
             buildTypes: currentOs.build_type || [],
-            currentOs: currentOs,
+            currentOs,
         }));
     }
 
     onBuildTypeChange(value) {
-        let currentBuildType = this.state.buildTypes.find(item => item === value);
+        const { buildTypes } = this.state;
+        const currentBuildType = buildTypes.find((item) => item === value);
         this.setState(() => ({
-            currentBuildType: currentBuildType,
+            currentBuildType,
         }));
     }
 
     render() {
-        let selectDevices = this.formatDevices(this.state.devices);
-        let selectedOs = this.formatSupportedOs(this.state.supportedOs);
-        let selectedBuildTypes = this.formatBuildTypes(this.state.buildTypes);
+        const { devices, supportedOs, buildTypes } = this.state;
+        const selectDevices = SelectInitializationParams.formatDevices(devices);
+        const selectedOs = SelectInitializationParams.formatSupportedOs(supportedOs);
+        const selectedBuildTypes = SelectInitializationParams.formatBuildTypes(buildTypes);
 
         return [
             <Select
@@ -158,3 +160,7 @@ export default class SelectInitializationParams extends Component {
         ];
     }
 }
+
+SelectInitializationParams.propTypes = {
+    onChange: PropTypes.func.isRequired,
+};

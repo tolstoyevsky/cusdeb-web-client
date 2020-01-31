@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 
-import Card from "common/containers/Card"
-import FormSignIn from "./components/FormSignIn/FormSignIn";
-
 import { addBodyClass } from "utils/misk";
+
+import Card from "common/containers/Card";
+import FormSignIn from "./components/FormSignIn/FormSignIn";
 
 export default class SignIn extends Component {
     componentDidMount() {
-        addBodyClass('login-page');
+        addBodyClass("login-page");
     }
 
     render() {
@@ -18,6 +18,6 @@ export default class SignIn extends Component {
                     <FormSignIn />
                 </Card>
             </div>
-        )
+        );
     }
 }

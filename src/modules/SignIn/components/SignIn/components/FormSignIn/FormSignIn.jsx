@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 
 import Button from "common/components/Button";
 import Input from "common/components/Input";
@@ -38,70 +38,77 @@ export default class FormSignIn extends Component {
     }
 
     onFieldsChange(fieldName, fieldValue) {
-        this.setState(() => ({
-            formData: Object.assign(this.state.formData, { [fieldName]: fieldValue }),
+        this.setState((prevState) => ({
+            formData: Object.assign(prevState.formData, { [fieldName]: fieldValue }),
         }));
     }
 
     onSubmit(event) {
         event.preventDefault();
+        const { formData } = this.state;
+        const validateResult = validSignInForm(formData);
 
-        let validateResult = validSignInForm(this.state.formData);
-
-        if (validateResult.status)
-            API.signIn(this.state.formData)
-                .then(response => {
+        if (validateResult.status) {
+            API.signIn(formData)
+                .then((response) => {
                     if (response.status === signInSuccessCode) {
                         setTokens(response.data.access, response.data.refresh);
-                        window.location.href = '/dashboard';
+                        window.location.href = "/dashboard";
                     }
                 })
-                .catch(error => {
+                .catch((error) => {
                     if (error.response.status === signInErrorCode) {
                         this.setState(() => ({
-                            errorMsg: signInErrorMsg
+                            errorMsg: signInErrorMsg,
                         }));
                     }
                 });
-        else {
-            for (let field in validateResult.invalidFields) {
-                let fieldStatus = validateResult.invalidFields[field];
-                this.setState({ isValid: Object.assign(this.state.isValid, { [field]: fieldStatus }) });
-            }
+        } else {
+            Object.keys(validateResult.invalidFields).forEach((field) => {
+                const fieldStatus = validateResult.invalidFields[field];
+                this.setState((prevState) => ({
+                    isValid: Object.assign(prevState.isValid, { [field]: fieldStatus }),
+                }));
+            });
         }
     }
 
     render() {
+        const { isValid, errorMsg, formData } = this.state;
         return (
             <form onSubmit={this.onSubmit}>
                 <InputGroup
                     styleName={defaultInputGroupSize}
-                    faIcon={faUser}>
+                    faIcon={faUser}
+                >
 
                     <Input
                         type="text"
                         name="username"
                         placeholder="Username"
                         onChange={this.onFieldsChange}
-                        isValid={this.state.isValid.username}
+                        isValid={isValid.username}
+                        value={formData.username}
                     />
                 </InputGroup>
                 <InputGroup
                     styleName={defaultInputGroupSize}
-                    faIcon={faLock}>
+                    faIcon={faLock}
+                >
 
                     <Input
                         type="password"
                         name="password"
                         placeholder="Password"
                         onChange={this.onFieldsChange}
-                        isValid={this.state.isValid.password}
+                        isValid={isValid.password}
+                        value={formData.password}
                     />
                 </InputGroup>
 
-                <div className="form-error-msg">{this.state.errorMsg}</div>
+                <div className="form-error-msg">{errorMsg}</div>
                 <Button styleName="btn-primary btn-block">Sign in</Button>
             </form>
-        )
+        );
     }
 }

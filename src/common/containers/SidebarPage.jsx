@@ -1,35 +1,40 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
+import { addBodyClass } from "utils/misk";
+
 import Footer from "./Footer";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 
-import { addBodyClass } from "utils/misk";
-
 export default class SidebarPage extends Component {
-    static propType = {
-        sidebarItems: PropTypes.arrayOf(PropTypes.object),
-    }
-
     componentDidMount() {
         addBodyClass("sidebar-mini");
     }
 
     render() {
+        const { children, sidebarItems } = this.props;
         return (
             <div className="wrapper">
                 <Header logo={false} />
                 <Sidebar>
-                    {this.props.sidebarItems}
+                    {sidebarItems}
                 </Sidebar>
 
                 <div className="content-wrapper">
-                    {this.props.children}
+                    {children}
                 </div>
 
                 <Footer />
             </div>
-        )
+        );
     }
 }
+
+SidebarPage.propTypes = {
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node,
+    ]).isRequired,
+    sidebarItems: PropTypes.arrayOf(PropTypes.object).isRequired,
+};

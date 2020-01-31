@@ -4,52 +4,38 @@ import PropTypes from "prop-types";
 import Card from "common/containers/Card";
 
 export default class TotalPackagesPanel extends Component {
-    static propTypes = {
-        packages: PropTypes.shape({
-            base: PropTypes.array,
-            selected: PropTypes.array,
-            dependent: PropTypes.array,
-        }),
-        resolvePackage: PropTypes.func,
-    }
-
-    static defaultProps = {
-        packages: {
-            base: [],
-            selected: [],
-            dependent: [],
-        },
-    }
-
     constructor(props) {
         super(props);
 
         this.onRemovePackage = this.onRemovePackage.bind(this);
     }
 
-    onRemovePackage() {
-        let packageName = event.target.dataset.package;
-        this.props.resolvePackage(packageName, "remove");
+    onRemovePackage(event) {
+        const { resolvePackage } = this.props;
+        const packageName = event.target.dataset.package;
+        resolvePackage(packageName, "remove");
     }
 
     render() {
+        const { packages } = this.props;
         return (
             <Card title="Selected packages:">
-                {this.props.packages.selected.length > 0 ? (
-                    this.props.packages.selected.map((item, index) => (
-                        <span key={index} className="badge bg-success package-item">
+                {packages.selected.length > 0 ? (
+                    packages.selected.map((item, index) => (
+                        <span key={item} className="badge bg-success package-item">
                             {item}
-                            <a data-package={item} onClick={this.onRemovePackage}>x</a>
+                            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
+                            <button type="button" className="link-button bg-success" tabIndex={index} data-package={item} onClick={this.onRemovePackage}>x</button>
                         </span>
                     ))
-                ) : <span>You haven't chosen any packages yet</span>}
+                ) : <span>You haven&apos;t chosen any packages yet</span>}
 
-                {this.props.packages.dependent.length > 0 && (
+                {packages.dependent.length > 0 && (
                     <div className="dependencies">
                         <h3 className="card-title dependency-title">Dependencies:</h3>
                         <div className="dependency-list">
-                            {this.props.packages.dependent.map((item, index) => (
-                                <span key={index} className="badge bg-danger package-item">{item}</span>
+                            {packages.dependent.map((item) => (
+                                <span key={item} className="badge bg-danger package-item">{item}</span>
                             ))}
                         </div>
                     </div>
@@ -58,3 +44,20 @@ export default class TotalPackagesPanel extends Component {
         );
     }
 }
+
+TotalPackagesPanel.propTypes = {
+    packages: PropTypes.shape({
+        base: PropTypes.array,
+        selected: PropTypes.array,
+        dependent: PropTypes.array,
+    }),
+    resolvePackage: PropTypes.func.isRequired,
+};
+
+TotalPackagesPanel.defaultProps = {
+    packages: {
+        base: [],
+        selected: [],
+        dependent: [],
+    },
+};

@@ -27,7 +27,7 @@ export default class Builder extends Component {
         };
 
         this.waitExecutingState = false;
-        this.buildUUID;
+        this.buildUUID = "";
 
         this.onNextBuildState = this.onNextBuildState.bind(this);
         this.currentStateRef = React.createRef();
@@ -42,78 +42,94 @@ export default class Builder extends Component {
         if (!this.waitExecutingState) {
             this.waitExecutingState = true;
 
-            this.currentStateRef.current.executeState(stateData => {
+            this.currentStateRef.current.executeState((stateData) => {
                 this.processStateData(stateData);
             });
         }
     }
 
     processStateData(data) {
+        const { currentRoute, prevRouteIndex } = this.state;
         switch (data ? data.state : "") {
             case "initialization":
                 this.buildUUID = data.buildUUID;
                 break;
-            default:
-                // To next state.   
+            default: {
+                // To next state.
                 this.waitExecutingState = false;
 
-                let nextRouteIndex = this.state.prevRouteIndex + 1;
+                const nextRouteIndex = prevRouteIndex + 1;
                 this.setState(() => ({
                     prevRouteIndex: nextRouteIndex,
-                    prevRoute: this.state.currentRoute,
+                    prevRoute: currentRoute,
                     currentRoute: routes[nextRouteIndex].path,
 
-                    nextButtonIsActive: nextRouteIndex < routes.length - 1 ? true : false,
+                    nextButtonIsActive: nextRouteIndex < routes.length - 1,
                 }));
+            }
         }
     }
 
     render() {
+        const { currentRoute, nextButtonIsActive, prevRoute } = this.state;
         return (
             <div>
                 <Switch>
                     <Router>
-                        <Redirect from={this.state.prevRoute} to={this.state.currentRoute} />
+                        <Redirect from={prevRoute} to={currentRoute} />
 
-                        <SidebarPage sidebarItems={routes.map((item, index) => {
-                            let isActive = matchPath(this.state.currentRoute, item);
-                            let additionalClass = isActive ? "active" : "";
-                            return (
-                                <div className={"nav-link " + additionalClass} key={index}>{item.title}</div>
-                            )
-                        })}>
+                        <SidebarPage
+                            sidebarItems={routes.map((item) => {
+                                const isActive = matchPath(currentRoute, item);
+                                const additionalClass = isActive ? "active" : "";
+                                return (
+                                    <div className={`nav-link ${additionalClass}`} key={item.title}>{item.title}</div>
+                                );
+                            })}
+                        >
                             <div className="content-header">
                                 <div className="container-fluid">
                                     <Switch>
-                                        {routes.map((route, index) => (
+                                        {routes.map((route) => (
                                             <Route
-                                                key={index}
+                                                key={route.title}
                                                 path={route.path}
-                                                exact={true}
-                                                children={<h3>{route.title}</h3>}
-                                            />
+                                                exact
+                                            >
+                                                <h3>{route.title}</h3>
+                                            </Route>
                                         ))}
                                     </Switch>
                                 </div>
                             </div>
                             <div className="content">
                                 <Switch>
-                                    {routes.map((route, index) => (
+                                    {routes.map((route) => (
                                         <Route
-                                            key={index}
+                                            key={route.title}
                                             path={route.path}
-                                            exact={true}
-                                            children={<route.main ref={matchPath(this.state.currentRoute, route) ? this.currentStateRef : null} />}
-                                        />
+                                            exact
+                                        >
+                                            <route.main
+                                                ref={
+                                                    matchPath(currentRoute, route)
+                                                        ? this.currentStateRef : null
+                                                }
+                                            />
+                                        </Route>
                                     ))}
                                 </Switch>
 
-                                {this.state.nextButtonIsActive && (
+                                {nextButtonIsActive && (
                                     <div className="row">
-                                        <div className="col-md-9"></div>
+                                        <div className="col-md-9">{" "}</div>
                                         <div className="col-md-3">
-                                            <Button styleName="btn-primary btn-block next-state"
-                                                onClick={this.onNextBuildState}>Next</Button>
+                                            <Button
+                                                styleName="btn-primary btn-block next-state"
+                                                onClick={this.onNextBuildState}
+                                            >
+                                                Next
+                                            </Button>
                                         </div>
                                     </div>
                                 )}
@@ -122,6 +138,6 @@ export default class Builder extends Component {
                     </Router>
                 </Switch>
             </div>
-        )
+        );
     }
 }
