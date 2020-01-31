@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 
+import { addBodyClass } from "utils/misk";
+
 import Card from "common/containers/Card";
 import FormSignUp from "./components/FormSignUp/FormSignUp";
 
-import { addBodyClass } from "utils/misk";
-
 export default class SignUp extends Component {
     componentDidMount() {
-        addBodyClass('register-page');
+        addBodyClass("register-page");
     }
 
     render() {
@@ -18,6 +18,6 @@ export default class SignUp extends Component {
                     <FormSignUp />
                 </Card>
             </div>
-        )
+        );
     }
 }

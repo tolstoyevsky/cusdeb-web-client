@@ -1,12 +1,15 @@
-export const validSignUpForm = formData => {
-    let validState = false, validFields = {}, msg = "";
+export const validSignUpForm = (formData) => {
+    const validFields = {};
+    let validState = false;
+    let msg = "";
 
-    for (let field in formData) {
+    Object.keys(formData).forEach((field) => {
         validFields[field] = !!formData[field];
 
-        if (!formData[field])
+        if (!formData[field]) {
             validState = true;
-    }
+        }
+    });
 
     if (formData.password !== formData.retypePassword) {
         msg = "Passwords don't match";
@@ -14,12 +17,13 @@ export const validSignUpForm = formData => {
         validFields.retypePassword = false;
     }
 
-    if (msg || validState)
+    if (msg || validState) {
         return {
             status: false,
             invalidFields: validFields,
-            msg: msg,
+            msg,
         };
+    }
 
     return {
         status: true,

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 import Card from "common/containers/Card";
 import Input from "common/components/Input";
@@ -22,23 +22,6 @@ import {
 } from "./config";
 
 export default class PackagesTable extends Component {
-    static propTypes = {
-        packages: PropTypes.shape({
-            base: PropTypes.array,
-            selected: PropTypes.array,
-            dependent: PropTypes.array,
-        }),
-        resolvePackage: PropTypes.func,
-    }
-
-    static defaultProps = {
-        packages: {
-            base: [],
-            selected: [],
-            dependent: [],
-        },
-    }
-
     constructor(props) {
         super(props);
 
@@ -67,30 +50,34 @@ export default class PackagesTable extends Component {
     }
 
     componentDidMount() {
+        const { currentPageNumber, itemsPerPage } = this.state;
         RPC.fetchPackagesNumber()
-            .then(number => {
+            .then((number) => {
                 this.packagesNumber = number;
-                this.totalPages = Math.ceil(number / this.state.itemsPerPage);
+                this.totalPages = Math.ceil(number / itemsPerPage);
             });
 
-        RPC.fetchPackagesList(this.state.currentPageNumber, this.state.itemsPerPage)
-            .then(currentPagePackages => {
+        RPC.fetchPackagesList(currentPageNumber, itemsPerPage)
+            .then((currentPagePackages) => {
                 this.setState(() => ({ currentPagePackages }));
             });
     }
 
     componentDidUpdate(_prevProps, prevState) {
-        if (prevState.currentPageNumber !== this.state.currentPageNumber || prevState.itemsPerPage !== this.state.itemsPerPage) {
-            RPC.fetchPackagesList(this.state.currentPageNumber, this.state.itemsPerPage)
-                .then(currentPagePackages => {
+        const { currentPageNumber, itemsPerPage } = this.state;
+        if (prevState.currentPageNumber !== currentPageNumber
+            || prevState.itemsPerPage !== itemsPerPage) {
+            RPC.fetchPackagesList(currentPageNumber, itemsPerPage)
+                .then((currentPagePackages) => {
                     this.setState({ currentPagePackages });
                 });
         }
     }
 
     onItemsPerPageChange(itemsPerPage) {
-        itemsPerPage = parseInt(itemsPerPage);
-        this.setState(() => ({ itemsPerPage }));
+        this.setState(() => ({
+            itemsPerPage: parseInt(itemsPerPage, 10),
+        }));
     }
 
     onPageChange(currentPageNumber) {
@@ -98,9 +85,10 @@ export default class PackagesTable extends Component {
     }
 
     onPackageSearch() {
-        RPC.searchPackages(this.state.searchFieldValue)
-            .then(list => {
-                console.log('search res', list)
+        const { searchFieldValue } = this.state;
+        RPC.searchPackages(searchFieldValue)
+            .then((list) => {
+                console.log("search res", list);
             });
     }
 
@@ -109,9 +97,10 @@ export default class PackagesTable extends Component {
     }
 
     onPackageActionClick(event) {
-        let packageName = event.target.dataset.package;
-        let action = event.target.dataset.action;
-        this.props.resolvePackage(packageName, action);
+        const packageName = event.target.dataset.package;
+        const { action } = event.target.dataset;
+        const { resolvePackage } = this.props;
+        resolvePackage(packageName, action);
     }
 
     /*
@@ -122,57 +111,85 @@ export default class PackagesTable extends Component {
         return (
             <div>
                 Show
-                    <Select styleName="form-control-sm" options={itemsPerPageOptions} onChange={this.onItemsPerPageChange} />
+                <Select styleName="form-control-sm" options={itemsPerPageOptions} onChange={this.onItemsPerPageChange} />
                 packages
             </div>
-        )
+        );
     }
 
     getCardTools() {
         return (
             <InputGroup
                 styleName="input-group-sm"
-                appendComponent={
-                    <button className="btn btn-default" onClick={this.onPackageSearch}>
+                appendComponent={(
+                    <button type="button" className="btn btn-default" onClick={this.onPackageSearch}>
                         <FontAwesomeIcon icon={faSearch} />
                     </button>
-                }>
+                )}
+            >
                 <Input
                     type="text"
                     name="package-search"
                     placeholder="Package name"
-                    onChange={this.onSearchFieldChange} />
+                    onChange={this.onSearchFieldChange}
+                />
             </InputGroup>
-        )
+        );
     }
 
     getCardFooter() {
-        let packagesStartNumber = (this.state.currentPageNumber - 1) * this.state.itemsPerPage + 1;
-        let packagesEndNumber = this.state.currentPageNumber * this.state.itemsPerPage;
+        const { currentPageNumber, itemsPerPage } = this.state;
+        const packagesStartNumber = (currentPageNumber - 1) * itemsPerPage + 1;
+        const packagesEndNumber = currentPageNumber * itemsPerPage;
 
         return [
             <div className="float-left" key="packagesCount">
+                {/* eslint-disable-next-line react/jsx-one-expression-per-line, max-len */}
                 Showing {packagesStartNumber} to {packagesEndNumber} of {this.packagesNumber} packages
             </div>,
             <div className="float-right" key="pagination">
                 <Pagination
                     paginationPagesCount={paginationPagesCount}
                     totalPages={this.totalPages}
-                    currentPageNumber={this.state.currentPageNumber}
-                    onChange={this.onPageChange} />
-            </div>
-        ]
+                    currentPageNumber={currentPageNumber}
+                    onChange={this.onPageChange}
+                />
+            </div>,
+        ];
     }
 
     render() {
+        const { currentPagePackages } = this.state;
+        const { packages } = this.props;
         return (
-            <Card title={this.getCardTitle()} tools={this.getCardTools()} footer={this.getCardFooter()}>
+            <Card
+                title={this.getCardTitle()}
+                tools={this.getCardTools()}
+                footer={this.getCardFooter()}
+            >
                 <Table columnTitles={columnTitles} fieldsName={fieldsName}>
-                    {this.state.currentPagePackages.map(item =>
-                        prepareTableItem(item, this.props.packages, this.onPackageActionClick)
-                    )}
+                    {currentPagePackages.map((item) => (
+                        prepareTableItem(item, packages, this.onPackageActionClick)
+                    ))}
                 </Table>
             </Card>
         );
     }
 }
+
+PackagesTable.propTypes = {
+    packages: PropTypes.shape({
+        base: PropTypes.array,
+        selected: PropTypes.array,
+        dependent: PropTypes.array,
+    }),
+    resolvePackage: PropTypes.func.isRequired,
+};
+
+PackagesTable.defaultProps = {
+    packages: {
+        base: [],
+        selected: [],
+        dependent: [],
+    },
+};

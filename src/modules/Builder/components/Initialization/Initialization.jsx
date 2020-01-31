@@ -21,20 +21,21 @@ export default class Initialization extends Component {
                 buildType: "",
             },
         };
-        
-        this.builderCallback;
+
+        this.builderCallback = () => { };
 
         this.syncSelectsData = this.syncSelectsData.bind(this);
         this.initializationRPCCallback = this.initializationRPCCallback.bind(this);
     }
 
     executeState(builderCallback) {
+        const { selectsData } = this.state;
         this.builderCallback = builderCallback.bind(this);
         RPC.initialization(
             "My image",
-            this.state.selectsData.device,
-            this.state.selectsData.os,
-            BUILD_TYPE_CODES[this.state.selectsData.buildType],
+            selectsData.device,
+            selectsData.os,
+            BUILD_TYPE_CODES[selectsData.buildType],
 
             // Callback
             this.initializationRPCCallback,
@@ -62,7 +63,7 @@ export default class Initialization extends Component {
                 // Black Magic never returns the error code.
                 break;
             case CODE.READY:
-                this.builderCallback()
+                this.builderCallback();
                 break;
             case CODE.BUSY:
                 // Black Magic never returns the error code.
@@ -79,32 +80,33 @@ export default class Initialization extends Component {
     }
 
     syncSelectsData(device, os, buildType) {
-        if (this.state.selectsData.device === device &&
-            this.state.selectsData.os === os &&
-            this.state.selectsData.buildType === buildType) {
+        const { selectsData } = this.state;
+        if (selectsData.device === device && selectsData.os === os
+            && selectsData.buildType === buildType) {
             return;
         }
 
         this.setState(() => ({
             selectsData: {
-                device: device,
-                os: os,
-                buildType: buildType,
+                device,
+                os,
+                buildType,
             },
         }));
     }
 
     render() {
+        const { logs } = this.state;
         return (
             <Card>
-                {this.state.logs ? (
+                {logs ? (
                     <div className="initialization__logs">
-                        {this.state.logs}
+                        {logs}
                         <Spinner animation="border" />
                     </div>
                 ) : (
-                        <SelectInitializationParams onChange={this.syncSelectsData} />
-                    )}
+                    <SelectInitializationParams onChange={this.syncSelectsData} />
+                )}
             </Card>
         );
     }

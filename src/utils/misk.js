@@ -1,1 +1,1 @@
-export const addBodyClass = className => document.body.classList.add(className);
+export const addBodyClass = (className) => document.body.classList.add(className);

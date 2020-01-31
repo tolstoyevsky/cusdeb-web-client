@@ -13,9 +13,14 @@ const itemsPerPageOptions = [
     {
         value: 50,
         text: 50,
-    }
+    },
 ];
 
 const paginationPagesCount = 5;
 
-export { columnTitles, fieldsName, itemsPerPageOptions, paginationPagesCount };
+export {
+    columnTitles,
+    fieldsName,
+    itemsPerPageOptions,
+    paginationPagesCount,
+};

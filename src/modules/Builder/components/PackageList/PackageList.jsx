@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 
+import * as RPC from "api/rpc/blackmagic";
+
 import TotalPackagesPanel from "./components/TotalPackagesPanel/TotalPackagesPanel";
 import PackagesTable from "./components/PackagesTable/PackagesTable";
 import PackageStatistics from "./components/PackageStatistics/PackageStatistics";
-
-import * as RPC from "api/rpc/blackmagic";
 
 export default class PackageList extends Component {
     constructor(props) {
@@ -14,39 +14,44 @@ export default class PackageList extends Component {
             basePackages: [],
             selectedPackages: [],
             dependentPackages: [],
-        }
+        };
 
         this.resolvePackage = this.resolvePackage.bind(this);
     }
 
     componentDidMount() {
         RPC.fetchBasePackagesList()
-            .then(basePackages => {
+            .then((basePackages) => {
                 this.setState(() => ({ basePackages }));
             });
     }
 
     resolvePackage(packageName, action) {
-        let selectedPackages = [...this.state.selectedPackages];
+        const { selectedPackages } = this.state;
+        const newSelectedPackages = [...selectedPackages];
 
-        if (action == "add")
-            selectedPackages.push(packageName);
-        else if (action == "remove")
-            selectedPackages.pop(packageName);
+        if (action === "add") {
+            newSelectedPackages.push(packageName);
+        } else if (action === "remove") {
+            newSelectedPackages.pop(packageName);
+        }
 
-        this.setState(() => ({ selectedPackages }));
+        this.setState(() => ({
+            selectedPackages: newSelectedPackages,
+        }));
 
-        RPC.resolvePackages(selectedPackages)
-            .then(dependentPackages => {
+        RPC.resolvePackages(newSelectedPackages)
+            .then((dependentPackages) => {
                 this.setState(() => ({ dependentPackages }));
             });
     }
 
     render() {
-        let packages = {
-            base: this.state.basePackages,
-            selected: this.state.selectedPackages,
-            dependent: this.state.dependentPackages,
+        const { basePackages, selectedPackages, dependentPackages } = this.state;
+        const packages = {
+            base: basePackages,
+            selected: selectedPackages,
+            dependent: dependentPackages,
         };
 
         return [
@@ -58,7 +63,7 @@ export default class PackageList extends Component {
                     <PackageStatistics packages={packages} />
                 </div>
             </div>,
-            <PackagesTable key="packages-list-table" packages={packages} resolvePackage={this.resolvePackage} />
+            <PackagesTable key="packages-list-table" packages={packages} resolvePackage={this.resolvePackage} />,
         ];
     }
 }

@@ -1,7 +1,8 @@
 @import "~admin-lte-css";
 
 @import "~root/AppStyles.scss";
+@import "~styles/common.scss";
 
-@import '~modules/Builder/components/Initialization/styles.scss';
-@import '~modules/Builder/components/PackageList/components/PackagesTable/styles.scss';
-@import '~modules/Builder/components/PackageList/components/TotalPackagesPanel/styles.scss';
+@import "~modules/Builder/components/Initialization/styles.scss";
+@import "~modules/Builder/components/PackageList/components/PackagesTable/styles.scss";
+@import "~modules/Builder/components/PackageList/components/TotalPackagesPanel/styles.scss";

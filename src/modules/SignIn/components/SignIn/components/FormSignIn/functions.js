@@ -1,19 +1,21 @@
-export const validSignInForm = formData => {
-    let validState = false, validFields = {};
+export const validSignInForm = (formData) => {
+    const invalidFields = {};
+    let validState = false;
 
-    for (let field in formData) {
-        validFields[field] = !!formData[field];
+    Object.keys(formData).forEach((field) => {
+        invalidFields[field] = !!formData[field];
 
-        if (!formData[field])
+        if (!formData[field]) {
             validState = true;
-    }
+        }
+    });
 
-    if (validState)
+    if (validState) {
         return {
             status: false,
-            invalidFields: validFields,
+            invalidFields,
         };
-
+    }
 
     return {
         status: true,

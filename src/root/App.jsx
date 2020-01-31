@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 
-import Routes from './Routes';
-
 import * as API from "api/http/users";
+
+import Routes from "./Routes";
 
 export default class App extends Component {
     constructor(props) {
@@ -16,13 +16,13 @@ export default class App extends Component {
 
     componentDidMount() {
         API.whoAmI()
-            .then(response => {
+            .then((response) => {
                 this.setState(() => ({
-                    userIsAuth: response.status === 200 ? true : false,
+                    userIsAuth: response.status === 200,
                     loading: false,
                 }));
             })
-            .catch(error => {
+            .catch(() => {
                 this.setState(() => ({
                     loading: false,
                 }));
@@ -30,12 +30,12 @@ export default class App extends Component {
     }
 
     render() {
-        return (this.state.loading ? (
+        const { loading, userIsAuth } = this.state;
+        return (loading ? (
             // TODO: It may be worth replacing with a loader.
             <div className="app-loader" />
         ) : (
-                <Routes userIsAuth={this.state.userIsAuth} />
-            )
-        )
+            <Routes userIsAuth={userIsAuth} />
+        ));
     }
 }

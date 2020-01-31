@@ -1,1 +1,1 @@
-export const backendURI = '/api/v1/';
+export const backendURI = "/api/v1/";

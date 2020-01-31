@@ -2,70 +2,83 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 export default class Select extends Component {
-    static propTypes = {
-        label: PropTypes.string,
-        onChange: PropTypes.func,
-        options: PropTypes.arrayOf(PropTypes.object),
-        styleName: PropTypes.string,
-    }
-
-    static defaultProps = {
-        options: [],
-        styleName: "",
-    }
-
     constructor(props) {
         super(props);
 
         this.state = { value: "" };
 
         this.onChange = this.onChange.bind(this);
+        this.updateValueIfNeeded = this.updateValueIfNeeded.bind(this);
     }
 
-    onChange(event) {
-        let value = event.target.value;
+    shouldComponentUpdate(nextProps, nextState) {
+        // Update the component only if new elements or the value has been updated.
+        const { value } = this.state;
+        const { options } = this.props;
 
-        this.setState(() => ({ value }));
-        if (this.props.onChange)
-            this.props.onChange(value);
+        return (JSON.stringify(nextProps.options) !== JSON.stringify(options)
+            || value !== nextState.value);
     }
 
     componentDidUpdate() {
+        this.updateValueIfNeeded();
+    }
+
+    onChange(event) {
+        const { onChange } = this.props;
+        const { value } = event.target;
+
+        this.setState(() => ({ value }));
+        onChange(value);
+    }
+
+    updateValueIfNeeded() {
         // Problem. When the user chooses OS from the drop-down list and then switches
         // between devices, the current OS is dropped and set to the first one from the list.
         // Solution. This code helps memorize the previously chosen OS if it supports
         // the next chosen device. Otherwise, the first OS from the list is chosen.
 
-        let value = this.state.value;
-        let current = this.props.options.find(item => item.value.toString() === this.state.value.toString());
-        if (!current && this.props.options.length > 0) {
-            value = this.props.options[0].value;
+        let { value } = this.state;
+        const { onChange, options } = this.props;
+        const current = options.find((item) => item.value.toString() === value.toString());
+        if (!current && options.length > 0) {
+            value = options[0].value;
             this.setState(() => ({ value }));
         }
 
-        if (this.props.onChange)
-            this.props.onChange(value);
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        // Update the component only if new elements or the value has been updated.
-
-        return (JSON.stringify(nextProps.options) !== JSON.stringify(this.props.options) || this.state.value !== nextState.value);
+        onChange(value);
     }
 
     render() {
+        const { value } = this.state;
+        const { label, options, styleName } = this.props;
+
         return (
             <div className="form-group">
-                {this.props.label && (
-                    <label>{this.props.label}</label>
+                {label && (
+                    <label htmlFor={label}>{label}</label>
                 )}
 
-                <select className={"form-control " + this.props.styleName} onChange={this.onChange} value={this.state.value}>
-                    {this.props.options.map((item, index) => (
-                        <option value={item.value} key={index}>{item.text}</option>
+                <select id={label} className={`form-control ${styleName}`} onChange={this.onChange} value={value}>
+                    {options.map((item) => (
+                        <option value={item.value} key={item.value}>{item.text}</option>
                     ))}
                 </select>
             </div>
-        )
+        );
     }
 }
+
+Select.propTypes = {
+    label: PropTypes.string,
+    onChange: PropTypes.func,
+    options: PropTypes.arrayOf(PropTypes.object),
+    styleName: PropTypes.string,
+};
+
+Select.defaultProps = {
+    label: null,
+    onChange: () => { },
+    options: [],
+    styleName: "",
+};

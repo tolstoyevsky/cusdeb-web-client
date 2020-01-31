@@ -1,12 +1,25 @@
-import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import React from "react";
+import PropTypes from "prop-types";
+import { Route, Redirect } from "react-router-dom";
 
-export const AuthRoute = ({ userIsAuth, component: Component, ...rest }) => (
-    <Route {...rest} render={props => (
-        userIsAuth ? (
-            <Component {...props} />
-        ) : (
-                <Redirect to='/signin/' />
+const AuthRoute = ({ userIsAuth, component: Component, ...rest }) => (
+    <Route
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...rest}
+        render={(props) => (
+            userIsAuth ? (
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                <Component {...props} />
+            ) : (
+                <Redirect to="/signin/" />
             )
-    )} />
-)
+        )}
+    />
+);
+
+AuthRoute.propTypes = {
+    userIsAuth: PropTypes.bool.isRequired,
+    component: PropTypes.func.isRequired,
+};
+
+export default AuthRoute;

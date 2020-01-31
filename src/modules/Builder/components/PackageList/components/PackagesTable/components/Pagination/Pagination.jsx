@@ -2,19 +2,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 export default class Pagination extends Component {
-    static propTypes = {
-        currentPageNumber: PropTypes.number,
-        onChange: PropTypes.func,
-        paginationPagesCount: PropTypes.number,
-        totalPages: PropTypes.number,
-    }
-
-    static defaultProps = {
-        currentPageNumber: 0,
-        paginationPagesCount: 0,
-        totalPages: 0,
-    }
-
     constructor(props) {
         super(props);
 
@@ -24,56 +11,79 @@ export default class Pagination extends Component {
     }
 
     onPageChange(event) {
-        let targetId = event.target.id
-        let currentPageNumber = parseInt(targetId);
+        const { currentPageNumber } = this.state;
+        const { onChange } = this.props;
 
-        if (targetId === "previous")
-            currentPageNumber = this.state.currentPageNumber - 1;
-        else if (targetId === "next")
-            currentPageNumber = this.state.currentPageNumber + 1;
+        const targetId = event.target.id;
+        let nextPageNumber = parseInt(targetId, 10);
 
-        this.setState(() => ({ currentPageNumber }));
+        if (targetId === "previous") {
+            nextPageNumber = currentPageNumber - 1;
+        } else if (targetId === "next") {
+            nextPageNumber = currentPageNumber + 1;
+        }
 
-        this.props.onChange(currentPageNumber);
+        this.setState(() => ({
+            currentPageNumber: nextPageNumber,
+        }));
+
+        onChange(nextPageNumber);
     }
 
     render() {
-        let previousStatus = this.state.currentPageNumber == 1 ? "disabled" : "";
-        let nextStatus = this.state.currentPageNumber == this.props.totalPages ? "disabled" : "";
+        const { currentPageNumber } = this.state;
+        const { paginationPagesCount, totalPages } = this.props;
 
-        let paginationMiddleValue = Math.round(this.props.paginationPagesCount / 2);
+        const previousStatus = currentPageNumber === 1 ? "disabled" : "";
+        const nextStatus = currentPageNumber === totalPages ? "disabled" : "";
+
+        const paginationMiddleValue = Math.round(paginationPagesCount / 2);
 
         let forValue;
-        if (this.state.currentPageNumber <= paginationMiddleValue)
+        if (currentPageNumber <= paginationMiddleValue) {
             forValue = 1;
-        else if (this.state.currentPageNumber + paginationMiddleValue > this.props.totalPages)
-            forValue = this.props.totalPages - this.props.paginationPagesCount + 1;
-        else
-            forValue = this.state.currentPageNumber - paginationMiddleValue + 1;
+        } else if (currentPageNumber + paginationMiddleValue > totalPages) {
+            forValue = totalPages - paginationPagesCount + 1;
+        } else {
+            forValue = currentPageNumber - paginationMiddleValue + 1;
+        }
 
-        let paginationPages = new Array(this.props.paginationPagesCount).fill(0).map(_ => {
-            let buf = forValue;
+        const paginationPages = new Array(paginationPagesCount).fill(0).map(() => {
+            const buf = forValue;
             forValue += 1;
             return buf;
         });
 
         return (
             <ul className="pagination">
-                <li className={"paginate_button page-item previous " + previousStatus}>
-                    <a className="page-link" id="previous" onClick={this.onPageChange}>Previous</a>
+                <li className={`paginate_button page-item previous ${previousStatus}`}>
+                    <button type="button" className="page-link" id="previous" onClick={this.onPageChange}>Previous</button>
                 </li>
-                {paginationPages.map(item => {
-                    let isActive = item == this.state.currentPageNumber ? "active" : "";
+                {paginationPages.map((item) => {
+                    const isActive = item === currentPageNumber ? "active" : "";
                     return (
-                        <li className={"paginate_button page-item " + isActive} key={item}>
-                            <a className="page-link" id={item} onClick={this.onPageChange}>{item}</a>
+                        <li className={`paginate_button page-item ${isActive}`} key={item}>
+                            <button type="button" className="page-link" id={item} onClick={this.onPageChange}>{item}</button>
                         </li>
-                    )
+                    );
                 })}
-                <li className={"paginate_button page-item next " + nextStatus}>
-                    <a className="page-link" id="next" onClick={this.onPageChange}>Next</a>
+                <li className={`paginate_button page-item next ${nextStatus}`}>
+                    <button type="button" className="page-link" id="next" onClick={this.onPageChange}>Next</button>
                 </li>
             </ul>
-        )
+        );
     }
 }
+
+Pagination.propTypes = {
+    currentPageNumber: PropTypes.number,
+    onChange: PropTypes.func.isRequired,
+    paginationPagesCount: PropTypes.number,
+    totalPages: PropTypes.number,
+};
+
+Pagination.defaultProps = {
+    currentPageNumber: 0,
+    paginationPagesCount: 0,
+    totalPages: 0,
+};
