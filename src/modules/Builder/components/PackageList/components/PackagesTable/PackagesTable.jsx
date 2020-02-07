@@ -165,6 +165,7 @@ export default class PackagesTable extends Component {
         const { packages } = this.props;
         return (
             <Card
+                additionalClasses="packages-table-card"
                 title={this.getCardTitle()}
                 tools={this.getCardTools()}
                 footer={this.getCardFooter()}
