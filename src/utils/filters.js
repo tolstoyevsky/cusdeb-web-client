@@ -5,3 +5,8 @@ export const formatBytes = (bytes) => {
     const result = (bytes / 1024 ** i);
     return result.toFixed(1) + sizes[i];
 };
+
+export const spaceSeparation = (largeNumber) => {
+    const results = largeNumber.toLocaleString();
+    return results;
+};

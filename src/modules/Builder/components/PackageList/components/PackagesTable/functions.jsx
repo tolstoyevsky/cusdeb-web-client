@@ -1,5 +1,5 @@
 import React from "react";
-import { formatBytes } from "utils/filter";
+import { formatBytes } from "utils/filters";
 
 const getBadgeByPackageType = (packageType) => {
     if (packageType === "base") {

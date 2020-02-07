@@ -11,6 +11,8 @@ import InputGroup from "common/components/InputGroup";
 
 import * as RPC from "api/rpc/blackmagic";
 
+import { spaceSeparation } from "utils/filters";
+
 import Pagination from "./components/Pagination/Pagination";
 import prepareTableItem from "./functions";
 
@@ -145,7 +147,7 @@ export default class PackagesTable extends Component {
         return [
             <div className="float-left" key="packagesCount">
                 {/* eslint-disable-next-line react/jsx-one-expression-per-line, max-len */}
-                Showing {packagesStartNumber} to {packagesEndNumber} of {this.packagesNumber} packages
+                Showing {packagesStartNumber} to {packagesEndNumber} of {spaceSeparation(this.packagesNumber)} packages
             </div>,
             <div className="float-right" key="pagination">
                 <Pagination
