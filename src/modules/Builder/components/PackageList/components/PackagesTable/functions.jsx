@@ -1,4 +1,5 @@
 import React from "react";
+import { formatBytes } from "utils/filter";
 
 const getBadgeByPackageType = (packageType) => {
     if (packageType === "base") {
@@ -51,6 +52,8 @@ const prepareTableItem = (_item, packages, onPackageActionClick) => {
             </button>
         );
     }
+
+    item.size = (formatBytes(item.size));
 
     return item;
 };
