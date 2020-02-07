@@ -2,3 +2,8 @@
     margin: 0 5px;
     display: inline-block;
 }
+@media screen and (max-width:750px){
+    .packages-table-card #Description, .packages-table-card #description{
+        display: none;
+    }
+}

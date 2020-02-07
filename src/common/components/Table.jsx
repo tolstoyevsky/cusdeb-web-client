@@ -8,7 +8,7 @@ const Table = ({
         <thead>
             <tr>
                 {columnTitles.map((title) => (
-                    <th key={title}>{title}</th>
+                    <th id={title} key={title}>{title}</th>
                 ))}
             </tr>
         </thead>
@@ -17,7 +17,7 @@ const Table = ({
                 // eslint-disable-next-line react/no-array-index-key
                 <tr key={index}>
                     {fieldsName.map((field) => (
-                        <td key={field}>{packageObj[field]}</td>
+                        <td id={field} key={field}>{packageObj[field]}</td>
                     ))}
                 </tr>
             ))}
