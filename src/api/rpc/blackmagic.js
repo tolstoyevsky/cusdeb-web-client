@@ -7,6 +7,8 @@ const GET_PACKAGES_LIST_PR = "get_packages_list";
 const GET_PACKAGES_NUMBER_PR = "get_packages_number";
 const SEARCH_PACKAGES_PR = "search";
 const RESOLVE_PACKAGES_PR = "resolve";
+const GET_DEFAULT_CONFIGURATION_RP = "get_default_configuration";
+const SYNC_CONFIGURATION_RP = "sync_configuration";
 
 let rpcClient;
 
@@ -39,4 +41,12 @@ export const searchPackages = async (packageName) => (
 
 export const resolvePackages = async (packageList) => (
     rpcClient.emit(RESOLVE_PACKAGES_PR, packageList)
+);
+
+export const fetchDefaultConfigurationParams = async () => (
+    rpcClient.emit(GET_DEFAULT_CONFIGURATION_RP)
+);
+
+export const syncConfigurationParams = async (configuration) => (
+    rpcClient.emit(SYNC_CONFIGURATION_RP, configuration)
 );

@@ -23,13 +23,16 @@ export default class Builder extends Component {
             prevRouteIndex: baseRouteIndex,
             prevRoute: baseRoute.path,
             currentRoute: routes[baseRouteIndex].path,
-
+            device: "",
+            os: "",
             nextButtonIsActive: true,
+            buttonState: false,
         };
 
         this.waitExecutingState = false;
         this.buildUUID = "";
 
+        this.builderCallback = this.builderCallback.bind(this);
         this.onNextBuildState = this.onNextBuildState.bind(this);
         this.currentStateRef = React.createRef();
         this.processStateData = this.processStateData.bind(this);
@@ -43,10 +46,12 @@ export default class Builder extends Component {
         if (!this.waitExecutingState) {
             this.waitExecutingState = true;
 
-            this.currentStateRef.current.executeState((stateData) => {
-                this.processStateData(stateData);
-            });
+            this.currentStateRef.current.executeState(this.builderCallback);
         }
+    }
+
+    builderCallback(stateData) {
+        this.processStateData(stateData);
     }
 
     processStateData(data) {
@@ -58,6 +63,9 @@ export default class Builder extends Component {
                     device: data.device,
                     os: data.os,
                 }));
+                break;
+            case "buttonState":
+                this.setState(({ buttonState: data.buttonState }));
                 break;
             default: {
                 // To next state.
@@ -76,7 +84,12 @@ export default class Builder extends Component {
     }
 
     render() {
-        const { currentRoute, nextButtonIsActive, prevRoute } = this.state;
+        const {
+            currentRoute, nextButtonIsActive, prevRoute,
+            os,
+            device,
+            buttonState,
+        } = this.state;
         return (
             <div className="builder">
                 <Switch>
@@ -123,6 +136,9 @@ export default class Builder extends Component {
                                                     matchPath(currentRoute, route)
                                                         ? this.currentStateRef : null
                                                 }
+                                                os={os}
+                                                device={device}
+                                                builderCallback={this.builderCallback}
                                             />
                                         </Route>
                                     ))}
@@ -136,6 +152,7 @@ export default class Builder extends Component {
                                                 type="button"
                                                 className="btn btn-primary btn-block next-state"
                                                 onClick={this.onNextBuildState}
+                                                disabled={buttonState}
                                             >
                                                 Next
                                             </button>
