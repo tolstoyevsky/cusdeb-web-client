@@ -1,3 +1,4 @@
+import Configuration from "modules/Builder/components/Configuration/Configuration";
 import Initialization from "modules/Builder/components/Initialization/Initialization";
 import PackageList from "modules/Builder/components/PackageList/PackageList";
 import {
@@ -34,7 +35,7 @@ const routes = [
     {
         path: `${routeBasePath}/configuration`,
         title: "Configuration",
-        main: "",
+        main: Configuration,
         icon: faCogs,
         icon_style: "",
     },
