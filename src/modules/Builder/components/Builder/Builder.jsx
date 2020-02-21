@@ -7,6 +7,8 @@ import {
     Switch,
 } from "react-router-dom";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import SidebarPage from "common/containers/SidebarPage";
 import Button from "common/components/Button";
 
@@ -73,7 +75,7 @@ export default class Builder extends Component {
     render() {
         const { currentRoute, nextButtonIsActive, prevRoute } = this.state;
         return (
-            <div>
+            <div className="builder">
                 <Switch>
                     <Router>
                         <Redirect from={prevRoute} to={currentRoute} />
@@ -83,7 +85,10 @@ export default class Builder extends Component {
                                 const isActive = matchPath(currentRoute, item);
                                 const additionalClass = isActive ? "active" : "";
                                 return (
-                                    <div className={`nav-link ${additionalClass}`} key={item.title}>{item.title}</div>
+                                    <div className={`nav-link ${additionalClass}`} key={item.title}>
+                                        <FontAwesomeIcon className={`nav-icon fas ${item.icon_style}`} icon={item.icon} />
+                                        <p className="sidebar-text collapse show">{item.title}</p>
+                                    </div>
                                 );
                             })}
                         >
