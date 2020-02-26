@@ -16,7 +16,7 @@ export default class Input extends Component {
 
     render() {
         const {
-            isValid, name, placeholder, type, value,
+            isValid, name, placeholder, type, value, disabled,
         } = this.props;
         const isValidClass = isValid ? "" : "is-invalid";
 
@@ -28,6 +28,7 @@ export default class Input extends Component {
                 name={name}
                 value={value}
                 onChange={this.onChange}
+                disabled={disabled}
             />
         );
     }
@@ -40,6 +41,7 @@ Input.propTypes = {
     placeholder: PropTypes.string,
     type: PropTypes.string.isRequired,
     value: PropTypes.string,
+    disabled: PropTypes.bool,
 };
 
 Input.defaultProps = {
@@ -48,4 +50,5 @@ Input.defaultProps = {
     onChange: () => { },
     placeholder: "",
     value: "",
+    disabled: false,
 };
