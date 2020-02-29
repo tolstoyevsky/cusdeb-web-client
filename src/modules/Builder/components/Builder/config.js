@@ -9,11 +9,6 @@ const routes = [
         main: Initialization,
     },
     {
-        path: `${routeBasePath}/desktop`,
-        title: "Desktop environment",
-        main: "",
-    },
-    {
         path: `${routeBasePath}/packagelist`,
         title: "Package list",
         main: PackageList,
