@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 import * as RPC from "api/rpc/blackmagic";
 
@@ -46,6 +47,11 @@ export default class PackageList extends Component {
             });
     }
 
+    executeState() {
+        const { builderCallback } = this.props;
+        builderCallback();
+    }
+
     render() {
         const { basePackages, selectedPackages, dependentPackages } = this.state;
         const packages = {
@@ -67,3 +73,7 @@ export default class PackageList extends Component {
         ];
     }
 }
+
+PackageList.propTypes = {
+    builderCallback: PropTypes.func.isRequired,
+};
