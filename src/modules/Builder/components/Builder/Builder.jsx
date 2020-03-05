@@ -10,7 +10,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import SidebarPage from "common/containers/SidebarPage";
-import Button from "common/components/Button";
 
 import * as RPC from "api/rpc/blackmagic";
 
@@ -133,12 +132,13 @@ export default class Builder extends Component {
                                     <div className="row">
                                         <div className="col-md-9">{" "}</div>
                                         <div className="col-md-3">
-                                            <Button
-                                                styleName="btn-primary btn-block next-state"
+                                            <button
+                                                type="button"
+                                                className="btn btn-primary btn-block next-state"
                                                 onClick={this.onNextBuildState}
                                             >
                                                 Next
-                                            </Button>
+                                            </button>
                                         </div>
                                     </div>
                                 )}
