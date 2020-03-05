@@ -1,29 +1,53 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { DebounceInput } from "react-debounce-input";
+
+const invalidCssClass = "is-invalid";
+const DEBOUNCE_TIMEOUT = 600;
 
 export default class Input extends Component {
     constructor(props) {
         super(props);
-
+        this.state = {
+            isValid: true,
+        };
         this.onChange = this.onChange.bind(this);
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        const { value, disabled } = this.props;
+        const { isValid } = this.state;
+        return value !== nextProps.value || isValid !== nextState.isValid
+            || disabled !== nextProps.disabled;
+    }
+
+    componentDidUpdate() {
+        (function onUpdate() {
+            const { value, validationFunc } = this.props;
+            const isValid = validationFunc(value);
+            this.setState(() => ({ isValid }));
+        }).call(this);
+    }
+
     onChange(event) {
-        const { onChange, name } = this.props;
         const { value } = event.target;
-        onChange(name, value);
+        const { onChange, name } = this.props;
+        if (onChange) {
+            onChange(name, value);
+        }
     }
 
     render() {
         const {
-            isValid, name, placeholder, type, value, disabled,
+            name, placeholder, type, value, disabled, id,
         } = this.props;
-        const isValidClass = isValid ? "" : "is-invalid";
-
+        const { isValid } = this.state;
         return (
-            <input
+            <DebounceInput
+                id={id}
                 type={type}
-                className={`form-control ${isValidClass}`}
+                className={`form-control ${(!isValid && invalidCssClass)}`}
+                debounceTimeout={DEBOUNCE_TIMEOUT}
                 placeholder={placeholder}
                 name={name}
                 value={value}
@@ -35,20 +59,22 @@ export default class Input extends Component {
 }
 
 Input.propTypes = {
-    isValid: PropTypes.bool,
+    id: PropTypes.string,
     name: PropTypes.string,
     onChange: PropTypes.func,
     placeholder: PropTypes.string,
     type: PropTypes.string.isRequired,
+    validationFunc: PropTypes.func,
     value: PropTypes.string,
     disabled: PropTypes.bool,
 };
 
 Input.defaultProps = {
-    isValid: true,
+    id: "",
     name: "",
     onChange: () => { },
     placeholder: "",
+    validationFunc: () => true,
     value: "",
     disabled: false,
 };
