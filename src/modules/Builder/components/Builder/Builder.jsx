@@ -55,6 +55,10 @@ export default class Builder extends Component {
         switch (data ? data.state : "") {
             case "initialization":
                 this.buildUUID = data.buildUUID;
+                this.setState(() => ({
+                    device: data.device,
+                    os: data.os,
+                }));
                 break;
             default: {
                 // To next state.

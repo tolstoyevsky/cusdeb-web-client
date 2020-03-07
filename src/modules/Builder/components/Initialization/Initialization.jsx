@@ -43,6 +43,7 @@ export default class Initialization extends Component {
     }
 
     initializationRPCCallback(event) {
+        const { selectsData } = this.state;
         switch (event) {
             case CODE.MAINTENANCE_MODE:
                 this.setState(() => ({ logs: MSG.MAINTENANCE_MODE_MSG }));
@@ -75,6 +76,8 @@ export default class Initialization extends Component {
                 this.builderCallback({
                     state: "initialization",
                     buildUUID: event,
+                    device: selectsData.device,
+                    os: selectsData.os,
                 });
         }
     }
