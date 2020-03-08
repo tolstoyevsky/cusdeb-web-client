@@ -5,6 +5,7 @@ import HtmlWebPackPlugin from "html-webpack-plugin";
 const rootPath = path.resolve(__dirname, "./");
 const srcPath = path.resolve(rootPath, "./src");
 
+const HOST = process.env.HOST || "localhost";
 const { BM_RPC_ADDR } = process.env;
 
 if (!BM_RPC_ADDR) {
@@ -71,6 +72,7 @@ module.exports = {
         }),
     ],
     devServer: {
+        host: HOST,
         contentBase: path.resolve(__dirname, "dist"),
         publicPath: "/",
         historyApiFallback: true,
