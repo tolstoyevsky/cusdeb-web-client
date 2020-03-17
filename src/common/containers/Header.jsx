@@ -46,7 +46,7 @@ export default class Header extends Component {
                     <ul className="navbar-nav">
                         <li className="nav-item">
                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                            <a href="#" data-target=".brand-text" data-toggle="collapse" data-widget="pushmenu" className="nav-link">
+                            <a href="#" data-target="" data-toggle="collapse" data-widget="pushmenu" className="nav-link">
                                 <FontAwesomeIcon icon={faBars} />
                             </a>
                         </li>
