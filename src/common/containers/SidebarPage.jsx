@@ -5,7 +5,7 @@ import { addBodyClass } from "utils/misk";
 
 import Footer from "./Footer";
 import Header from "./Header";
-import Sidebar from "./Sidebar";
+import Sidebar from "./Sidebar/Sidebar";
 
 export default class SidebarPage extends Component {
     componentDidMount() {
