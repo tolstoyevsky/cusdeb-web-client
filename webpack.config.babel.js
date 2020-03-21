@@ -6,13 +6,16 @@ const rootPath = path.resolve(__dirname, "./");
 const srcPath = path.resolve(rootPath, "./src");
 
 const HOST = process.env.HOST || "localhost";
-const { BM_RPC_URL, CUSDEB_API_URL } = process.env;
+const { BM_RPC_URL, CUSDEB_API_URL, HELPIK_URL } = process.env;
 
 if (!BM_RPC_URL) {
     throw new Error("The Black Magic RPC server address is not specified.");
 }
 if (!CUSDEB_API_URL) {
     throw new Error("The CusDeb API server address is not specified.");
+}
+if (!HELPIK_URL) {
+    throw new Error("The CusDeb Helpik server adress is not specified.");
 }
 
 module.exports = {
@@ -73,6 +76,7 @@ module.exports = {
         new webpack.EnvironmentPlugin({
             BM_RPC_URL: JSON.stringify(BM_RPC_URL),
             CUSDEB_API_URL: JSON.stringify(CUSDEB_API_URL),
+            HELPIK_URL: JSON.stringify(HELPIK_URL),
         }),
     ],
     devServer: {
@@ -83,6 +87,9 @@ module.exports = {
         proxy: {
             "/api/v1": {
                 target: "http://localhost:3000",
+            },
+            "/helpik_api": {
+                target: "http://localhost:8005",
             },
         },
     },

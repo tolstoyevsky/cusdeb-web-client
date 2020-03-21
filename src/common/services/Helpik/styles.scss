@@ -1,0 +1,24 @@
+.helpik-main {
+  @media (hover: hover) and (pointer: fine) {
+    .icon-hover:hover {
+      color: black !important;
+      cursor: pointer;
+    }
+  }
+}
+
+// This is bad solution to use margin for
+// Popper library.
+// Solution is to use prop 'popperConfig' in Ovelay, but
+// now it doesn't work
+.helpik-popover {
+  .arrow {
+    margin: 0 !important;
+  }
+  hr {
+    margin: 0.5rem 0;
+  }
+  p {
+    margin-bottom: 0.5rem;
+  }
+}
