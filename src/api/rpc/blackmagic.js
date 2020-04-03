@@ -1,4 +1,5 @@
 import getRpcClient from "utils/rpc-client";
+import { blackmagicRpcAddr } from "config/main";
 
 const INIT_RP = "init";
 const GET_BASE_PACKAGES_LIST_PR = "get_base_packages_list";
@@ -10,8 +11,7 @@ const RESOLVE_PACKAGES_PR = "resolve";
 let rpcClient;
 
 export const connectToRpc = async () => {
-    /* global BM_RPC_ADDR */
-    rpcClient = await getRpcClient(BM_RPC_ADDR);
+    rpcClient = await getRpcClient(blackmagicRpcAddr);
 };
 
 export const initialization = async (firmwareName, device, OS, buildType, callback) => (
