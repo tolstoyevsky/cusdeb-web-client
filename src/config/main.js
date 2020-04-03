@@ -1,3 +1,3 @@
 export const cusdebAPIURL = process.env.CUSDEB_API_URL;
 
-export const blackmagicRpcAddr = process.env.BM_RPC_ADDR;
+export const blackmagicRpcURL = process.env.BM_RPC_URL;

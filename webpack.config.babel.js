@@ -6,9 +6,9 @@ const rootPath = path.resolve(__dirname, "./");
 const srcPath = path.resolve(rootPath, "./src");
 
 const HOST = process.env.HOST || "localhost";
-const { BM_RPC_ADDR, CUSDEB_API_URL } = process.env;
+const { BM_RPC_URL, CUSDEB_API_URL } = process.env;
 
-if (!BM_RPC_ADDR) {
+if (!BM_RPC_URL) {
     throw new Error("The Black Magic RPC server address is not specified.");
 }
 if (!CUSDEB_API_URL) {
@@ -71,7 +71,7 @@ module.exports = {
             jQuery: "jquery",
         }),
         new webpack.EnvironmentPlugin({
-            BM_RPC_ADDR: JSON.stringify(BM_RPC_ADDR),
+            BM_RPC_URL: JSON.stringify(BM_RPC_URL),
             CUSDEB_API_URL: JSON.stringify(CUSDEB_API_URL),
         }),
     ],
