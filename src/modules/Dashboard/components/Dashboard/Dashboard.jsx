@@ -1,39 +1,87 @@
 import React, { Component } from "react";
-
-import Regular from "common/containers/Regular";
-
-import { Button } from "react-bootstrap";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import {
+    Button,
+    Col,
+    Container,
+    Row,
+} from "react-bootstrap";
 import { faWrench } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-// eslint-disable-next-line react/prefer-stateless-function
-export default class Dashboard extends Component {
+import { fetchUserImagesList as fetchUserImagesListAPI } from "modules/Dashboard/actions/dashboard";
+import Regular from "common/containers/Regular";
+import CardImage from "../CardImage/CardImage";
+import NotesModal from "../NotesModal/NotesModal";
+
+class Dashboard extends Component {
+    componentDidMount() {
+        const { fetchUserImagesList } = this.props;
+        fetchUserImagesList();
+    }
+
     render() {
+        const { imagesList } = this.props;
+
         return (
             <Regular>
                 <section className="content-header dashboard-build-state">
-                    <div className="container-fluid">
-                        <div className="row">
-                            <div className="col-sm-6">
-                                <h3 className="ml-3 text-dark">
+                    <Container fluid>
+                        <Row className="mx-5">
+                            <Col sm={6}>
+                                <h3 className="text-dark text-nowrap">
                                     Dashboard
-                                    <small className="text-gray">
+                                    <small className="ml-1 text-gray">
                                         My Images
                                     </small>
                                 </h3>
-                            </div>
-                            <div className="col-sm-6">
-                                <div className="ml-3 float-left float-sm-right">
+                            </Col>
+                            <Col sm={6}>
+                                <div className="float-left float-sm-right">
                                     <Button variant="primary" href="/builder">
                                         <FontAwesomeIcon className="fa-flip-horizontal" icon={faWrench} />
                                         Build New
                                     </Button>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                            </Col>
+                        </Row>
+                    </Container>
                 </section>
+                <Container fluid>
+                    <Row className="mx-5">
+                        {Object.keys(imagesList).map((imageId) => (
+                            <Col xl={6} key={imageId}>
+                                <CardImage
+                                    key={imageId}
+                                    userImage={imagesList[imageId]}
+                                    imageId={imageId}
+                                />
+                            </Col>
+                        ))}
+                    </Row>
+                </Container>
+                <NotesModal />
             </Regular>
         );
     }
 }
+
+Dashboard.propTypes = {
+    imagesList: PropTypes.objectOf(PropTypes.object),
+    fetchUserImagesList: PropTypes.func.isRequired,
+};
+
+Dashboard.defaultProps = {
+    imagesList: {},
+};
+
+const mapStateToProps = ({ dashboard }) => ({
+    imagesList: dashboard.imagesList,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    fetchUserImagesList: () => dispatch(fetchUserImagesListAPI()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
