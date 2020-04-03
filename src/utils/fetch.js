@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import { getToken } from "utils/localStorage";
-import { backendURI } from "config/main";
+import { cusdebAPIURL } from "config/main";
 
 /* eslint no-param-reassign: "error" */
 
@@ -45,7 +45,7 @@ const createRequestInterceptor = (instance) => {
 
 const fetch = (() => {
     const instance = axios.create({
-        baseURL: backendURI,
+        baseURL: cusdebAPIURL,
     });
 
     createRequestInterceptor(instance);
