@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 import Card from "common/containers/Card";
 import { Spinner } from "react-bootstrap";
@@ -22,15 +23,13 @@ export default class Initialization extends Component {
             },
         };
 
-        this.builderCallback = () => { };
 
         this.syncSelectsData = this.syncSelectsData.bind(this);
         this.initializationRPCCallback = this.initializationRPCCallback.bind(this);
     }
 
-    executeState(builderCallback) {
+    executeState() {
         const { selectsData } = this.state;
-        this.builderCallback = builderCallback.bind(this);
         RPC.initialization(
             "My image",
             selectsData.device,
@@ -44,6 +43,7 @@ export default class Initialization extends Component {
 
     initializationRPCCallback(event) {
         const { selectsData } = this.state;
+        const { builderCallback } = this.props;
         switch (event) {
             case CODE.MAINTENANCE_MODE:
                 this.setState(() => ({ logs: MSG.MAINTENANCE_MODE_MSG }));
@@ -64,7 +64,7 @@ export default class Initialization extends Component {
                 // Black Magic never returns the error code.
                 break;
             case CODE.READY:
-                this.builderCallback();
+                builderCallback();
                 break;
             case CODE.BUSY:
                 // Black Magic never returns the error code.
@@ -73,7 +73,7 @@ export default class Initialization extends Component {
                 // Black Magic never returns the error code.
                 break;
             default:
-                this.builderCallback({
+                builderCallback({
                     state: "initialization",
                     buildUUID: event,
                     device: selectsData.device,
@@ -114,3 +114,7 @@ export default class Initialization extends Component {
         );
     }
 }
+
+Initialization.propTypes = {
+    builderCallback: PropTypes.func.isRequired,
+};
