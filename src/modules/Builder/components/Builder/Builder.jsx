@@ -46,7 +46,7 @@ export default class Builder extends Component {
         if (!this.waitExecutingState) {
             this.waitExecutingState = true;
 
-            this.currentStateRef.current.executeState(this.builderCallback);
+            this.currentStateRef.current.executeState();
         }
     }
 
