@@ -24,7 +24,8 @@ module.exports = {
     rules: {
         quotes: [
             "error",
-            "double"
+            "double",
+            { "allowTemplateLiterals": true },
         ],
         indent: [
             "error",
