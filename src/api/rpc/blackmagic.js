@@ -2,11 +2,11 @@ import getRpcClient from "utils/rpc-client";
 import { blackmagicRpcURL } from "config/main";
 
 const INIT_RP = "init";
-const GET_BASE_PACKAGES_LIST_PR = "get_base_packages_list";
-const GET_PACKAGES_LIST_PR = "get_packages_list";
-const GET_PACKAGES_NUMBER_PR = "get_packages_number";
-const SEARCH_PACKAGES_PR = "search";
-const RESOLVE_PACKAGES_PR = "resolve";
+const GET_BASE_PACKAGES_LIST_RP = "get_base_packages_list";
+const GET_PACKAGES_LIST_RP = "get_packages_list";
+const GET_PACKAGES_NUMBER_RP = "get_packages_number";
+const SEARCH_PACKAGES_RP = "search";
+const RESOLVE_PACKAGES_RP = "resolve";
 const GET_DEFAULT_CONFIGURATION_RP = "get_default_configuration";
 const SYNC_CONFIGURATION_RP = "sync_configuration";
 
@@ -24,23 +24,23 @@ export const initialization = async (firmwareName, device, OS, buildType, callba
 );
 
 export const fetchBasePackagesList = async () => (
-    rpcClient.emit(GET_BASE_PACKAGES_LIST_PR)
+    rpcClient.emit(GET_BASE_PACKAGES_LIST_RP)
 );
 
 export const fetchPackagesList = async (currentPage, packagesPerPage) => (
-    rpcClient.emit(GET_PACKAGES_LIST_PR, currentPage, packagesPerPage)
+    rpcClient.emit(GET_PACKAGES_LIST_RP, currentPage, packagesPerPage)
 );
 
 export const fetchPackagesNumber = async () => (
-    rpcClient.emit(GET_PACKAGES_NUMBER_PR)
+    rpcClient.emit(GET_PACKAGES_NUMBER_RP)
 );
 
 export const searchPackages = async (packageName) => (
-    rpcClient.emit(SEARCH_PACKAGES_PR, packageName)
+    rpcClient.emit(SEARCH_PACKAGES_RP, packageName)
 );
 
 export const resolvePackages = async (packageList) => (
-    rpcClient.emit(RESOLVE_PACKAGES_PR, packageList)
+    rpcClient.emit(RESOLVE_PACKAGES_RP, packageList)
 );
 
 export const fetchDefaultConfigurationParams = async () => (
