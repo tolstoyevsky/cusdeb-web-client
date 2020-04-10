@@ -72,7 +72,7 @@ Input.propTypes = {
 
 Input.defaultProps = {
     autoFocus: false,
-    id: "",
+    id: null,
     name: "",
     onChange: () => { },
     placeholder: "",
