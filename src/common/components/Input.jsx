@@ -15,10 +15,9 @@ export default class Input extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        const { value, disabled } = this.props;
         const { isValid } = this.state;
-        return value !== nextProps.value || isValid !== nextState.isValid
-            || disabled !== nextProps.disabled;
+        return isValid !== nextState.isValid
+            || JSON.stringify(this.props) !== JSON.stringify(nextProps);
     }
 
     componentDidUpdate() {
