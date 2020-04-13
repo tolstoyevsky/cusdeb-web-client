@@ -61,6 +61,7 @@
     "react-debounce-input": "^3.2.2",
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.1.2",
+    "select2": "^4.0.13",
     "shirow": "github:tolstoyevsky/shirow"
   }
 }

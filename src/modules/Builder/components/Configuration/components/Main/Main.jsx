@@ -1,16 +1,15 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
+import * as API from "api/http/cdtz";
 import * as RPC from "api/rpc/blackmagic";
 
 import Card from "common/containers/Card";
 import Input from "common/components/Input";
-import Select from "common/components/Select";
-
-import { timeZones } from "./config";
+import SelectSearch from "common/components/SelectSearch";
 
 export default class Main extends Component {
-    static formatTimeZone() {
+    static formatTimeZones(timeZones) {
         return timeZones.map((item) => ({
             value: item,
             text: item,
@@ -21,7 +20,9 @@ export default class Main extends Component {
         super(props);
         this.state = {
             hostName: "",
-            timeZone: timeZones[0],
+            timeZones: [],
+
+            currentTimeZone: "",
 
             warningStatus: false,
         };
@@ -32,6 +33,14 @@ export default class Main extends Component {
     }
 
     componentDidMount() {
+        API.fetchTZData()
+            .then((response) => {
+                const timeZones = response.data;
+                this.setState(() => ({
+                    timeZones,
+                    currentTimeZone: timeZones[0],
+                }));
+            });
         RPC.fetchDefaultConfigurationParams()
             .then((defaultConfig) => {
                 this.setState(() => ({ hostName: defaultConfig.hostname }));
@@ -45,9 +54,10 @@ export default class Main extends Component {
     }
 
     onTimeZoneChange(value) {
-        const timeZone = timeZones.find((item) => item === value);
+        const { timeZones } = this.state;
+        const currentTimeZone = timeZones.find((item) => item === value);
         this.setState(() => ({
-            timeZone,
+            currentTimeZone,
         }));
     }
 
@@ -76,18 +86,18 @@ export default class Main extends Component {
     }
 
     syncConfigParams() {
-        const { hostName, timeZone } = this.state;
+        const { hostName, currentTimeZone } = this.state;
         RPC.syncConfigurationParams(
             {
                 hostname: hostName,
-                timezone: timeZone,
+                timezone: currentTimeZone,
             },
         );
     }
 
     render() {
-        const selectTimeZones = Main.formatTimeZone();
-        const { hostName } = this.state;
+        const { hostName, timeZones } = this.state;
+        const selectTimeZones = Main.formatTimeZones(timeZones);
         return (
             <Card>
                 <div className="configuration-main">
@@ -106,7 +116,8 @@ export default class Main extends Component {
                         />
                     </div>
                     <div className="form-group">
-                        <Select
+                        <SelectSearch
+                            id="timeZones"
                             key="time-zone"
                             label="Time zone"
                             options={selectTimeZones}

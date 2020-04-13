@@ -6,7 +6,9 @@ const rootPath = path.resolve(__dirname, "./");
 const srcPath = path.resolve(rootPath, "./src");
 
 const HOST = process.env.HOST || "localhost";
-const { BM_RPC_URL, CUSDEB_API_URL, CUSDEB_HELPIK_URL } = process.env;
+const {
+    BM_RPC_URL, CUSDEB_API_URL, CUSDEB_HELPIK_URL, CUSDEB_TZ_URL,
+} = process.env;
 
 if (!BM_RPC_URL) {
     throw new Error("The Black Magic RPC server address is not specified.");
@@ -16,6 +18,9 @@ if (!CUSDEB_API_URL) {
 }
 if (!CUSDEB_HELPIK_URL) {
     throw new Error("The CusDeb Helpik server adress is not specified.");
+}
+if (!CUSDEB_TZ_URL) {
+    throw new Error("The CusDeb TZ server address is not specified.");
 }
 
 module.exports = {
@@ -77,6 +82,7 @@ module.exports = {
             BM_RPC_URL: JSON.stringify(BM_RPC_URL),
             CUSDEB_API_URL: JSON.stringify(CUSDEB_API_URL),
             CUSDEB_HELPIK_URL: JSON.stringify(CUSDEB_HELPIK_URL),
+            CUSDEB_TZ_URL: JSON.stringify(CUSDEB_TZ_URL),
         }),
     ],
     devServer: {
@@ -90,6 +96,9 @@ module.exports = {
             },
             "/helpik_api": {
                 target: "http://localhost:8005",
+            },
+            "/tz": {
+                target: "http://localhost:8006",
             },
         },
     },

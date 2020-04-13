@@ -51,15 +51,17 @@ export default class Select extends Component {
 
     render() {
         const { value } = this.state;
-        const { label, options, styleName } = this.props;
+        const {
+            id, label, options, styleName,
+        } = this.props;
 
         return (
             <div className="form-group">
                 {label && (
-                    <label htmlFor={label}>{label}</label>
+                    <label htmlFor={id}>{label}</label>
                 )}
 
-                <select id={label} className={`form-control ${styleName}`} onChange={this.onChange} value={value}>
+                <select id={id} className={`form-control ${styleName}`} onChange={this.onChange} value={value}>
                     {options.map((item) => (
                         <option value={item.value} key={item.value}>{item.text}</option>
                     ))}
@@ -70,6 +72,7 @@ export default class Select extends Component {
 }
 
 Select.propTypes = {
+    id: PropTypes.string,
     label: PropTypes.string,
     onChange: PropTypes.func,
     options: PropTypes.arrayOf(PropTypes.object),
@@ -77,6 +80,7 @@ Select.propTypes = {
 };
 
 Select.defaultProps = {
+    id: null,
     label: null,
     onChange: () => { },
     options: [],
