@@ -19,7 +19,7 @@ const PackageStatistics = (props) => {
                     count: <div className="badge bg-success">{selected.length}</div>,
                 },
                 {
-                    packageType: "Dependent:",
+                    packageType: "Dependent",
                     count: <div className="badge bg-danger">{dependent.length}</div>,
                 },
                 {
