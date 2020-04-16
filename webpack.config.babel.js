@@ -7,7 +7,7 @@ const srcPath = path.resolve(rootPath, "./src");
 
 const HOST = process.env.HOST || "localhost";
 const {
-    BM_RPC_URL, CUSDEB_API_URL, CUSDEB_HELPIK_URL, CUSDEB_TZ_URL,
+    BM_RPC_URL, CUSDEB_API_URL, CUSDEB_HELPIK_URL, CUSDEB_TZ_URL, DOMINION_RPC_URL,
 } = process.env;
 
 if (!BM_RPC_URL) {
@@ -21,6 +21,9 @@ if (!CUSDEB_HELPIK_URL) {
 }
 if (!CUSDEB_TZ_URL) {
     throw new Error("The CusDeb TZ server address is not specified.");
+}
+if (!DOMINION_RPC_URL) {
+    throw new Error("The Dominion RPC server address is not specified.");
 }
 
 module.exports = {
@@ -83,6 +86,7 @@ module.exports = {
             CUSDEB_API_URL: JSON.stringify(CUSDEB_API_URL),
             CUSDEB_HELPIK_URL: JSON.stringify(CUSDEB_HELPIK_URL),
             CUSDEB_TZ_URL: JSON.stringify(CUSDEB_TZ_URL),
+            DOMINION_RPC_URL: JSON.stringify(DOMINION_RPC_URL),
         }),
     ],
     devServer: {

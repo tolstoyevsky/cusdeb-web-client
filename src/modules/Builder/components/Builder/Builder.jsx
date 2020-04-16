@@ -133,6 +133,7 @@ export default class Builder extends Component {
                                                 os={os}
                                                 device={device}
                                                 builderCallback={this.builderCallback}
+                                                buildUUID={this.buildUUID}
                                             />
                                         </Route>
                                     ))}

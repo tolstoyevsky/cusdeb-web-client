@@ -15,6 +15,7 @@ const GET_DEFAULT_ROOT_PASSWORD_RP = "get_default_root_password";
 const CHANGE_ROOT_PASSWORD_RP = "change_root_password";
 const GET_SHELLS_LIST_RP = "get_shells_list";
 const ADD_USER_RP = "add_user";
+const BUILD_IMAGE_RP = "build";
 
 export default class Blackmagic {
     constructor() {
@@ -77,5 +78,9 @@ export default class Blackmagic {
 
     async addUser(user) {
         return this.connection.emit(ADD_USER_RP, ...user);
+    }
+
+    async buildImage() {
+        return this.connection.emit(BUILD_IMAGE_RP);
     }
 }
