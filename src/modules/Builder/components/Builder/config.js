@@ -1,3 +1,4 @@
+import Build from "modules/Builder/components/Build/Build";
 import Configuration from "modules/Builder/components/Configuration/Configuration";
 import Initialization from "modules/Builder/components/Initialization/Initialization";
 import PackageList from "modules/Builder/components/PackageList/PackageList";
@@ -44,7 +45,7 @@ const routes = [
     {
         path: `${routeBasePath}/build`,
         title: "Build",
-        main: "",
+        main: Build,
         icon: faWrench,
         icon_style: "fa-flip-horizontal",
     },

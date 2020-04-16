@@ -62,6 +62,8 @@
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.1.2",
     "select2": "^4.0.13",
-    "shirow": "github:tolstoyevsky/shirow"
+    "shirow": "github:tolstoyevsky/shirow",
+    "xterm": "^4.5.0",
+    "xterm-addon-fit": "^0.3.0"
   }
 }
