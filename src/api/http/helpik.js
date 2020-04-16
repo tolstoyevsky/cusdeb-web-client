@@ -1,8 +1,8 @@
 import axios from "axios";
-import { helpikURL } from "config/main";
+import { cusdebHelpikURL } from "config/main";
 
 export const fetchHelpikData = async (pageName, languageName) => (
-    axios.get(`${helpikURL}/get_synopsis/`, {
+    axios.get(`${cusdebHelpikURL}/get_synopsis/`, {
         params: {
             pageName,
             language: languageName,
