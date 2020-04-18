@@ -83,6 +83,7 @@ export default class FormSignIn extends Component {
                 >
 
                     <Input
+                        autoFocus
                         type="text"
                         name="username"
                         placeholder="Username"
