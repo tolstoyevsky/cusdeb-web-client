@@ -39,7 +39,7 @@ export default class Input extends Component {
 
     render() {
         const {
-            name, placeholder, type, value, disabled, id,
+            autoFocus, name, placeholder, type, value, disabled, id,
         } = this.props;
         const { isValid } = this.state;
         return (
@@ -53,12 +53,14 @@ export default class Input extends Component {
                 value={value}
                 onChange={this.onChange}
                 disabled={disabled}
+                autoFocus={autoFocus}
             />
         );
     }
 }
 
 Input.propTypes = {
+    autoFocus: PropTypes.bool,
     id: PropTypes.string,
     name: PropTypes.string,
     onChange: PropTypes.func,
@@ -70,6 +72,7 @@ Input.propTypes = {
 };
 
 Input.defaultProps = {
+    autoFocus: false,
     id: "",
     name: "",
     onChange: () => { },
