@@ -1,8 +1,9 @@
 import Shirow from "shirow";
+import { getToken } from "utils/localStorage";
 
-// TODO: temporary solution. The real tokens will be used when Shirow is done.
-const token = "mock_token";
-
-const getRpcClient = (rpcURL) => new Shirow(rpcURL.replace("%token", token));
+const getRpcClient = (rpcURL) => {
+    const token = getToken("accessToken");
+    return new Shirow(rpcURL.replace("%token", token));
+};
 
 export default getRpcClient;
