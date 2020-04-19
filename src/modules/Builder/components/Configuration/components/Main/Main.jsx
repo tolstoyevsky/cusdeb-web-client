@@ -110,15 +110,13 @@ export default class Main extends Component {
                             numbers or a dot character
                         </div>
                     </Form.Group>
-                    <div className="form-group">
-                        <SelectSearch
-                            id="timeZones"
-                            key="time-zone"
-                            label="Time zone"
-                            options={selectTimeZones}
-                            onChange={this.onTimeZoneChange}
-                        />
-                    </div>
+                    <SelectSearch
+                        id="timeZones"
+                        key="time-zone"
+                        label="Time zone"
+                        options={selectTimeZones}
+                        onChange={this.onTimeZoneChange}
+                    />
                 </div>
             </Card>
         );

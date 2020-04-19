@@ -101,12 +101,15 @@ export default class Wireless extends Component {
 
         return (
             <Card>
-                <div className="form-group configuration-wireless">
-                    <div className="custom-control custom-checkbox mr-sm-2">
-                        <input id="wifi-checkbox" className="custom-control-input" type="checkbox" onChange={this.onCheckboxChange} />
-                        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                        <label className="custom-control-label" htmlFor="wifi-checkbox">Support Wi-Fi</label>
-                    </div>
+                <div className="configuration-wireless">
+                    <Form.Group>
+                        <Form.Check
+                            type="checkbox"
+                            id="show-ordinary-password"
+                            label="Support Wi-Fi"
+                            onChange={this.onCheckboxChange}
+                        />
+                    </Form.Group>
                     <Form.Group>
                         <Form.Label>Network name</Form.Label>
                         <Input
