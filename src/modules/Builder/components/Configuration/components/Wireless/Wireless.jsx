@@ -1,38 +1,19 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { Form } from "react-bootstrap";
 
 import Card from "common/containers/Card";
 import Input from "common/components/Input";
-import InputGroup from "common/components/InputGroup";
 
 import * as RPC from "api/rpc/blackmagic";
 
 export default class Wireless extends Component {
-    static warningMessegeSSID() {
-        return (
-            <div className="text-warning">
-                Network name must be between 1 and 31 characters.
-            </div>
-        );
-    }
-
-    static warningMessegePSK() {
-        return (
-            <div className="text-warning">
-                Password must be either empty or between 8 and 63 characters.
-            </div>
-        );
-    }
-
     constructor(props) {
         super(props);
         this.state = {
             PSK: "",
             SSID: "",
             enableWireless: false,
-
-            warningStatusPSK: false,
-            warningStatusSSID: false,
         };
 
         this.onCheckboxChange = this.onCheckboxChange.bind(this);
@@ -81,12 +62,9 @@ export default class Wireless extends Component {
 
     SSIDValidor(value) {
         const isValid = /(^$|^[.\w\d]{1,31}$)/i;
-        const { warningStatusSSID } = this.state;
         const { buttonStateCallback } = this.props;
+
         let SSIDValid = true;
-        if (warningStatusSSID === SSIDValid) {
-            SSIDValid = false;
-        }
         if (isValid.test(value)) {
             SSIDValid = true;
         } else {
@@ -95,9 +73,7 @@ export default class Wireless extends Component {
         if (value === "") {
             SSIDValid = false;
         }
-        this.setState(() => ({
-            warningStatusSSID: !SSIDValid,
-        }));
+
         buttonStateCallback("wirelessSSID", SSIDValid);
 
         return SSIDValid;
@@ -106,29 +82,23 @@ export default class Wireless extends Component {
 
     PSKValidor(value) {
         const isValid = /(^$|^[.\w\d]{8,63}$)/i;
-        const { warningStatusPSK } = this.state;
         const { buttonStateCallback } = this.props;
+
         let PSKValid = true;
-        if (warningStatusPSK === PSKValid) {
-            PSKValid = false;
-        }
         if (isValid.test(value)) {
             PSKValid = true;
         } else {
             PSKValid = false;
         }
-        this.setState(() => ({
-            warningStatusPSK: !PSKValid,
-        }));
+
         buttonStateCallback("wirelessPSK", PSKValid);
 
         return PSKValid;
     }
 
     render() {
-        const {
-            SSID, PSK, warningStatusSSID, warningStatusPSK, enableWireless,
-        } = this.state;
+        const { SSID, PSK, enableWireless } = this.state;
+
         return (
             <Card>
                 <div className="form-group configuration-wireless">
@@ -137,43 +107,38 @@ export default class Wireless extends Component {
                         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                         <label className="custom-control-label" htmlFor="wifi-checkbox">Support Wi-Fi</label>
                     </div>
-                    <InputGroup
-                        styleName="wifi-group"
-                    >
-                        <div className="form-group">
-                            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                            <label className="custom-label" htmlFor="SSIDID">
-                                Network name
-                            </label>
-                            <Input
-                                id="SSIDID"
-                                name="SSID"
-                                type="text"
-                                value={SSID}
-                                onChange={this.onChangeData}
-                                disabled={!enableWireless}
-                                validationFunc={this.SSIDValidor}
-                            />
-                            {warningStatusSSID && <Wireless.warningMessegeSSID />}
+                    <Form.Group>
+                        <Form.Label>Network name</Form.Label>
+                        <Input
+                            id="SSIDID"
+                            name="SSID"
+                            type="text"
+                            value={SSID}
+                            onChange={this.onChangeData}
+                            disabled={!enableWireless}
+                            validationFunc={this.SSIDValidor}
+                        />
+                        <div className="error invalid-feedback">
+                            Network name must be between 1 and 31 characters of Latin letters,
+                            numbers or a dot character
                         </div>
-
-                        <div className="form-group">
-                            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                            <label className="custom-label" htmlFor="PSKID">
-                                Password
-                            </label>
-                            <Input
-                                id="PSKID"
-                                name="PSK"
-                                type="password"
-                                value={PSK}
-                                onChange={this.onChangeData}
-                                disabled={!enableWireless}
-                                validationFunc={this.PSKValidor}
-                            />
-                            {warningStatusPSK && <Wireless.warningMessegePSK />}
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label>Password</Form.Label>
+                        <Input
+                            id="PSKID"
+                            name="PSK"
+                            type="password"
+                            value={PSK}
+                            onChange={this.onChangeData}
+                            disabled={!enableWireless}
+                            validationFunc={this.PSKValidor}
+                        />
+                        <div className="error invalid-feedback">
+                            Password must be either empty or between 8 and 63 characters
+                            of Latin letters, numbers or a dot character
                         </div>
-                    </InputGroup>
+                    </Form.Group>
                 </div>
             </Card>
         );

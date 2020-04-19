@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { Form } from "react-bootstrap";
 
 import * as API from "api/http/cdtz";
 import * as RPC from "api/rpc/blackmagic";
@@ -23,8 +24,6 @@ export default class Main extends Component {
             timeZones: [],
 
             currentTimeZone: "",
-
-            warningStatus: false,
         };
 
         this.onHostNameChange = this.onHostNameChange.bind(this);
@@ -63,12 +62,9 @@ export default class Main extends Component {
 
     hostNameValidor(value) {
         const { buttonStateCallback } = this.props;
-        const { warningStatus } = this.state;
         const isValid = /(^$|^[.\da-z]{1,253}$)/i;
+
         let hostNameValid = true;
-        if (warningStatus === hostNameValid) {
-            hostNameValid = false;
-        }
         if (isValid.test(value)) {
             hostNameValid = true;
         } else {
@@ -77,9 +73,7 @@ export default class Main extends Component {
         if (value === "") {
             hostNameValid = false;
         }
-        this.setState(() => ({
-            warningStatus: !hostNameValid,
-        }));
+
         buttonStateCallback("mainHostName", hostNameValid);
 
         return hostNameValid;
@@ -101,11 +95,8 @@ export default class Main extends Component {
         return (
             <Card>
                 <div className="configuration-main">
-                    <div className="form-group">
-                        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-                        <label className="custom-label" htmlFor="hostNameId">
-                            Host name
-                        </label>
+                    <Form.Group>
+                        <Form.Label>Host name</Form.Label>
                         <Input
                             id="hostNameId"
                             name="hostName"
@@ -114,7 +105,11 @@ export default class Main extends Component {
                             onChange={this.onHostNameChange}
                             validationFunc={this.hostNameValidor}
                         />
-                    </div>
+                        <div className="error invalid-feedback">
+                            Host name must be between 1 and 253 characters of Latin letters,
+                            numbers or a dot character
+                        </div>
+                    </Form.Group>
                     <div className="form-group">
                         <SelectSearch
                             id="timeZones"
