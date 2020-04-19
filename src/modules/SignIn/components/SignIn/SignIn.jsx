@@ -16,6 +16,9 @@ export default class SignIn extends Component {
                 <Card additionalClasses="login-card-body">
                     <p className="login-box-msg">Sign in to build an image</p>
                     <FormSignIn />
+                    <p className="mb-0 mt-3">
+                        <a href="/signup">Register a new account</a>
+                    </p>
                 </Card>
             </div>
         );
