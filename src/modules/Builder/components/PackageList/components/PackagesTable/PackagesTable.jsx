@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { Table } from "react-bootstrap";
 
 import Card from "common/containers/Card";
 import Input from "common/components/Input";
-import Table from "common/components/Table";
 import Select from "common/components/Select";
 import InputGroup from "common/components/InputGroup";
 
@@ -170,10 +170,28 @@ export default class PackagesTable extends Component {
                 tools={this.getCardTools()}
                 footer={this.getCardFooter()}
             >
-                <Table columnTitles={columnTitles} fieldsName={fieldsName}>
-                    {currentPagePackages.map((item) => (
-                        prepareTableItem(item, packages, this.onPackageActionClick)
-                    ))}
+                <Table bsPrefix="table table-responsive border-top-0">
+                    <thead>
+                        <tr>
+                            {columnTitles.map((title) => (
+                                <th id={title} key={title}>{title}</th>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {currentPagePackages.map((item) => (
+                            prepareTableItem(item, packages, this.onPackageActionClick)
+                        )).map((packageObj) => {
+                            const trKey = packageObj.package;
+                            return (
+                                <tr key={trKey}>
+                                    {fieldsName.map((field) => (
+                                        <td id={field} key={field}>{packageObj[field]}</td>
+                                    ))}
+                                </tr>
+                            );
+                        })}
+                    </tbody>
                 </Table>
             </Card>
         );
