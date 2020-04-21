@@ -25,6 +25,9 @@ export default class SignIn extends Component {
                         <p className="mb-0 mt-3">
                             <a href="/signup">Register a new account</a>
                         </p>
+                        <p className="mb-0 mt-1">
+                            <a href="/reset-password">Forgot password?</a>
+                        </p>
                     </Card.Body>
                 </Card>
             </div>
