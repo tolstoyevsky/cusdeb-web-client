@@ -1,4 +1,4 @@
-const columnTitles = ["", "Package name", "Description", "Version", "Size"];
+const columnTitles = ["", "Package\u00A0name", "Description", "Version", "Size"];
 const fieldsName = ["action", "package", "description", "version", "size"];
 
 const itemsPerPageOptions = [
