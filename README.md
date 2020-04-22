@@ -15,7 +15,7 @@ CusDeb Web Client is a web client which relies on such CusDeb services as [CusDe
 CusDeb Web Client requires
 
 * running [CusDeb API](https://github.com/tolstoyevsky/cusdeb-api) and [Black Magic](https://github.com/tolstoyevsky/blackmagic);
-* [Node.js](https://nodejs.org/) 10 or above.
+* [Node.js](https://nodejs.org/) 12 or above.
 
 ## Configuration
 
