@@ -15,11 +15,7 @@ const CHANGE_ROOT_PASSWORD_RP = "change_root_password";
 const GET_SHELLS_LIST_RP = "get_shells_list";
 const ADD_USER_RP = "add_user";
 
-let rpcClient;
-
-export const connectToRpc = async () => {
-    rpcClient = await getRpcClient(blackmagicRpcURL);
-};
+const rpcClient = getRpcClient(blackmagicRpcURL);
 
 export const initialization = async (firmwareName, device, OS, buildType, callback) => (
     rpcClient.emit(INIT_RP, firmwareName, device, OS, buildType)
