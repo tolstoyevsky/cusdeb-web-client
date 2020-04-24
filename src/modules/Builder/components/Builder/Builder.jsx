@@ -11,8 +11,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import SidebarPage from "common/containers/SidebarPage";
 
-import * as RPC from "api/rpc/blackmagic";
-
 import { routes, baseRouteIndex, baseRoute } from "./config";
 
 export default class Builder extends Component {
@@ -36,10 +34,6 @@ export default class Builder extends Component {
         this.onNextBuildState = this.onNextBuildState.bind(this);
         this.currentStateRef = React.createRef();
         this.processStateData = this.processStateData.bind(this);
-    }
-
-    componentDidMount() {
-        RPC.connectToRpc();
     }
 
     onNextBuildState() {

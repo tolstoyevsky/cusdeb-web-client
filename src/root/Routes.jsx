@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {
     BrowserRouter as Router,
+    Redirect,
     Route,
     Switch,
 } from "react-router-dom";
@@ -27,7 +28,10 @@ const Routes = (props) => {
 
                 <AuthRoute exact path="/dashboard" component={Dashboard} userIsAuth={userIsAuth} />
 
-                <AuthRoute path="/builder" component={Builder} userIsAuth={userIsAuth} />
+                <AuthRoute exact path="/builder" component={Builder} userIsAuth={userIsAuth} />
+                <Route path="/builder">
+                    <Redirect to="/builder" />
+                </Route>
 
                 <Route exact path="*" component={Error404} />
             </Switch>
