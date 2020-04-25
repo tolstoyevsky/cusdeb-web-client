@@ -13,31 +13,6 @@ export default class SelectInitializationParams extends Component {
         }));
     }
 
-    static formatOsTitle(os) {
-        let port;
-        if (os.port === "armhf") {
-            port = "32-bit";
-        } else if (os.port === "arm64") {
-            port = "64-bit";
-        }
-
-        let title = "";
-        if (os.name) {
-            title = `${title} ${os.name}`;
-        }
-        if (os.version) {
-            title = `${title} ${os.version}`;
-        }
-        if (os.codename) {
-            title = `${title} "${os.codename}"`;
-        }
-        if (port) {
-            title = `${title} (${port})`;
-        }
-
-        return title.trim();
-    }
-
     static formatDeviceTitle(device) {
         let title = "";
         if (device.name) {
@@ -55,8 +30,8 @@ export default class SelectInitializationParams extends Component {
 
     static formatSupportedOs(supportedOs) {
         return supportedOs.map((item) => ({
-            value: item.id,
-            text: SelectInitializationParams.formatOsTitle(item),
+            value: item.short_name,
+            text: item.full_name,
         }));
     }
 
@@ -101,7 +76,7 @@ export default class SelectInitializationParams extends Component {
         const { onChange } = this.props;
         onChange(
             currentDevice ? SelectInitializationParams.formatDeviceTitle(currentDevice) : "",
-            currentOs ? SelectInitializationParams.formatOsTitle(currentOs) : "",
+            currentOs ? currentOs.short_name : "",
             currentBuildType || "",
         );
     }
@@ -117,7 +92,7 @@ export default class SelectInitializationParams extends Component {
 
     onOsChange(value) {
         const { supportedOs } = this.state;
-        const currentOs = supportedOs.find((item) => item.id.toString() === value.toString());
+        const currentOs = supportedOs.find((item) => item.short_name === value);
         this.setState(() => ({
             buildTypes: currentOs.build_type || [],
             currentOs,
