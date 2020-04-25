@@ -35,6 +35,12 @@ export default class Helpik extends Component {
                     helpikURL: response.data.url,
                     helpikVisability: true,
                 }));
+            })
+            .catch((error) => {
+                if (error.response.status === 404) {
+                    const article = `${pageName}${section ? `#${section}` : ""}`;
+                    console.warn(`CusDeb Helpik: Article "${article}" is not found`);
+                }
             });
     }
 
