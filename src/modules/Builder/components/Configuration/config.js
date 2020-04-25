@@ -1,5 +1,5 @@
 const wirelessSupportOS = [
-    `Raspbian 10 "Buster" (32-bit)`,
+    "raspbian-buster-armhf",
 ];
 
 const wirelessSupportDevices = [
