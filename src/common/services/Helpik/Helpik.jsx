@@ -27,8 +27,8 @@ export default class Helpik extends Component {
     }
 
     componentDidMount() {
-        const { pageName } = this.props;
-        API.fetchHelpikData(pageName, "en")
+        const { pageName, section } = this.props;
+        API.fetchHelpikData(pageName, "en", section)
             .then((response) => {
                 this.setState(() => ({
                     helpikContent: response.data.text,
@@ -97,4 +97,9 @@ export default class Helpik extends Component {
 
 Helpik.propTypes = {
     pageName: PropTypes.string.isRequired,
+    section: PropTypes.string,
+};
+
+Helpik.defaultProps = {
+    section: null,
 };
