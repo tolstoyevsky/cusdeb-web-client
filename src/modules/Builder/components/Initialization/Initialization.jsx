@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import Card from "common/containers/Card";
 import { Spinner } from "react-bootstrap";
 
-import * as RPC from "api/rpc/blackmagic";
+import Blackmagic from "api/rpc/blackmagic";
 
 import SelectInitializationParams from "./components/SelectInitializationParams";
 import { CODE, MSG, BUILD_TYPE_CODES } from "./config";
@@ -23,6 +23,7 @@ export default class Initialization extends Component {
             },
         };
 
+        this.blackmagic = new Blackmagic();
 
         this.syncSelectsData = this.syncSelectsData.bind(this);
         this.initializationRPCCallback = this.initializationRPCCallback.bind(this);
@@ -30,7 +31,7 @@ export default class Initialization extends Component {
 
     executeState() {
         const { selectsData } = this.state;
-        RPC.initialization(
+        this.blackmagic.initialization(
             "My image",
             selectsData.device,
             selectsData.os,

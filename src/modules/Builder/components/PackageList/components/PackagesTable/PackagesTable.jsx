@@ -9,7 +9,7 @@ import Input from "common/components/Input";
 import Select from "common/components/Select";
 import InputGroup from "common/components/InputGroup";
 
-import * as RPC from "api/rpc/blackmagic";
+import Blackmagic from "api/rpc/blackmagic";
 
 import { spaceSeparation } from "utils/filters";
 
@@ -36,6 +36,8 @@ export default class PackagesTable extends Component {
             searchFieldValue: "",
         };
 
+        this.blackmagic = new Blackmagic();
+
         this.packagesNumber = 0;
         this.totalPages = 0;
 
@@ -53,13 +55,13 @@ export default class PackagesTable extends Component {
 
     componentDidMount() {
         const { currentPageNumber, itemsPerPage } = this.state;
-        RPC.fetchPackagesNumber()
+        this.blackmagic.fetchPackagesNumber()
             .then((number) => {
                 this.packagesNumber = number;
                 this.totalPages = Math.ceil(number / itemsPerPage);
             });
 
-        RPC.fetchPackagesList(currentPageNumber, itemsPerPage)
+        this.blackmagic.fetchPackagesList(currentPageNumber, itemsPerPage)
             .then((currentPagePackages) => {
                 this.setState(() => ({ currentPagePackages }));
             });
@@ -69,7 +71,7 @@ export default class PackagesTable extends Component {
         const { currentPageNumber, itemsPerPage } = this.state;
         if (prevState.currentPageNumber !== currentPageNumber
             || prevState.itemsPerPage !== itemsPerPage) {
-            RPC.fetchPackagesList(currentPageNumber, itemsPerPage)
+            this.blackmagic.fetchPackagesList(currentPageNumber, itemsPerPage)
                 .then((currentPagePackages) => {
                     this.setState({ currentPagePackages });
                 });
@@ -88,7 +90,7 @@ export default class PackagesTable extends Component {
 
     onPackageSearch() {
         const { searchFieldValue } = this.state;
-        RPC.searchPackages(searchFieldValue)
+        this.blackmagic.searchPackages(searchFieldValue)
             .then((list) => {
                 console.log("search res", list);
             });

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Card, Table } from "react-bootstrap";
 
-import * as RPC from "api/rpc/blackmagic";
+import Blackmagic from "api/rpc/blackmagic";
 
 import OrdinaryModal from "./components/OrdinaryModal/OrdinaryModal";
 import RootModal from "./components/RootModal/RootModal";
@@ -45,6 +45,8 @@ export default class Users extends Component {
             ordinary: React.createRef(),
         };
 
+        this.blackmagic = new Blackmagic();
+
         this.onChangeRootPassword = this.onChangeRootPassword.bind(this);
         this.onHideOrdinaryModal = this.onHideOrdinaryModal.bind(this);
         this.addOrUpdateOrdinaryUser = this.addOrUpdateOrdinaryUser.bind(this);
@@ -56,7 +58,7 @@ export default class Users extends Component {
     }
 
     componentDidMount() {
-        RPC.fetchUsersList()
+        this.blackmagic.fetchUsersList()
             .then((users) => {
                 this.setState(() => ({
                     users: Users.formatUsers(users),
@@ -124,7 +126,7 @@ export default class Users extends Component {
         const { ordinaryUsers, rootPassword } = this.state;
 
         ordinaryUsers.forEach((user) => {
-            RPC.addUser([
+            this.blackmagic.addUser([
                 user.username,
                 user.password,
                 user.uid,
@@ -136,7 +138,7 @@ export default class Users extends Component {
         });
 
         if (rootPassword !== null) {
-            RPC.changeRootPassword(rootPassword);
+            this.blackmagic.changeRootPassword(rootPassword);
         }
 
         const { builderCallback } = this.props;

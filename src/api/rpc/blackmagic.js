@@ -1,4 +1,4 @@
-import getRpcClient from "utils/rpc-client";
+import RpcClient from "utils/rpc-client";
 import { blackmagicRpcURL } from "config/main";
 
 const INIT_RP = "init";
@@ -15,59 +15,63 @@ const CHANGE_ROOT_PASSWORD_RP = "change_root_password";
 const GET_SHELLS_LIST_RP = "get_shells_list";
 const ADD_USER_RP = "add_user";
 
-const rpcClient = getRpcClient(blackmagicRpcURL);
+export default class Blackmagic extends RpcClient {
+    constructor() {
+        super(blackmagicRpcURL);
+    }
 
-export const initialization = async (firmwareName, device, OS, buildType, callback) => (
-    rpcClient.emit(INIT_RP, firmwareName, device, OS, buildType)
-        .then((event) => {
-            callback(event);
-        })
-);
+    async initialization(firmwareName, device, OS, buildType, callback) {
+        return this.connection.emit(INIT_RP, firmwareName, device, OS, buildType)
+            .then((event) => {
+                callback(event);
+            });
+    }
 
-export const fetchBasePackagesList = async () => (
-    rpcClient.emit(GET_BASE_PACKAGES_LIST_RP)
-);
+    async fetchBasePackagesList() {
+        return this.connection.emit(GET_BASE_PACKAGES_LIST_RP);
+    }
 
-export const fetchPackagesList = async (currentPage, packagesPerPage) => (
-    rpcClient.emit(GET_PACKAGES_LIST_RP, currentPage, packagesPerPage)
-);
+    async fetchPackagesList(currentPage, packagesPerPage) {
+        return this.connection.emit(GET_PACKAGES_LIST_RP, currentPage, packagesPerPage);
+    }
 
-export const fetchPackagesNumber = async () => (
-    rpcClient.emit(GET_PACKAGES_NUMBER_RP)
-);
+    async fetchPackagesNumber() {
+        return this.connection.emit(GET_PACKAGES_NUMBER_RP);
+    }
 
-export const searchPackages = async (packageName) => (
-    rpcClient.emit(SEARCH_PACKAGES_RP, packageName)
-);
+    async searchPackagesp(packageName) {
+        return this.connection.emit(SEARCH_PACKAGES_RP, packageName);
+    }
 
-export const resolvePackages = async (packageList) => (
-    rpcClient.emit(RESOLVE_PACKAGES_RP, packageList)
-);
+    async resolvePackages(packageList) {
+        return this.connection.emit(RESOLVE_PACKAGES_RP, packageList);
+    }
 
-export const fetchDefaultConfigurationParams = async () => (
-    rpcClient.emit(GET_DEFAULT_CONFIGURATION_RP)
-);
+    async fetchDefaultConfigurationParams() {
+        return this.connection.emit(GET_DEFAULT_CONFIGURATION_RP);
+    }
 
-export const syncConfigurationParams = async (configuration) => (
-    rpcClient.emit(SYNC_CONFIGURATION_RP, configuration)
-);
+    async syncConfigurationParams(configuration) {
+        return this.connection.emit(SYNC_CONFIGURATION_RP, configuration);
+    }
 
-export const fetchUsersList = async () => (
-    rpcClient.emit(GET_USERS_LIST_RP)
-);
+    async fetchUsersList() {
+        return this.connection.emit(GET_USERS_LIST_RP);
+    }
 
-export const fetchDefaultRootPassword = async () => (
-    rpcClient.emit(GET_DEFAULT_ROOT_PASSWORD_RP)
-);
+    async fetchDefaultRootPassword() {
+        return this.connection.emit(GET_DEFAULT_ROOT_PASSWORD_RP);
+    }
 
-export const changeRootPassword = async (rootPassword) => (
-    rpcClient.emit(CHANGE_ROOT_PASSWORD_RP, rootPassword)
-);
+    async changeRootPassword(rootPassword) {
+        return this.connection.emit(CHANGE_ROOT_PASSWORD_RP, rootPassword);
+    }
 
-export const fetchShellsList = async () => (
-    rpcClient.emit(GET_SHELLS_LIST_RP)
-);
+    async fetchShellsList() {
+        return this.connection.emit(GET_SHELLS_LIST_RP);
+    }
 
-export const addUser = async (user) => (
-    rpcClient.emit(ADD_USER_RP, ...user)
-);
+    async addUser(user) {
+        return this.connection.emit(ADD_USER_RP, ...user);
+    }
+}

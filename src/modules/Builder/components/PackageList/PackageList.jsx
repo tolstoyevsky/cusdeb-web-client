@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import * as RPC from "api/rpc/blackmagic";
+import Blackmagic from "api/rpc/blackmagic";
 
 import TotalPackagesPanel from "./components/TotalPackagesPanel/TotalPackagesPanel";
 import PackagesTable from "./components/PackagesTable/PackagesTable";
@@ -17,11 +17,13 @@ export default class PackageList extends Component {
             dependentPackages: [],
         };
 
+        this.blackmagic = new Blackmagic();
+
         this.resolvePackage = this.resolvePackage.bind(this);
     }
 
     componentDidMount() {
-        RPC.fetchBasePackagesList()
+        this.blackmagic.fetchBasePackagesList()
             .then((basePackages) => {
                 this.setState(() => ({ basePackages }));
             });
@@ -41,7 +43,7 @@ export default class PackageList extends Component {
             selectedPackages: newSelectedPackages,
         }));
 
-        RPC.resolvePackages(newSelectedPackages)
+        this.blackmagic.resolvePackages(newSelectedPackages)
             .then((dependentPackages) => {
                 this.setState(() => ({ dependentPackages }));
             });

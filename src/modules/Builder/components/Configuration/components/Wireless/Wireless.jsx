@@ -5,7 +5,7 @@ import { Form } from "react-bootstrap";
 import Card from "common/containers/Card";
 import Input from "common/components/Input";
 
-import * as RPC from "api/rpc/blackmagic";
+import Blackmagic from "api/rpc/blackmagic";
 
 export default class Wireless extends Component {
     constructor(props) {
@@ -16,6 +16,8 @@ export default class Wireless extends Component {
             enableWireless: false,
         };
 
+        this.blackmagic = new Blackmagic();
+
         this.onCheckboxChange = this.onCheckboxChange.bind(this);
         this.onChangeData = this.onChangeData.bind(this);
         this.PSKValidor = this.PSKValidor.bind(this);
@@ -23,7 +25,7 @@ export default class Wireless extends Component {
     }
 
     componentDidMount() {
-        RPC.fetchDefaultConfigurationParams()
+        this.blackmagic.fetchDefaultConfigurationParams()
             .then((defaultConfig) => {
                 this.setState(() => ({ SSID: defaultConfig.SSID }));
             });
@@ -50,7 +52,7 @@ export default class Wireless extends Component {
     syncConfigParams() {
         const { enableWireless, SSID, PSK } = this.state;
         if (enableWireless) {
-            RPC.syncConfigurationParams(
+            this.blackmagic.syncConfigurationParams(
                 {
                     enable_wireless: enableWireless,
                     SSID,

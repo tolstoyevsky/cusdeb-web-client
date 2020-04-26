@@ -8,7 +8,7 @@ import {
 
 import Input from "common/components/Input";
 
-import * as RPC from "api/rpc/blackmagic";
+import Blackmagic from "api/rpc/blackmagic";
 
 export default class OrdinaryModal extends Component {
     static formatShellsList(shells) {
@@ -55,6 +55,8 @@ export default class OrdinaryModal extends Component {
             retypePassword: React.createRef(),
         };
 
+        this.blackmagic = new Blackmagic();
+
         this.onAddOrUpdateOrdinaryUser = this.onAddOrUpdateOrdinaryUser.bind(this);
         this.onChangeModalStatus = this.onChangeModalStatus.bind(this);
         this.onCommentChange = this.onCommentChange.bind(this);
@@ -70,7 +72,7 @@ export default class OrdinaryModal extends Component {
     }
 
     componentDidMount() {
-        RPC.fetchShellsList().then((baseShellsList) => {
+        this.blackmagic.fetchShellsList().then((baseShellsList) => {
             this.setState(() => {
                 const shellsList = OrdinaryModal.formatShellsList(baseShellsList);
                 return {
