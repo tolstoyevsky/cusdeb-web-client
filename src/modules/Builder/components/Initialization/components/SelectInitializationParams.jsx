@@ -83,7 +83,7 @@ export default class SelectInitializationParams extends Component {
 
     onDeviceChange(value) {
         const { devices } = this.state;
-        const currentDevice = devices.find((item) => item.id.toString() === value.toString());
+        const currentDevice = devices.find((item) => String(item.id) === String(value));
         this.setState(() => ({
             supportedOs: currentDevice.os,
             currentDevice,

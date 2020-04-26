@@ -40,7 +40,7 @@ export default class Select extends Component {
 
         let { value } = this.state;
         const { onChange, options } = this.props;
-        const current = options.find((item) => item.value.toString() === value.toString());
+        const current = options.find((item) => String(item.value) === String(value));
         if (!current && options.length > 0) {
             value = options[0].value;
             this.setState(() => ({ value }));
