@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Form } from "react-bootstrap";
 
 import * as API from "api/http/cdtz";
-import * as RPC from "api/rpc/blackmagic";
+import Blackmagic from "api/rpc/blackmagic";
 
 import Card from "common/containers/Card";
 import Input from "common/components/Input";
@@ -26,6 +26,8 @@ export default class Main extends Component {
             currentTimeZone: "",
         };
 
+        this.blackmagic = new Blackmagic();
+
         this.onHostNameChange = this.onHostNameChange.bind(this);
         this.onTimeZoneChange = this.onTimeZoneChange.bind(this);
         this.hostNameValidor = this.hostNameValidor.bind(this);
@@ -40,7 +42,7 @@ export default class Main extends Component {
                     currentTimeZone: timeZones[0],
                 }));
             });
-        RPC.fetchDefaultConfigurationParams()
+        this.blackmagic.fetchDefaultConfigurationParams()
             .then((defaultConfig) => {
                 this.setState(() => ({ hostName: defaultConfig.hostname }));
             });
@@ -81,7 +83,7 @@ export default class Main extends Component {
 
     syncConfigParams() {
         const { hostName, currentTimeZone } = this.state;
-        RPC.syncConfigurationParams(
+        this.blackmagic.syncConfigurationParams(
             {
                 hostname: hostName,
                 timezone: currentTimeZone,

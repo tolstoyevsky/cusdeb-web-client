@@ -8,7 +8,7 @@ import {
 
 import Input from "common/components/Input";
 
-import * as RPC from "api/rpc/blackmagic";
+import Blackmagic from "api/rpc/blackmagic";
 
 export default class RootModal extends Component {
     constructor(props) {
@@ -29,6 +29,8 @@ export default class RootModal extends Component {
             retypePassword: React.createRef(),
         };
 
+        this.blackmagic = new Blackmagic();
+
         this.onChangeModalStatus = this.onChangeModalStatus.bind(this);
         this.onModalSubmit = this.onModalSubmit.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
@@ -38,7 +40,7 @@ export default class RootModal extends Component {
     }
 
     componentDidMount() {
-        RPC.fetchDefaultRootPassword()
+        this.blackmagic.fetchDefaultRootPassword()
             .then((rootPassword) => {
                 this.setState(() => ({
                     password: rootPassword,
