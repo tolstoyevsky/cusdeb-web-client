@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import PropTypes from "prop-types";
 import {
     Button,
     Card,
@@ -70,13 +71,13 @@ export default class PackagesTable extends Component {
 
     componentDidMount() {
         const { currentPageNumber, itemsPerPage } = this.state;
-        this.blackmagic.fetchPackagesNumber()
+        const { fetchPackagesFunc, fetchPackagesNumberFunc } = this.props;
+        fetchPackagesNumberFunc()
             .then((number) => {
                 this.packagesNumber = number;
                 this.totalPages = Math.ceil(number / itemsPerPage);
             });
-
-        this.blackmagic.fetchPackagesList(currentPageNumber, itemsPerPage)
+        fetchPackagesFunc(currentPageNumber, itemsPerPage)
             .then((currentPagePackages) => {
                 this.setState(() => ({ currentPagePackages }));
             });
@@ -88,10 +89,12 @@ export default class PackagesTable extends Component {
 
     componentDidUpdate(_prevProps, prevState) {
         const { currentPageNumber, itemsPerPage } = this.state;
+        const { fetchPackagesFunc } = this.props;
         if (prevState.currentPageNumber !== currentPageNumber
             || prevState.itemsPerPage !== itemsPerPage) {
-            this.blackmagic.fetchPackagesList(currentPageNumber, itemsPerPage)
+            fetchPackagesFunc(currentPageNumber, itemsPerPage)
                 .then((currentPagePackages) => {
+                    console.log(currentPagePackages);
                     this.setState({ currentPagePackages });
                 });
         }
@@ -251,7 +254,7 @@ export default class PackagesTable extends Component {
     render() {
         const { currentPagePackages } = this.state;
         return (
-            <Card className="packages-table-card">
+            <Card className="packages-table-card mb-0 rounded-0 shadow-0">
                 <Card.Header>
                     <div className="row">
                         <div className="col-6">
@@ -315,3 +318,8 @@ export default class PackagesTable extends Component {
         );
     }
 }
+
+PackagesTable.propTypes = {
+    fetchPackagesFunc: PropTypes.func.isRequired,
+    fetchPackagesNumberFunc: PropTypes.func.isRequired,
+};

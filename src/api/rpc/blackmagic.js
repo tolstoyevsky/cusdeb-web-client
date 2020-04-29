@@ -6,6 +6,7 @@ const INIT_RP = "init";
 const GET_BASE_PACKAGES_LIST_RP = "get_base_packages_list";
 const GET_PACKAGES_LIST_RP = "get_packages_list";
 const GET_PACKAGES_NUMBER_RP = "get_packages_number";
+const GET_BASE_PACKAGES_NUMBER_RP = "get_base_packages_number";
 const SEARCH_PACKAGES_RP = "search";
 const RESOLVE_PACKAGES_RP = "resolve";
 const GET_DEFAULT_CONFIGURATION_RP = "get_default_configuration";
@@ -23,6 +24,11 @@ export default class Blackmagic {
             const token = getToken("accessToken");
             Blackmagic.prototype.connection = new Shirow(blackmagicRpcURL.replace("%token", token));
         }
+
+        this.fetchPackagesList = this.fetchPackagesList.bind(this);
+        this.fetchBasePackagesList = this.fetchBasePackagesList.bind(this);
+        this.fetchPackagesNumber = this.fetchPackagesNumber.bind(this);
+        this.fetchBasePackagesNumber = this.fetchBasePackagesNumber.bind(this);
     }
 
     async initialization(firmwareName, device, OS, buildType, callback) {
@@ -32,8 +38,8 @@ export default class Blackmagic {
             });
     }
 
-    async fetchBasePackagesList() {
-        return this.connection.emit(GET_BASE_PACKAGES_LIST_RP);
+    async fetchBasePackagesList(currentPage, packagesPerPage) {
+        return this.connection.emit(GET_BASE_PACKAGES_LIST_RP, currentPage, packagesPerPage);
     }
 
     async fetchPackagesList(currentPage, packagesPerPage) {
@@ -42,6 +48,10 @@ export default class Blackmagic {
 
     async fetchPackagesNumber() {
         return this.connection.emit(GET_PACKAGES_NUMBER_RP);
+    }
+
+    async fetchBasePackagesNumber() {
+        return this.connection.emit(GET_BASE_PACKAGES_NUMBER_RP);
     }
 
     async searchPackagesp(packageName) {
