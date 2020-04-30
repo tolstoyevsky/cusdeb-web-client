@@ -1,5 +1,6 @@
-import RpcClient from "utils/rpc-client";
+import Shirow from "shirow";
 import { blackmagicRpcURL } from "config/main";
+import { getToken } from "utils/localStorage";
 
 const INIT_RP = "init";
 const GET_BASE_PACKAGES_LIST_RP = "get_base_packages_list";
@@ -15,9 +16,12 @@ const CHANGE_ROOT_PASSWORD_RP = "change_root_password";
 const GET_SHELLS_LIST_RP = "get_shells_list";
 const ADD_USER_RP = "add_user";
 
-export default class Blackmagic extends RpcClient {
+export default class Blackmagic {
     constructor() {
-        super(blackmagicRpcURL);
+        if (!Blackmagic.prototype.connection) {
+            const token = getToken("accessToken");
+            Blackmagic.prototype.connection = new Shirow(blackmagicRpcURL.replace("%token", token));
+        }
     }
 
     async initialization(firmwareName, device, OS, buildType, callback) {
