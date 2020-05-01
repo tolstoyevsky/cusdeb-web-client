@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Button, NavLink } from "react-bootstrap";
 import {
     BrowserRouter as Router,
     matchPath,
@@ -93,12 +94,17 @@ export default class Builder extends Component {
                         <SidebarPage
                             sidebarItems={routes.map((item) => {
                                 const isActive = matchPath(currentRoute, item);
-                                const additionalClass = isActive ? "active" : "";
                                 return (
-                                    <div className={`nav-link ${additionalClass}`} key={item.title}>
-                                        <FontAwesomeIcon className={`nav-icon fas ${item.icon_style}`} icon={item.icon} />
+                                    <NavLink
+                                        active={isActive}
+                                        key={item.title}
+                                    >
+                                        <FontAwesomeIcon
+                                            className={`nav-icon fas ${item.icon_style}`}
+                                            icon={item.icon}
+                                        />
                                         <p className="sidebar-text collapse show">{item.title}</p>
-                                    </div>
+                                    </NavLink>
                                 );
                             })}
                         >
@@ -141,16 +147,16 @@ export default class Builder extends Component {
 
                                 {nextButtonIsActive && (
                                     <div className="row">
-                                        <div className="col-md-9">{" "}</div>
+                                        <div className="col-md-9" />
                                         <div className="col-md-3">
-                                            <button
-                                                type="button"
-                                                className="btn btn-primary btn-block next-state"
+                                            <Button
+                                                variant="primary"
+                                                block
                                                 onClick={this.onNextBuildState}
                                                 disabled={buttonState}
                                             >
                                                 Next
-                                            </button>
+                                            </Button>
                                         </div>
                                     </div>
                                 )}
