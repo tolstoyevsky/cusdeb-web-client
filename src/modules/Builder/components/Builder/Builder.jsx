@@ -20,14 +20,15 @@ export default class Builder extends Component {
 
         this.state = {
             currentStageKey: "initialization",
-            device: "",
-            os: "",
             nextButtonIsActive: true,
             buttonState: false,
+
+            buildUUID: "",
+            device: "",
+            os: "",
         };
 
         this.waitExecutingState = false;
-        this.buildUUID = "";
 
         this.builderCallback = this.builderCallback.bind(this);
         this.onNext = this.onNext.bind(this);
@@ -50,8 +51,8 @@ export default class Builder extends Component {
     processStateData(data) {
         switch (data ? data.state : "") {
             case "initialization":
-                this.buildUUID = data.buildUUID;
                 this.setState(() => ({
+                    buildUUID: data.buildUUID,
                     device: data.device,
                     os: data.os,
                 }));
@@ -80,8 +81,9 @@ export default class Builder extends Component {
     render() {
         const {
             currentStageKey, nextButtonIsActive,
-            os,
+            buildUUID,
             device,
+            os,
             buttonState,
         } = this.state;
         const currentStage = BUILDER_STAGES[currentStageKey];
@@ -142,10 +144,10 @@ export default class Builder extends Component {
                                                         matchPath(currentStage.path, stage)
                                                             ? this.currentStateRef : null
                                                     }
-                                                    os={os}
+                                                    buildUUID={buildUUID}
                                                     device={device}
+                                                    os={os}
                                                     builderCallback={this.builderCallback}
-                                                    buildUUID={this.buildUUID}
                                                 />
                                             </Route>
                                         );
