@@ -31,12 +31,12 @@ export default class Builder extends Component {
         this.buildUUID = "";
 
         this.builderCallback = this.builderCallback.bind(this);
-        this.onNextBuildState = this.onNextBuildState.bind(this);
+        this.onNext = this.onNext.bind(this);
         this.currentStateRef = React.createRef();
         this.processStateData = this.processStateData.bind(this);
     }
 
-    onNextBuildState() {
+    onNext() {
         if (!this.waitExecutingState) {
             this.waitExecutingState = true;
 
@@ -150,7 +150,7 @@ export default class Builder extends Component {
                                             <Button
                                                 variant="primary"
                                                 block
-                                                onClick={this.onNextBuildState}
+                                                onClick={this.onNext}
                                                 disabled={buttonState}
                                             >
                                                 Next
