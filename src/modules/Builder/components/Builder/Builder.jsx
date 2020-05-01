@@ -27,27 +27,27 @@ export default class Builder extends Component {
             os: "",
         };
 
-        this.waitExecutingState = false;
+        this.waitExecutingStage = false;
 
         this.builderCallback = this.builderCallback.bind(this);
         this.onNext = this.onNext.bind(this);
         this.currentStateRef = React.createRef();
-        this.processStateData = this.processStateData.bind(this);
+        this.processStageData = this.processStageData.bind(this);
     }
 
     onNext() {
-        if (!this.waitExecutingState) {
-            this.waitExecutingState = true;
+        if (!this.waitExecutingStage) {
+            this.waitExecutingStage = true;
 
             this.currentStateRef.current.executeState();
         }
     }
 
     builderCallback(stateData) {
-        this.processStateData(stateData);
+        this.processStageData(stateData);
     }
 
-    processStateData(data) {
+    processStageData(data) {
         switch (data ? data.state : "") {
             case "initialization":
                 this.setState(() => ({
@@ -61,7 +61,7 @@ export default class Builder extends Component {
                 break;
             default: {
                 // To next state.
-                this.waitExecutingState = false;
+                this.waitExecutingStage = false;
 
                 this.setState((prevState) => {
                     const currentStageIndex = Object.keys(BUILDER_STAGES).findIndex((stageKey) => (
