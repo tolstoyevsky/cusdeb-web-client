@@ -27,11 +27,11 @@ export default class Builder extends Component {
             os: "",
         };
 
+        this.currentStageRef = React.createRef();
         this.waitExecutingStage = false;
 
         this.builderCallback = this.builderCallback.bind(this);
         this.onNext = this.onNext.bind(this);
-        this.currentStateRef = React.createRef();
         this.processStageData = this.processStageData.bind(this);
     }
 
@@ -39,7 +39,7 @@ export default class Builder extends Component {
         if (!this.waitExecutingStage) {
             this.waitExecutingStage = true;
 
-            this.currentStateRef.current.executeState();
+            this.currentStageRef.current.executeState();
         }
     }
 
@@ -141,7 +141,7 @@ export default class Builder extends Component {
                                                 <stage.main
                                                     ref={
                                                         matchPath(currentStage.path, stage)
-                                                            ? this.currentStateRef : null
+                                                            ? this.currentStageRef : null
                                                     }
                                                     buildUUID={buildUUID}
                                                     device={device}
