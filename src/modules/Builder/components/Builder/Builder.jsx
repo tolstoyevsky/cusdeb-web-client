@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, NavLink } from "react-bootstrap";
 import {
     BrowserRouter as Router,
@@ -7,8 +8,6 @@ import {
     Route,
     Switch,
 } from "react-router-dom";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import SidebarPage from "common/containers/SidebarPage";
 
