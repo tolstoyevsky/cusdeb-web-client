@@ -12,15 +12,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import SidebarPage from "common/containers/SidebarPage";
 
-import { routes, baseRouteIndex } from "./config";
+import { BUILDER_STAGES, NEXT_BUTTON_INACTIVE_STAGES } from "./config";
 
 export default class Builder extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            prevRouteIndex: baseRouteIndex,
-            currentRoute: routes[baseRouteIndex].path,
+            currentStageKey: "initialization",
             device: "",
             os: "",
             nextButtonIsActive: true,
@@ -49,7 +48,6 @@ export default class Builder extends Component {
     }
 
     processStateData(data) {
-        const { prevRouteIndex } = this.state;
         switch (data ? data.state : "") {
             case "initialization":
                 this.buildUUID = data.buildUUID;
@@ -65,43 +63,48 @@ export default class Builder extends Component {
                 // To next state.
                 this.waitExecutingState = false;
 
-                const nextRouteIndex = prevRouteIndex + 1;
-                this.setState(() => ({
-                    prevRouteIndex: nextRouteIndex,
-                    currentRoute: routes[nextRouteIndex].path,
-
-                    nextButtonIsActive: nextRouteIndex < routes.length - 1,
-                }));
+                this.setState((prevState) => {
+                    const currentStageIndex = Object.keys(BUILDER_STAGES).findIndex((stageKey) => (
+                        stageKey === prevState.currentStageKey
+                    ));
+                    const nextStageKey = Object.keys(BUILDER_STAGES)[currentStageIndex + 1];
+                    return {
+                        currentStageKey: nextStageKey,
+                        nextButtonIsActive: !NEXT_BUTTON_INACTIVE_STAGES.includes(nextStageKey),
+                    };
+                });
             }
         }
     }
 
     render() {
         const {
-            currentRoute, nextButtonIsActive,
+            currentStageKey, nextButtonIsActive,
             os,
             device,
             buttonState,
         } = this.state;
+        const currentStage = BUILDER_STAGES[currentStageKey];
+
         return (
             <div className="builder">
                 <Switch>
                     <Router>
-                        <Redirect to={currentRoute} />
+                        <Redirect to={currentStage.path} />
 
                         <SidebarPage
-                            sidebarItems={routes.map((item) => {
-                                const isActive = matchPath(currentRoute, item);
+                            sidebarItems={Object.keys(BUILDER_STAGES).map((stageKey) => {
+                                const stage = BUILDER_STAGES[stageKey];
                                 return (
                                     <NavLink
-                                        active={isActive}
-                                        key={item.title}
+                                        active={matchPath(currentStage.path, stage)}
+                                        key={stage.title}
                                     >
                                         <FontAwesomeIcon
-                                            className={`nav-icon fas ${item.icon_style}`}
-                                            icon={item.icon}
+                                            className={`nav-icon fas ${stage.icon_style}`}
+                                            icon={stage.icon}
                                         />
-                                        <p className="sidebar-text collapse show">{item.title}</p>
+                                        <p className="sidebar-text collapse show">{stage.title}</p>
                                     </NavLink>
                                 );
                             })}
@@ -109,38 +112,44 @@ export default class Builder extends Component {
                             <div className="content-header">
                                 <div className="container-fluid">
                                     <Switch>
-                                        {routes.map((route) => (
-                                            <Route
-                                                key={route.title}
-                                                path={route.path}
-                                                exact
-                                            >
-                                                <h3>{route.title}</h3>
-                                            </Route>
-                                        ))}
+                                        {Object.keys(BUILDER_STAGES).map((stageKey) => {
+                                            const stage = BUILDER_STAGES[stageKey];
+                                            return (
+                                                <Route
+                                                    key={stage.title}
+                                                    path={stage.path}
+                                                    exact
+                                                >
+                                                    <h3>{stage.title}</h3>
+                                                </Route>
+                                            );
+                                        })}
                                     </Switch>
                                 </div>
                             </div>
                             <div className="content">
                                 <Switch>
-                                    {routes.map((route) => (
-                                        <Route
-                                            key={route.title}
-                                            path={route.path}
-                                            exact
-                                        >
-                                            <route.main
-                                                ref={
-                                                    matchPath(currentRoute, route)
-                                                        ? this.currentStateRef : null
-                                                }
-                                                os={os}
-                                                device={device}
-                                                builderCallback={this.builderCallback}
-                                                buildUUID={this.buildUUID}
-                                            />
-                                        </Route>
-                                    ))}
+                                    {Object.keys(BUILDER_STAGES).map((stageKey) => {
+                                        const stage = BUILDER_STAGES[stageKey];
+                                        return (
+                                            <Route
+                                                key={stage.title}
+                                                path={stage.path}
+                                                exact
+                                            >
+                                                <stage.main
+                                                    ref={
+                                                        matchPath(currentStage.path, stage)
+                                                            ? this.currentStateRef : null
+                                                    }
+                                                    os={os}
+                                                    device={device}
+                                                    builderCallback={this.builderCallback}
+                                                    buildUUID={this.buildUUID}
+                                                />
+                                            </Route>
+                                        );
+                                    })}
                                 </Switch>
 
                                 {nextButtonIsActive && (
