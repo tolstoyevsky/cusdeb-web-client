@@ -52,6 +52,5 @@ const routes = [
 ];
 
 const baseRouteIndex = 0;
-const baseRoute = routes[baseRouteIndex];
 
-export { routes, baseRouteIndex, baseRoute };
+export { routes, baseRouteIndex };

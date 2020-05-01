@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import SidebarPage from "common/containers/SidebarPage";
 
-import { routes, baseRouteIndex, baseRoute } from "./config";
+import { routes, baseRouteIndex } from "./config";
 
 export default class Builder extends Component {
     constructor(props) {
@@ -20,7 +20,6 @@ export default class Builder extends Component {
 
         this.state = {
             prevRouteIndex: baseRouteIndex,
-            prevRoute: baseRoute.path,
             currentRoute: routes[baseRouteIndex].path,
             device: "",
             os: "",
@@ -50,7 +49,7 @@ export default class Builder extends Component {
     }
 
     processStateData(data) {
-        const { currentRoute, prevRouteIndex } = this.state;
+        const { prevRouteIndex } = this.state;
         switch (data ? data.state : "") {
             case "initialization":
                 this.buildUUID = data.buildUUID;
@@ -69,7 +68,6 @@ export default class Builder extends Component {
                 const nextRouteIndex = prevRouteIndex + 1;
                 this.setState(() => ({
                     prevRouteIndex: nextRouteIndex,
-                    prevRoute: currentRoute,
                     currentRoute: routes[nextRouteIndex].path,
 
                     nextButtonIsActive: nextRouteIndex < routes.length - 1,
@@ -80,7 +78,7 @@ export default class Builder extends Component {
 
     render() {
         const {
-            currentRoute, nextButtonIsActive, prevRoute,
+            currentRoute, nextButtonIsActive,
             os,
             device,
             buttonState,
@@ -89,7 +87,7 @@ export default class Builder extends Component {
             <div className="builder">
                 <Switch>
                     <Router>
-                        <Redirect from={prevRoute} to={currentRoute} />
+                        <Redirect to={currentRoute} />
 
                         <SidebarPage
                             sidebarItems={routes.map((item) => {
