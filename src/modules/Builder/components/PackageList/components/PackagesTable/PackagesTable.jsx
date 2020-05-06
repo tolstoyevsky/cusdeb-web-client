@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { Table } from "react-bootstrap";
+import {
+    Button,
+    Card,
+    InputGroup,
+    Table,
+} from "react-bootstrap";
 
-import Card from "common/containers/Card";
 import Input from "common/components/Input";
 import Select from "common/components/Select";
-import InputGroup from "common/components/InputGroup";
 
 import Blackmagic from "api/rpc/blackmagic";
 
@@ -50,10 +53,6 @@ export default class PackagesTable extends Component {
         this.onPageChange = this.onPageChange.bind(this);
         this.onSearchFieldChange = this.onSearchFieldChange.bind(this);
         this.resolvePackage = this.resolvePackage.bind(this);
-
-        // Bind render methods
-        this.getCardTitle = this.getCardTitle.bind(this);
-        this.getCardTools = this.getCardTools.bind(this);
         this.getCardFooter = this.getCardFooter.bind(this);
     }
 
@@ -114,40 +113,6 @@ export default class PackagesTable extends Component {
         this.resolvePackage(packageName, action);
     }
 
-    /*
-        Render methods
-    */
-
-    getCardTitle() {
-        return (
-            <div>
-                Show
-                <Select styleName="form-control-sm" options={itemsPerPageOptions} onChange={this.onItemsPerPageChange} />
-                packages
-            </div>
-        );
-    }
-
-    getCardTools() {
-        return (
-            <InputGroup
-                styleName="input-group-sm"
-                appendComponent={(
-                    <button type="button" className="btn btn-default" onClick={this.onPackageSearch}>
-                        <FontAwesomeIcon icon={faSearch} />
-                    </button>
-                )}
-            >
-                <Input
-                    type="text"
-                    name="package-search"
-                    placeholder="Package name"
-                    onChange={this.onSearchFieldChange}
-                />
-            </InputGroup>
-        );
-    }
-
     getCardFooter() {
         const { currentPageNumber, itemsPerPage } = this.state;
         const packagesStartNumber = (currentPageNumber - 1) * itemsPerPage + 1;
@@ -203,35 +168,67 @@ export default class PackagesTable extends Component {
         };
 
         return (
-            <Card
-                additionalClasses="packages-table-card"
-                title={this.getCardTitle()}
-                tools={this.getCardTools()}
-                footer={this.getCardFooter()}
-            >
-                <Table bsPrefix="table table-responsive border-top-0">
-                    <thead>
-                        <tr>
-                            {columnTitles.map((title) => (
-                                <th id={title} key={title}>{title}</th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {currentPagePackages.map((item) => (
-                            prepareTableItem(item, packages, this.onPackageActionClick)
-                        )).map((packageObj) => {
-                            const trKey = packageObj.package;
-                            return (
-                                <tr key={trKey}>
-                                    {fieldsName.map((field) => (
-                                        <td id={field} key={field}>{packageObj[field]}</td>
-                                    ))}
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </Table>
+            <Card className="packages-table-card">
+                <Card.Header>
+                    <div className="row">
+                        <div className="col-sm-12 col-md-9">
+                            <Card.Title>
+                                Show
+                                <Select
+                                    styleName="form-control-sm"
+                                    options={itemsPerPageOptions}
+                                    onChange={this.onItemsPerPageChange}
+                                />
+                                packages
+                            </Card.Title>
+                        </div>
+                        <div className="col-sm-12 col-md-3 d-inline-flex justify-content-end">
+                            <div className="card-tools">
+                                <InputGroup size="sm">
+                                    <Input
+                                        type="text"
+                                        name="package-search"
+                                        placeholder="Package name"
+                                        onChange={this.onSearchFieldChange}
+                                    />
+                                    <InputGroup.Append>
+                                        <Button variant="default" onClick={this.onPackageSearch}>
+                                            <FontAwesomeIcon icon={faSearch} />
+                                        </Button>
+                                    </InputGroup.Append>
+                                </InputGroup>
+                            </div>
+                        </div>
+                    </div>
+                </Card.Header>
+                <Card.Body>
+                    <Table bsPrefix="table table-responsive border-top-0">
+                        <thead>
+                            <tr>
+                                {columnTitles.map((title) => (
+                                    <th id={title} key={title}>{title}</th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {currentPagePackages.map((item) => (
+                                prepareTableItem(item, packages, this.onPackageActionClick)
+                            )).map((packageObj) => {
+                                const trKey = packageObj.package;
+                                return (
+                                    <tr key={trKey}>
+                                        {fieldsName.map((field) => (
+                                            <td id={field} key={field}>{packageObj[field]}</td>
+                                        ))}
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </Table>
+                </Card.Body>
+                <Card.Footer>
+                    {this.getCardFooter()}
+                </Card.Footer>
             </Card>
         );
     }
