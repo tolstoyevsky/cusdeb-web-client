@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { Table } from "react-bootstrap";
@@ -34,6 +33,10 @@ export default class PackagesTable extends Component {
             currentPagePackages: [],
 
             searchFieldValue: "",
+
+            basePackages: [],
+            selectedPackages: [],
+            dependentPackages: [],
         };
 
         this.blackmagic = new Blackmagic();
@@ -46,6 +49,7 @@ export default class PackagesTable extends Component {
         this.onPackageSearch = this.onPackageSearch.bind(this);
         this.onPageChange = this.onPageChange.bind(this);
         this.onSearchFieldChange = this.onSearchFieldChange.bind(this);
+        this.resolvePackage = this.resolvePackage.bind(this);
 
         // Bind render methods
         this.getCardTitle = this.getCardTitle.bind(this);
@@ -64,6 +68,10 @@ export default class PackagesTable extends Component {
         this.blackmagic.fetchPackagesList(currentPageNumber, itemsPerPage)
             .then((currentPagePackages) => {
                 this.setState(() => ({ currentPagePackages }));
+            });
+        this.blackmagic.fetchBasePackagesList()
+            .then((basePackages) => {
+                this.setState(() => ({ basePackages }));
             });
     }
 
@@ -103,8 +111,7 @@ export default class PackagesTable extends Component {
     onPackageActionClick(event) {
         const packageName = event.target.dataset.package;
         const { action } = event.target.dataset;
-        const { resolvePackage } = this.props;
-        resolvePackage(packageName, action);
+        this.resolvePackage(packageName, action);
     }
 
     /*
@@ -162,9 +169,39 @@ export default class PackagesTable extends Component {
         ];
     }
 
+    resolvePackage(packageName, action) {
+        const { selectedPackages } = this.state;
+        const newSelectedPackages = [...selectedPackages];
+
+        if (action === "add") {
+            newSelectedPackages.push(packageName);
+        } else if (action === "remove") {
+            newSelectedPackages.pop(packageName);
+        }
+
+        this.setState(() => ({
+            selectedPackages: newSelectedPackages,
+        }));
+
+        this.blackmagic.resolvePackages(newSelectedPackages)
+            .then((dependentPackages) => {
+                this.setState(() => ({ dependentPackages }));
+            });
+    }
+
     render() {
-        const { currentPagePackages } = this.state;
-        const { packages } = this.props;
+        const {
+            currentPagePackages,
+            basePackages,
+            selectedPackages,
+            dependentPackages,
+        } = this.state;
+        const packages = {
+            base: basePackages,
+            selected: selectedPackages,
+            dependent: dependentPackages,
+        };
+
         return (
             <Card
                 additionalClasses="packages-table-card"
@@ -199,20 +236,3 @@ export default class PackagesTable extends Component {
         );
     }
 }
-
-PackagesTable.propTypes = {
-    packages: PropTypes.shape({
-        base: PropTypes.array,
-        selected: PropTypes.array,
-        dependent: PropTypes.array,
-    }),
-    resolvePackage: PropTypes.func.isRequired,
-};
-
-PackagesTable.defaultProps = {
-    packages: {
-        base: [],
-        selected: [],
-        dependent: [],
-    },
-};
