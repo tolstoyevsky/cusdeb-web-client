@@ -3,9 +3,7 @@ import PropTypes from "prop-types";
 
 import Blackmagic from "api/rpc/blackmagic";
 
-import TotalPackagesPanel from "./components/TotalPackagesPanel/TotalPackagesPanel";
 import PackagesTable from "./components/PackagesTable/PackagesTable";
-import PackageStatistics from "./components/PackageStatistics/PackageStatistics";
 
 export default class PackageList extends Component {
     constructor(props) {
@@ -62,17 +60,9 @@ export default class PackageList extends Component {
             dependent: dependentPackages,
         };
 
-        return [
-            <div className="row" key="packages-and-statistics">
-                <div className="col-md-9">
-                    <TotalPackagesPanel packages={packages} resolvePackage={this.resolvePackage} />
-                </div>
-                <div className="col-md-3">
-                    <PackageStatistics packages={packages} />
-                </div>
-            </div>,
-            <PackagesTable key="packages-list-table" packages={packages} resolvePackage={this.resolvePackage} />,
-        ];
+        return (
+            <PackagesTable key="packages-list-table" packages={packages} resolvePackage={this.resolvePackage} />
+        );
     }
 }
 
