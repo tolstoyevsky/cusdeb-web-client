@@ -274,7 +274,7 @@ export default class PackagesTable extends Component {
                     </div>
                 </Card.Header>
                 <Card.Body>
-                    <Table bsPrefix="table table-responsive border-top-0">
+                    <Table bsPrefix="table table-responsive-sm border-top-0">
                         <thead>
                             <tr>
                                 {columnTitles.map((title) => (
