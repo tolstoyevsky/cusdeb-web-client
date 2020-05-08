@@ -127,7 +127,6 @@ export default class PackagesTable extends Component {
                 <Pagination
                     paginationPagesCount={paginationPagesCount}
                     totalPages={this.totalPages}
-                    currentPageNumber={currentPageNumber}
                     onChange={this.onPageChange}
                 />
             </div>,
