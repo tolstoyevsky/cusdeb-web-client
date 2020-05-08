@@ -1,10 +1,14 @@
-.card-title .form-group {
-    margin-bottom: 0;
-    margin-right: 5px;
-    display: inline-block;
-}
-@media screen and (max-width:750px){
-    .packages-table-card #Description, .packages-table-card #description{
-        display: none;
+.packages-table-card {
+    .card-title .form-group {
+        margin-bottom: 0;
+        margin-right: 5px;
+        display: inline-block;
+    }
+
+    .Description,
+    .description {
+        @media screen and (max-width: 750px) {
+            display: none;
+        }
     }
 }

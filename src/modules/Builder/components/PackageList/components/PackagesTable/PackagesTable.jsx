@@ -283,7 +283,7 @@ export default class PackagesTable extends Component {
                         <thead>
                             <tr>
                                 {columnTitles.map((title) => (
-                                    <th id={title} key={title}>{title}</th>
+                                    <th className={title} key={title}>{title}</th>
                                 ))}
                             </tr>
                         </thead>
@@ -293,7 +293,7 @@ export default class PackagesTable extends Component {
                                 return (
                                     <tr key={packageObj.package}>
                                         {fieldsName.map((field) => (
-                                            <td id={field} key={field}>
+                                            <td className={field} key={field}>
                                                 {preparedPackageObj[field]}
                                             </td>
                                         ))}
