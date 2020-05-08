@@ -130,19 +130,25 @@ export default class PackagesTable extends Component {
         const packagesStartNumber = (currentPageNumber - 1) * itemsPerPage + 1;
         const packagesEndNumber = currentPageNumber * itemsPerPage;
 
-        return [
-            <div className="float-left" key="packagesCount">
-                {/* eslint-disable-next-line react/jsx-one-expression-per-line, max-len */}
-                Showing {packagesStartNumber} to {packagesEndNumber} of {spaceSeparation(this.packagesNumber)} packages
-            </div>,
-            <div className="float-right" key="pagination">
-                <Pagination
-                    paginationPagesCount={paginationPagesCount}
-                    totalPages={this.totalPages}
-                    onChange={this.onPageChange}
-                />
-            </div>,
-        ];
+        return (
+            <div className="row">
+                <div className="col-12 col-sm-6 mb-2 mb-sm-0">
+                    <div className="text-center text-sm-left" key="packagesCount">
+                        {/* eslint-disable-next-line react/jsx-one-expression-per-line, max-len */}
+                        Showing {packagesStartNumber} to {packagesEndNumber} of {spaceSeparation(this.packagesNumber)} packages
+                    </div>
+                </div>
+                <div className="col-12 col-sm-6 d-inline-flex justify-content-sm-end justify-content-center">
+                    <div key="pagination">
+                        <Pagination
+                            paginationPagesCount={paginationPagesCount}
+                            totalPages={this.totalPages}
+                            onChange={this.onPageChange}
+                        />
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     getPackageType(packageName) {
@@ -243,18 +249,17 @@ export default class PackagesTable extends Component {
             <Card className="packages-table-card">
                 <Card.Header>
                     <div className="row">
-                        <div className="col-sm-12 col-md-9">
+                        <div className="col-6">
                             <Card.Title>
-                                Show
                                 <Select
                                     styleName="form-control-sm"
                                     options={itemsPerPageOptions}
                                     onChange={this.onItemsPerPageChange}
                                 />
-                                packages
+                                rows
                             </Card.Title>
                         </div>
-                        <div className="col-sm-12 col-md-3 d-inline-flex justify-content-end">
+                        <div className="col-6 d-inline-flex justify-content-end">
                             <div className="card-tools">
                                 <InputGroup size="sm">
                                     <Input

@@ -58,7 +58,7 @@ export default class Pagination extends Component {
         });
 
         return (
-            <BootsrapPagination onClick={this.onPageChange}>
+            <BootsrapPagination onClick={this.onPageChange} className="mb-0">
                 <BootsrapPagination.Item id="prev" disabled={currentPage === 1}>‹</BootsrapPagination.Item>
                 {paginationPages.map((page) => (
                     <BootsrapPagination.Item
