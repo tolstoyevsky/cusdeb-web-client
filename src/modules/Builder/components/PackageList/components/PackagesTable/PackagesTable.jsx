@@ -5,6 +5,7 @@ import {
     Button,
     Card,
     InputGroup,
+    Spinner,
     Table,
 } from "react-bootstrap";
 
@@ -12,12 +13,9 @@ import Input from "common/components/Input";
 import Select from "common/components/Select";
 
 import Blackmagic from "api/rpc/blackmagic";
-
-import { spaceSeparation } from "utils/filters";
+import { formatBytes, spaceSeparation } from "utils/filters";
 
 import Pagination from "./components/Pagination/Pagination";
-import prepareTableItem from "./functions";
-
 import {
     columnTitles,
     fieldsName,
@@ -26,6 +24,20 @@ import {
 } from "./config";
 
 export default class PackagesTable extends Component {
+    static getBadgeByPackageType(packageType) {
+        if (packageType === "base") {
+            return <span className="badge bg-warning">Base</span>;
+        }
+        if (packageType === "selected") {
+            return <span className="badge bg-success">Selected</span>;
+        }
+        if (packageType === "dependent") {
+            return <span className="badge bg-danger">Dependent</span>;
+        }
+
+        return "";
+    }
+
     constructor(props) {
         super(props);
 
@@ -40,6 +52,7 @@ export default class PackagesTable extends Component {
             basePackages: [],
             selectedPackages: [],
             dependentPackages: [],
+            resolvingPackages: [],
         };
 
         this.blackmagic = new Blackmagic();
@@ -52,7 +65,6 @@ export default class PackagesTable extends Component {
         this.onPackageSearch = this.onPackageSearch.bind(this);
         this.onPageChange = this.onPageChange.bind(this);
         this.onSearchFieldChange = this.onSearchFieldChange.bind(this);
-        this.resolvePackage = this.resolvePackage.bind(this);
         this.getCardFooter = this.getCardFooter.bind(this);
     }
 
@@ -133,39 +145,100 @@ export default class PackagesTable extends Component {
         ];
     }
 
-    resolvePackage(packageName, action) {
-        const { selectedPackages } = this.state;
-        const newSelectedPackages = [...selectedPackages];
+    getPackageType(packageName) {
+        const { basePackages, dependentPackages, selectedPackages } = this.state;
 
-        if (action === "add") {
-            newSelectedPackages.push(packageName);
-        } else if (action === "remove") {
-            newSelectedPackages.pop(packageName);
+        if (basePackages.includes(packageName)) {
+            return "base";
+        }
+        if (dependentPackages.includes(packageName)) {
+            return "dependent";
+        }
+        if (selectedPackages.includes(packageName)) {
+            return "selected";
         }
 
-        this.setState(() => ({
-            selectedPackages: newSelectedPackages,
-        }));
+        return "unset";
+    }
 
-        this.blackmagic.resolvePackages(newSelectedPackages)
-            .then((dependentPackages) => {
-                this.setState(() => ({ dependentPackages }));
+    resolvePackage(packageName, action) {
+        const { resolvingPackages } = this.state;
+
+        resolvingPackages.push(packageName);
+        this.setState(() => ({ resolvingPackages }));
+
+        this.blackmagic.resolvePackages([packageName])
+            .then((newDependentPackages) => {
+                this.setState((prevState) => {
+                    // eslint-disable-next-line no-shadow
+                    const { dependentPackages, resolvingPackages, selectedPackages } = prevState;
+
+                    if (action === "add") {
+                        selectedPackages.push(packageName);
+                    } else if (action === "remove") {
+                        selectedPackages.pop(packageName);
+                    }
+                    resolvingPackages.pop(packageName);
+
+                    return {
+                        dependentPackages: dependentPackages.concat(newDependentPackages),
+                        resolvingPackages,
+                        selectedPackages,
+                    };
+                });
             });
     }
 
-    render() {
-        const {
-            currentPagePackages,
-            basePackages,
-            selectedPackages,
-            dependentPackages,
-        } = this.state;
-        const packages = {
-            base: basePackages,
-            selected: selectedPackages,
-            dependent: dependentPackages,
-        };
+    prepareTableItem(_packageObj) {
+        const { resolvingPackages } = this.state;
+        const packageObj = { ..._packageObj };
+        const packageName = packageObj.package;
 
+        packageObj.package = [
+            <span key="packageNme">{packageName}</span>,
+        ];
+
+        const packageType = this.getPackageType(packageName);
+        const badge = PackagesTable.getBadgeByPackageType(packageType);
+        if (badge) {
+            packageObj.package.push(
+                <span key="badge" className="ml-1">
+                    {badge}
+                </span>,
+            );
+        }
+        if (resolvingPackages.includes(packageName)) {
+            packageObj.package.push(
+                <Spinner
+                    key="spinner"
+                    className="ml-1"
+                    animation="border"
+                    size="sm"
+                />,
+            );
+        }
+
+        if (packageType !== "base" && packageType !== "dependent") {
+            packageObj.action = (
+                <button
+                    type="button"
+                    className="btn btn-default"
+                    onClick={this.onPackageActionClick}
+                    data-action={packageType === "selected" ? "remove" : "add"}
+                    data-package={packageName}
+                >
+                    {packageType === "selected" ? "-" : "+"}
+                </button>
+            );
+        }
+
+        packageObj.size = formatBytes(packageObj.size);
+
+        return packageObj;
+    }
+
+    render() {
+        const { currentPagePackages } = this.state;
         return (
             <Card className="packages-table-card">
                 <Card.Header>
@@ -210,14 +283,14 @@ export default class PackagesTable extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {currentPagePackages.map((item) => (
-                                prepareTableItem(item, packages, this.onPackageActionClick)
-                            )).map((packageObj) => {
-                                const trKey = packageObj.package;
+                            {currentPagePackages.map((packageObj) => {
+                                const preparedPackageObj = this.prepareTableItem(packageObj);
                                 return (
-                                    <tr key={trKey}>
+                                    <tr key={packageObj.package}>
                                         {fieldsName.map((field) => (
-                                            <td id={field} key={field}>{packageObj[field]}</td>
+                                            <td id={field} key={field}>
+                                                {preparedPackageObj[field]}
+                                            </td>
                                         ))}
                                     </tr>
                                 );
