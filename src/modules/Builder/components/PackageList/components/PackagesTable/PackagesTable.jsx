@@ -50,9 +50,7 @@ export default class PackagesTable extends Component {
 
             searchFieldValue: "",
 
-            basePackages: [],
             selectedPackages: [],
-            dependentPackages: [],
             resolvingPackages: [],
         };
 
@@ -80,10 +78,6 @@ export default class PackagesTable extends Component {
         fetchPackagesFunc(currentPageNumber, itemsPerPage)
             .then((currentPagePackages) => {
                 this.setState(() => ({ currentPagePackages }));
-            });
-        this.blackmagic.fetchBasePackagesList()
-            .then((basePackages) => {
-                this.setState(() => ({ basePackages }));
             });
     }
 
@@ -154,22 +148,6 @@ export default class PackagesTable extends Component {
         );
     }
 
-    getPackageType(packageName) {
-        const { basePackages, dependentPackages, selectedPackages } = this.state;
-
-        if (basePackages.includes(packageName)) {
-            return "base";
-        }
-        if (dependentPackages.includes(packageName)) {
-            return "dependent";
-        }
-        if (selectedPackages.includes(packageName)) {
-            return "selected";
-        }
-
-        return "unset";
-    }
-
     resolvePackage(packageName, action) {
         const { resolvingPackages, selectedPackages } = this.state;
 
@@ -187,16 +165,15 @@ export default class PackagesTable extends Component {
         }));
 
         this.blackmagic.resolvePackages(selectedPackages)
-            .then((newDependentPackages) => {
+            .then(() => {
                 this.setState((prevState) => {
                     // eslint-disable-next-line no-shadow
-                    const { dependentPackages, resolvingPackages } = prevState;
+                    const { resolvingPackages } = prevState;
 
                     const resolvingPackageIndex = resolvingPackages.indexOf(packageName);
                     resolvingPackages.splice(resolvingPackageIndex, 1);
 
                     return {
-                        dependentPackages: dependentPackages.concat(newDependentPackages),
                         resolvingPackages,
                     };
                 });
@@ -205,6 +182,7 @@ export default class PackagesTable extends Component {
 
     prepareTableItem(_packageObj) {
         const { resolvingPackages } = this.state;
+        const { allowAction } = this.props;
         const packageObj = { ..._packageObj };
         const packageName = packageObj.package;
 
@@ -212,8 +190,7 @@ export default class PackagesTable extends Component {
             <span key="packageNme">{packageName}</span>,
         ];
 
-        const packageType = this.getPackageType(packageName);
-        const badge = PackagesTable.getBadgeByPackageType(packageType);
+        const badge = PackagesTable.getBadgeByPackageType(packageObj.type);
         if (badge && !resolvingPackages.includes(packageName)) {
             packageObj.package.push(
                 <span key="badge" className="ml-1">
@@ -232,16 +209,16 @@ export default class PackagesTable extends Component {
             );
         }
 
-        if (packageType !== "base" && packageType !== "dependent") {
+        if (allowAction && packageObj.type !== "base" && packageObj.type !== "dependent") {
             packageObj.action = (
                 <button
                     type="button"
                     className="btn btn-default"
                     onClick={this.onPackageActionClick}
-                    data-action={packageType === "selected" ? "remove" : "add"}
+                    data-action={packageObj.type === "selected" ? "remove" : "add"}
                     data-package={packageName}
                 >
-                    {packageType === "selected" ? "-" : "+"}
+                    {packageObj.type === "selected" ? "-" : "+"}
                 </button>
             );
         }
@@ -253,6 +230,15 @@ export default class PackagesTable extends Component {
 
     render() {
         const { currentPagePackages } = this.state;
+        const { allowAction } = this.props;
+
+        const columnTitlesCopy = [...columnTitles];
+        const fieldsNameCopy = [...fieldsName];
+        if (!allowAction) {
+            columnTitlesCopy.shift();
+            fieldsNameCopy.shift();
+        }
+
         return (
             <Card className="packages-table-card mb-0 rounded-0 shadow-0">
                 <Card.Header>
@@ -290,7 +276,7 @@ export default class PackagesTable extends Component {
                     <Table bsPrefix="table table-responsive-sm border-top-0">
                         <thead>
                             <tr>
-                                {columnTitles.map((title) => (
+                                {columnTitlesCopy.map((title) => (
                                     <th className={title} key={title}>{title}</th>
                                 ))}
                             </tr>
@@ -300,7 +286,7 @@ export default class PackagesTable extends Component {
                                 const preparedPackageObj = this.prepareTableItem(packageObj);
                                 return (
                                     <tr key={packageObj.package}>
-                                        {fieldsName.map((field) => (
+                                        {fieldsNameCopy.map((field) => (
                                             <td className={field} key={field}>
                                                 {preparedPackageObj[field]}
                                             </td>
@@ -320,6 +306,11 @@ export default class PackagesTable extends Component {
 }
 
 PackagesTable.propTypes = {
+    allowAction: PropTypes.bool,
     fetchPackagesFunc: PropTypes.func.isRequired,
     fetchPackagesNumberFunc: PropTypes.func.isRequired,
+};
+
+PackagesTable.defaultProps = {
+    allowAction: true,
 };
