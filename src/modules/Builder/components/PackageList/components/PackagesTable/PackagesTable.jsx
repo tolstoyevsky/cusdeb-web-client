@@ -254,7 +254,7 @@ export default class PackagesTable extends Component {
                             </Card.Title>
                         </div>
                         <div className="col-6 d-inline-flex justify-content-end">
-                            <div className="card-tools">
+                            <div className="card-tools m-0">
                                 <InputGroup size="sm">
                                     <Input
                                         type="text"
