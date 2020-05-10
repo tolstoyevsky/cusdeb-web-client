@@ -42,6 +42,7 @@ export default class PackageList extends Component {
                             </Tab.Pane>
                             <Tab.Pane eventKey="base">
                                 <PackagesTable
+                                    allowAction={false}
                                     fetchPackagesFunc={this.blackmagic.fetchBasePackagesList}
                                     fetchPackagesNumberFunc={
                                         this.blackmagic.fetchBasePackagesNumber
