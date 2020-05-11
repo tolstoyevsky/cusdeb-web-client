@@ -49,7 +49,7 @@ export default class Blackmagic {
     }
 
     async resolvePackages(packageList) {
-        return this.connection.emit(RESOLVE_PACKAGES_RP, packageList);
+        return this.connection.emitForce(RESOLVE_PACKAGES_RP, packageList);
     }
 
     async fetchDefaultConfigurationParams() {
