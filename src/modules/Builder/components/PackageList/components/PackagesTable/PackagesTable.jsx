@@ -174,7 +174,8 @@ export default class PackagesTable extends Component {
         if (action === "add") {
             selectedPackages.push(packageName);
         } else if (action === "remove") {
-            selectedPackages.pop(packageName);
+            const selectPackageIndex = selectedPackages.indexOf(packageName);
+            selectedPackages.splice(selectPackageIndex, 1);
         }
 
         this.setState(() => ({
@@ -188,7 +189,8 @@ export default class PackagesTable extends Component {
                     // eslint-disable-next-line no-shadow
                     const { dependentPackages, resolvingPackages } = prevState;
 
-                    resolvingPackages.pop(packageName);
+                    const resolvingPackageIndex = resolvingPackages.indexOf(packageName);
+                    resolvingPackages.splice(resolvingPackageIndex, 1);
 
                     return {
                         dependentPackages: dependentPackages.concat(newDependentPackages),
