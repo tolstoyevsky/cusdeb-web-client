@@ -168,28 +168,31 @@ export default class PackagesTable extends Component {
     }
 
     resolvePackage(packageName, action) {
-        const { resolvingPackages } = this.state;
+        const { resolvingPackages, selectedPackages } = this.state;
 
         resolvingPackages.push(packageName);
-        this.setState(() => ({ resolvingPackages }));
+        if (action === "add") {
+            selectedPackages.push(packageName);
+        } else if (action === "remove") {
+            selectedPackages.pop(packageName);
+        }
 
-        this.blackmagic.resolvePackages([packageName])
+        this.setState(() => ({
+            resolvingPackages,
+            selectedPackages,
+        }));
+
+        this.blackmagic.resolvePackages(selectedPackages)
             .then((newDependentPackages) => {
                 this.setState((prevState) => {
                     // eslint-disable-next-line no-shadow
-                    const { dependentPackages, resolvingPackages, selectedPackages } = prevState;
+                    const { dependentPackages, resolvingPackages } = prevState;
 
-                    if (action === "add") {
-                        selectedPackages.push(packageName);
-                    } else if (action === "remove") {
-                        selectedPackages.pop(packageName);
-                    }
                     resolvingPackages.pop(packageName);
 
                     return {
                         dependentPackages: dependentPackages.concat(newDependentPackages),
                         resolvingPackages,
-                        selectedPackages,
                     };
                 });
             });
@@ -206,7 +209,7 @@ export default class PackagesTable extends Component {
 
         const packageType = this.getPackageType(packageName);
         const badge = PackagesTable.getBadgeByPackageType(packageType);
-        if (badge) {
+        if (badge && !resolvingPackages.includes(packageName)) {
             packageObj.package.push(
                 <span key="badge" className="ml-1">
                     {badge}
