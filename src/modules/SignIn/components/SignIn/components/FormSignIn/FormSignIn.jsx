@@ -1,9 +1,9 @@
 import React, { Component } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
-import { Button } from "react-bootstrap";
+import { Button, InputGroup } from "react-bootstrap";
 
 import Input from "common/components/Input";
-import InputGroup from "common/components/InputGroup";
 
 import { setTokens } from "utils/localStorage";
 import * as API from "api/http/users";
@@ -77,11 +77,7 @@ export default class FormSignIn extends Component {
         const { isValid, errorMsg, formData } = this.state;
         return (
             <form onSubmit={this.onSubmit}>
-                <InputGroup
-                    styleName={defaultInputGroupSize}
-                    faIcon={faUser}
-                >
-
+                <InputGroup className={defaultInputGroupSize}>
                     <Input
                         autoFocus
                         type="text"
@@ -91,12 +87,14 @@ export default class FormSignIn extends Component {
                         isValid={isValid.username}
                         value={formData.username}
                     />
+                    <InputGroup.Append>
+                        <InputGroup.Text>
+                            <FontAwesomeIcon icon={faUser} />
+                        </InputGroup.Text>
+                    </InputGroup.Append>
                 </InputGroup>
-                <InputGroup
-                    styleName={defaultInputGroupSize}
-                    faIcon={faLock}
-                >
 
+                <InputGroup className={defaultInputGroupSize}>
                     <Input
                         type="password"
                         name="password"
@@ -105,6 +103,11 @@ export default class FormSignIn extends Component {
                         isValid={isValid.password}
                         value={formData.password}
                     />
+                    <InputGroup.Append>
+                        <InputGroup.Text>
+                            <FontAwesomeIcon icon={faLock} />
+                        </InputGroup.Text>
+                    </InputGroup.Append>
                 </InputGroup>
 
                 <div className="form-error-msg">{errorMsg}</div>
