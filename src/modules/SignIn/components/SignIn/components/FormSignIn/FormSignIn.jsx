@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
+import { Button } from "react-bootstrap";
 
-import Button from "common/components/Button";
 import Input from "common/components/Input";
 import InputGroup from "common/components/InputGroup";
 
@@ -108,7 +108,7 @@ export default class FormSignIn extends Component {
                 </InputGroup>
 
                 <div className="form-error-msg">{errorMsg}</div>
-                <Button styleName="btn-primary btn-block">Sign in</Button>
+                <Button variant="primary" type="submit" block>Sign in</Button>
             </form>
         );
     }
