@@ -5,8 +5,10 @@ import { getToken } from "utils/localStorage";
 const INIT_RP = "init";
 const GET_BASE_PACKAGES_LIST_RP = "get_base_packages_list";
 const GET_PACKAGES_LIST_RP = "get_packages_list";
+const GET_SELECTED_PACKAGES_LIST_RP = "get_selected_packages_list";
 const GET_PACKAGES_NUMBER_RP = "get_packages_number";
 const GET_BASE_PACKAGES_NUMBER_RP = "get_base_packages_number";
+const GET_SELECTED_PACKAGES_NUMBER_RP = "get_selected_packages_number";
 const SEARCH_PACKAGES_RP = "search";
 const RESOLVE_PACKAGES_RP = "resolve";
 const GET_DEFAULT_CONFIGURATION_RP = "get_default_configuration";
@@ -27,8 +29,10 @@ export default class Blackmagic {
 
         this.fetchPackagesList = this.fetchPackagesList.bind(this);
         this.fetchBasePackagesList = this.fetchBasePackagesList.bind(this);
+        this.fetchSelectedPackagesList = this.fetchSelectedPackagesList.bind(this);
         this.fetchPackagesNumber = this.fetchPackagesNumber.bind(this);
         this.fetchBasePackagesNumber = this.fetchBasePackagesNumber.bind(this);
+        this.fetchSelectedPackagesNumber = this.fetchSelectedPackagesNumber.bind(this);
     }
 
     async initialization(firmwareName, device, OS, buildType, callback) {
@@ -46,12 +50,22 @@ export default class Blackmagic {
         return this.connection.emitForce(GET_PACKAGES_LIST_RP, currentPage, packagesPerPage);
     }
 
+    async fetchSelectedPackagesList(currentPage, packagesPerPage) {
+        return this.connection.emitForce(
+            GET_SELECTED_PACKAGES_LIST_RP, currentPage, packagesPerPage,
+        );
+    }
+
     async fetchPackagesNumber() {
         return this.connection.emit(GET_PACKAGES_NUMBER_RP);
     }
 
     async fetchBasePackagesNumber() {
         return this.connection.emit(GET_BASE_PACKAGES_NUMBER_RP);
+    }
+
+    async fetchSelectedPackagesNumber() {
+        return this.connection.emit(GET_SELECTED_PACKAGES_NUMBER_RP);
     }
 
     async searchPackagesp(packageName) {
