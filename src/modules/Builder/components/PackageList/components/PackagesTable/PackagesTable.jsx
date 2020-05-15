@@ -177,6 +177,13 @@ export default class PackagesTable extends Component {
                         resolvingPackages,
                     };
                 });
+
+                const { currentPageNumber, itemsPerPage } = this.state;
+                const { fetchPackagesFunc } = this.props;
+                fetchPackagesFunc(currentPageNumber, itemsPerPage)
+                    .then((currentPagePackages) => {
+                        this.setState(() => ({ currentPagePackages }));
+                    });
             });
     }
 
