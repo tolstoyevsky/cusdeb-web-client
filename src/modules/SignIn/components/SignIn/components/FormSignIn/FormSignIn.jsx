@@ -7,8 +7,6 @@ import Input from "common/components/Input";
 
 import * as API from "api/http/users";
 
-import { validSignInForm } from "./functions";
-
 export default class FormSignIn extends Component {
     constructor(props) {
         super(props);
@@ -18,16 +16,21 @@ export default class FormSignIn extends Component {
                 username: "",
                 password: "",
             },
-            isValid: {
-                username: true,
-                password: true,
-            },
 
             incorrectStatus: false,
+            buttonStates: {},
+        };
+
+        this.fieldRefs = {
+            username: React.createRef(),
+            password: React.createRef(),
         };
 
         this.onFieldsChange = this.onFieldsChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+
+        this.passwordValidor = this.passwordValidor.bind(this);
+        this.usernameValidor = this.usernameValidor.bind(this);
     }
 
     onFieldsChange(fieldName, fieldValue) {
@@ -39,37 +42,61 @@ export default class FormSignIn extends Component {
     onSubmit(event) {
         event.preventDefault();
         const { formData } = this.state;
-        const validateResult = validSignInForm(formData);
 
-        if (validateResult.status) {
-            API.signIn(formData)
-                .then((response) => {
-                    if (response.status === 200) {
-                        const { access, refresh } = response.data;
-                        localStorage.setItem("accessToken", access);
-                        localStorage.setItem("refreshToken", refresh);
-                        window.location.href = "/dashboard";
-                    }
-                })
-                .catch((error) => {
-                    if (error.response.status === 400) {
-                        this.setState(() => ({
-                            incorrectStatus: true,
-                        }));
-                    }
-                });
-        } else {
-            Object.keys(validateResult.invalidFields).forEach((field) => {
-                const fieldStatus = validateResult.invalidFields[field];
-                this.setState((prevState) => ({
-                    isValid: Object.assign(prevState.isValid, { [field]: fieldStatus }),
-                }));
+        API.signIn(formData)
+            .then((response) => {
+                if (response.status === 200) {
+                    const { access, refresh } = response.data;
+                    localStorage.setItem("accessToken", access);
+                    localStorage.setItem("refreshToken", refresh);
+                    window.location.href = "/dashboard";
+                }
+            })
+            .catch((error) => {
+                if (error.response.status === 400) {
+                    const incorrectStatus = Object.keys(error.response.data).includes("non_field_errors");
+                    this.setState(() => ({ incorrectStatus }));
+
+                    Object.keys(this.fieldRefs).forEach((ref) => {
+                        this.fieldRefs[ref].current.forceUpdate();
+                    });
+                }
             });
-        }
+    }
+
+    usernameValidor(value) {
+        const usernameValid = Boolean(value);
+
+        this.setState((prevState) => ({
+            buttonStates: {
+                ...prevState.buttonStates,
+                username: usernameValid,
+            },
+        }));
+
+        return usernameValid;
+    }
+
+    passwordValidor(value) {
+        const passwordValid = Boolean(value);
+
+        this.setState((prevState) => ({
+            buttonStates: {
+                ...prevState.buttonStates,
+                password: passwordValid,
+            },
+        }));
+
+        return passwordValid;
+    }
+
+    checkButtonStates() {
+        const { buttonStates } = this.state;
+        return Object.values(buttonStates).some((elem) => !elem);
     }
 
     render() {
-        const { isValid, incorrectStatus, formData } = this.state;
+        const { formData, incorrectStatus } = this.state;
         const classWarning = incorrectStatus ? "d-block" : "d-none";
 
         return (
@@ -77,11 +104,12 @@ export default class FormSignIn extends Component {
                 <InputGroup className="mb-3">
                     <Input
                         autoFocus
+                        ref={this.fieldRefs.username}
                         type="text"
                         name="username"
                         placeholder="Username"
                         onChange={this.onFieldsChange}
-                        isValid={isValid.username}
+                        validationFunc={this.usernameValidor}
                         value={formData.username}
                     />
                     <InputGroup.Append>
@@ -89,15 +117,17 @@ export default class FormSignIn extends Component {
                             <FontAwesomeIcon icon={faUser} />
                         </InputGroup.Text>
                     </InputGroup.Append>
+                    <div className="error invalid-feedback">Username cannot be empty</div>
                 </InputGroup>
 
                 <InputGroup className="mb-3">
                     <Input
+                        ref={this.fieldRefs.password}
                         type="password"
                         name="password"
                         placeholder="Password"
                         onChange={this.onFieldsChange}
-                        isValid={isValid.password}
+                        validationFunc={this.passwordValidor}
                         value={formData.password}
                     />
                     <InputGroup.Append>
@@ -105,12 +135,14 @@ export default class FormSignIn extends Component {
                             <FontAwesomeIcon icon={faLock} />
                         </InputGroup.Text>
                     </InputGroup.Append>
+                    <div className="error invalid-feedback">Password cannot be empty</div>
                 </InputGroup>
 
-                <div className={`${classWarning} form-error-msg`}>
+                <div className={`${classWarning} text-danger mb-3`}>
                     Incorrect username or password
                 </div>
-                <Button variant="primary" type="submit" block>Sign in</Button>
+
+                <Button variant="primary" type="submit" disabled={this.checkButtonStates()} block>Sign in</Button>
             </form>
         );
     }
