@@ -39,11 +39,11 @@ export default class Blackmagic {
     }
 
     async fetchBasePackagesList(currentPage, packagesPerPage) {
-        return this.connection.emit(GET_BASE_PACKAGES_LIST_RP, currentPage, packagesPerPage);
+        return this.connection.emitForce(GET_BASE_PACKAGES_LIST_RP, currentPage, packagesPerPage);
     }
 
     async fetchPackagesList(currentPage, packagesPerPage) {
-        return this.connection.emit(GET_PACKAGES_LIST_RP, currentPage, packagesPerPage);
+        return this.connection.emitForce(GET_PACKAGES_LIST_RP, currentPage, packagesPerPage);
     }
 
     async fetchPackagesNumber() {
