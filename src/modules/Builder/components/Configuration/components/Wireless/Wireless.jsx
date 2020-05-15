@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Form } from "react-bootstrap";
+import { Card, Form } from "react-bootstrap";
 
-import Card from "common/containers/Card";
 import Input from "common/components/Input";
 
 import Blackmagic from "api/rpc/blackmagic";
@@ -103,48 +102,50 @@ export default class Wireless extends Component {
 
         return (
             <Card>
-                <div className="configuration-wireless">
-                    <Form.Group>
-                        <Form.Check
-                            type="checkbox"
-                            id="show-ordinary-password"
-                            label="Support Wi-Fi"
-                            onChange={this.onCheckboxChange}
-                        />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Network name</Form.Label>
-                        <Input
-                            id="SSIDID"
-                            name="SSID"
-                            type="text"
-                            value={SSID}
-                            onChange={this.onChangeData}
-                            disabled={!enableWireless}
-                            validationFunc={this.SSIDValidor}
-                        />
-                        <div className="error invalid-feedback">
-                            Network name must be between 1 and 31 characters of Latin letters,
-                            numbers or a dot character
-                        </div>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Password</Form.Label>
-                        <Input
-                            id="PSKID"
-                            name="PSK"
-                            type="password"
-                            value={PSK}
-                            onChange={this.onChangeData}
-                            disabled={!enableWireless}
-                            validationFunc={this.PSKValidor}
-                        />
-                        <div className="error invalid-feedback">
-                            Password must be either empty or between 8 and 63 characters
-                            of Latin letters, numbers or a dot character
-                        </div>
-                    </Form.Group>
-                </div>
+                <Card.Body>
+                    <div className="configuration-wireless">
+                        <Form.Group>
+                            <Form.Check
+                                type="checkbox"
+                                id="show-ordinary-password"
+                                label="Support Wi-Fi"
+                                onChange={this.onCheckboxChange}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Network name</Form.Label>
+                            <Input
+                                id="SSIDID"
+                                name="SSID"
+                                type="text"
+                                value={SSID}
+                                onChange={this.onChangeData}
+                                disabled={!enableWireless}
+                                validationFunc={this.SSIDValidor}
+                            />
+                            <div className="error invalid-feedback">
+                                Network name must be between 1 and 31 characters of Latin letters,
+                                numbers or a dot character
+                            </div>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Password</Form.Label>
+                            <Input
+                                id="PSKID"
+                                name="PSK"
+                                type="password"
+                                value={PSK}
+                                onChange={this.onChangeData}
+                                disabled={!enableWireless}
+                                validationFunc={this.PSKValidor}
+                            />
+                            <div className="error invalid-feedback">
+                                Password must be either empty or between 8 and 63 characters
+                                of Latin letters, numbers or a dot character
+                            </div>
+                        </Form.Group>
+                    </div>
+                </Card.Body>
             </Card>
         );
     }

@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Form } from "react-bootstrap";
+import { Card, Form } from "react-bootstrap";
 
 import * as API from "api/http/cdtz";
 import Blackmagic from "api/rpc/blackmagic";
 
-import Card from "common/containers/Card";
 import Input from "common/components/Input";
 import SelectSearch from "common/components/SelectSearch";
 
@@ -96,30 +95,32 @@ export default class Main extends Component {
         const selectTimeZones = Main.formatTimeZones(timeZones);
         return (
             <Card>
-                <div className="configuration-main">
-                    <Form.Group>
-                        <Form.Label>Host name</Form.Label>
-                        <Input
-                            id="hostNameId"
-                            name="hostName"
-                            type="text"
-                            value={hostName}
-                            onChange={this.onHostNameChange}
-                            validationFunc={this.hostNameValidor}
+                <Card.Body>
+                    <div className="configuration-main">
+                        <Form.Group>
+                            <Form.Label>Host name</Form.Label>
+                            <Input
+                                id="hostNameId"
+                                name="hostName"
+                                type="text"
+                                value={hostName}
+                                onChange={this.onHostNameChange}
+                                validationFunc={this.hostNameValidor}
+                            />
+                            <div className="error invalid-feedback">
+                                Host name must be between 1 and 253 characters of Latin letters,
+                                numbers or a dot character
+                            </div>
+                        </Form.Group>
+                        <SelectSearch
+                            id="timeZones"
+                            key="time-zone"
+                            label="Time zone"
+                            options={selectTimeZones}
+                            onChange={this.onTimeZoneChange}
                         />
-                        <div className="error invalid-feedback">
-                            Host name must be between 1 and 253 characters of Latin letters,
-                            numbers or a dot character
-                        </div>
-                    </Form.Group>
-                    <SelectSearch
-                        id="timeZones"
-                        key="time-zone"
-                        label="Time zone"
-                        options={selectTimeZones}
-                        onChange={this.onTimeZoneChange}
-                    />
-                </div>
+                    </div>
+                </Card.Body>
             </Card>
         );
     }

@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import Card from "common/containers/Card";
-import { Spinner } from "react-bootstrap";
+import { Card, Spinner } from "react-bootstrap";
 
 import Blackmagic from "api/rpc/blackmagic";
 
@@ -103,14 +102,16 @@ export default class Initialization extends Component {
         const { logs } = this.state;
         return (
             <Card>
-                {logs ? (
-                    <div className="initialization__logs">
-                        {logs}
-                        <Spinner animation="border" />
-                    </div>
-                ) : (
-                    <SelectInitializationParams onChange={this.syncSelectsData} />
-                )}
+                <Card.Body>
+                    {logs ? (
+                        <div className="initialization__logs">
+                            {logs}
+                            <Spinner animation="border" />
+                        </div>
+                    ) : (
+                        <SelectInitializationParams onChange={this.syncSelectsData} />
+                    )}
+                </Card.Body>
             </Card>
         );
     }
