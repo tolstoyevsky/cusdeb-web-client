@@ -67,29 +67,14 @@ export default class PackagesTable extends Component {
     }
 
     componentDidMount() {
-        const { currentPageNumber, itemsPerPage } = this.state;
-        const { fetchPackagesFunc, fetchPackagesNumberFunc } = this.props;
-        fetchPackagesNumberFunc()
-            .then((number) => {
-                this.packagesNumber = number;
-                this.totalPages = Math.ceil(number / itemsPerPage);
-            });
-        fetchPackagesFunc(currentPageNumber, itemsPerPage)
-            .then((currentPagePackages) => {
-                this.setState(() => ({ currentPagePackages }));
-            });
+        this.fetchPackages();
     }
 
     componentDidUpdate(_prevProps, prevState) {
         const { currentPageNumber, itemsPerPage } = this.state;
-        const { fetchPackagesFunc } = this.props;
         if (prevState.currentPageNumber !== currentPageNumber
             || prevState.itemsPerPage !== itemsPerPage) {
-            fetchPackagesFunc(currentPageNumber, itemsPerPage)
-                .then((currentPagePackages) => {
-                    console.log(currentPagePackages);
-                    this.setState({ currentPagePackages });
-                });
+            this.fetchPackages();
         }
     }
 
@@ -147,6 +132,21 @@ export default class PackagesTable extends Component {
         );
     }
 
+    fetchPackages() {
+        const { currentPageNumber, itemsPerPage } = this.state;
+        const { fetchPackagesFunc, fetchPackagesNumberFunc } = this.props;
+
+        fetchPackagesNumberFunc()
+            .then((number) => {
+                this.packagesNumber = number;
+                this.totalPages = Math.ceil(number / itemsPerPage);
+            });
+        fetchPackagesFunc(currentPageNumber, itemsPerPage)
+            .then((currentPagePackages) => {
+                this.setState({ currentPagePackages });
+            });
+    }
+
     resolvePackage(packageName, action) {
         const { resolvingPackages } = this.state;
         const { updateSelectedPackages } = this.props;
@@ -181,12 +181,7 @@ export default class PackagesTable extends Component {
                     };
                 });
 
-                const { currentPageNumber, itemsPerPage } = this.state;
-                const { fetchPackagesFunc } = this.props;
-                fetchPackagesFunc(currentPageNumber, itemsPerPage)
-                    .then((currentPagePackages) => {
-                        this.setState(() => ({ currentPagePackages }));
-                    });
+                this.fetchPackages();
             });
     }
 
