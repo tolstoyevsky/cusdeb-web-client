@@ -15,8 +15,21 @@ export default class PackageList extends Component {
         };
 
         this.blackmagic = new Blackmagic();
+        this.tabRefs = {
+            all: React.createRef(),
+            base: React.createRef(),
+            selected: React.createRef(),
+        };
 
+        this.onTabSelect = this.onTabSelect.bind(this);
         this.updateSelectedPackages = this.updateSelectedPackages.bind(this);
+    }
+
+    onTabSelect(tabKey) {
+        const tabRef = this.tabRefs[tabKey];
+        if (tabRef) {
+            tabRef.current.fetchPackages();
+        }
     }
 
     updateSelectedPackages(selectedPackages) {
@@ -33,7 +46,7 @@ export default class PackageList extends Component {
     render() {
         const { selectedPackages } = this.state;
         return [
-            <Tab.Container key="tabs-container" defaultActiveKey="all">
+            <Tab.Container key="tabs-container" defaultActiveKey="all" onSelect={this.onTabSelect}>
                 <Card className="card-primary card-outline card-outline-tabs border-0">
                     <Card.Header className="p-0 border-bottom-0">
                         <Nav as="ul" bsPrefix="nav nav-tabs">
@@ -52,6 +65,7 @@ export default class PackageList extends Component {
                         <Tab.Content>
                             <Tab.Pane eventKey="all">
                                 <PackagesTable
+                                    ref={this.tabRefs.all}
                                     fetchPackagesFunc={this.blackmagic.fetchPackagesList}
                                     fetchPackagesNumberFunc={this.blackmagic.fetchPackagesNumber}
                                     selectedPackages={selectedPackages}
@@ -60,6 +74,7 @@ export default class PackageList extends Component {
                             </Tab.Pane>
                             <Tab.Pane eventKey="base">
                                 <PackagesTable
+                                    ref={this.tabRefs.base}
                                     allowAction={false}
                                     fetchPackagesFunc={this.blackmagic.fetchBasePackagesList}
                                     fetchPackagesNumberFunc={
