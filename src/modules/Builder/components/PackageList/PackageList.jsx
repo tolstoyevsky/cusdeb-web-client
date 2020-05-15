@@ -10,7 +10,19 @@ export default class PackageList extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            selectedPackages: [],
+        };
+
         this.blackmagic = new Blackmagic();
+
+        this.updateSelectedPackages = this.updateSelectedPackages.bind(this);
+    }
+
+    updateSelectedPackages(selectedPackages) {
+        this.setState(() => ({
+            selectedPackages,
+        }));
     }
 
     executeState() {
@@ -19,6 +31,7 @@ export default class PackageList extends Component {
     }
 
     render() {
+        const { selectedPackages } = this.state;
         return [
             <Tab.Container key="tabs-container" defaultActiveKey="all">
                 <Card className="card-primary card-outline card-outline-tabs border-0">
@@ -30,6 +43,9 @@ export default class PackageList extends Component {
                             <Nav.Item as="li">
                                 <Nav.Link eventKey="base">Base</Nav.Link>
                             </Nav.Item>
+                            <Nav.Item as="li">
+                                <Nav.Link eventKey="selected">Selected</Nav.Link>
+                            </Nav.Item>
                         </Nav>
                     </Card.Header>
                     <Card.Body className="p-0">
@@ -38,6 +54,8 @@ export default class PackageList extends Component {
                                 <PackagesTable
                                     fetchPackagesFunc={this.blackmagic.fetchPackagesList}
                                     fetchPackagesNumberFunc={this.blackmagic.fetchPackagesNumber}
+                                    selectedPackages={selectedPackages}
+                                    updateSelectedPackages={this.updateSelectedPackages}
                                 />
                             </Tab.Pane>
                             <Tab.Pane eventKey="base">
@@ -47,6 +65,20 @@ export default class PackageList extends Component {
                                     fetchPackagesNumberFunc={
                                         this.blackmagic.fetchBasePackagesNumber
                                     }
+                                    selectedPackages={selectedPackages}
+                                    updateSelectedPackages={this.updateSelectedPackages}
+                                />
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="selected">
+                                <PackagesTable
+                                    ref={this.tabRefs.selected}
+                                    actionByDefault="remove"
+                                    fetchPackagesFunc={this.blackmagic.fetchSelectedPackagesList}
+                                    fetchPackagesNumberFunc={
+                                        this.blackmagic.fetchSelectedPackagesNumber
+                                    }
+                                    selectedPackages={selectedPackages}
+                                    updateSelectedPackages={this.updateSelectedPackages}
                                 />
                             </Tab.Pane>
                         </Tab.Content>

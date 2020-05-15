@@ -50,7 +50,6 @@ export default class PackagesTable extends Component {
 
             searchFieldValue: "",
 
-            selectedPackages: [],
             resolvingPackages: [],
         };
 
@@ -149,7 +148,11 @@ export default class PackagesTable extends Component {
     }
 
     resolvePackage(packageName, action) {
-        const { resolvingPackages, selectedPackages } = this.state;
+        const { resolvingPackages } = this.state;
+        const { updateSelectedPackages } = this.props;
+        // eslint-disable-next-line react/destructuring-assignment
+        const currentSelectedPackages = this.props.selectedPackages;
+        const selectedPackages = [...currentSelectedPackages];
 
         resolvingPackages.push(packageName);
         if (action === "add") {
@@ -161,8 +164,8 @@ export default class PackagesTable extends Component {
 
         this.setState(() => ({
             resolvingPackages,
-            selectedPackages,
         }));
+        updateSelectedPackages(selectedPackages);
 
         this.blackmagic.resolvePackages(selectedPackages)
             .then(() => {
@@ -217,15 +220,23 @@ export default class PackagesTable extends Component {
         }
 
         if (allowAction && packageObj.type !== "base" && packageObj.type !== "dependent") {
+            const { actionByDefault } = this.props;
+            let action;
+            if (actionByDefault) {
+                action = actionByDefault;
+            } else {
+                action = packageObj.type === "selected" ? "remove" : "add";
+            }
+
             packageObj.action = (
                 <button
                     type="button"
                     className="btn btn-default"
                     onClick={this.onPackageActionClick}
-                    data-action={packageObj.type === "selected" ? "remove" : "add"}
+                    data-action={action}
                     data-package={packageName}
                 >
-                    {packageObj.type === "selected" ? "-" : "+"}
+                    {action === "add" ? "+" : "-"}
                 </button>
             );
         }
@@ -313,11 +324,15 @@ export default class PackagesTable extends Component {
 }
 
 PackagesTable.propTypes = {
+    actionByDefault: PropTypes.oneOf(["add", "remove"]),
     allowAction: PropTypes.bool,
     fetchPackagesFunc: PropTypes.func.isRequired,
     fetchPackagesNumberFunc: PropTypes.func.isRequired,
+    selectedPackages: PropTypes.arrayOf(PropTypes.string).isRequired,
+    updateSelectedPackages: PropTypes.func.isRequired,
 };
 
 PackagesTable.defaultProps = {
+    actionByDefault: null,
     allowAction: true,
 };
