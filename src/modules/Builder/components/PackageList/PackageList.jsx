@@ -59,6 +59,9 @@ export default class PackageList extends Component {
                             <Nav.Item as="li">
                                 <Nav.Link eventKey="selected">Selected</Nav.Link>
                             </Nav.Item>
+                            <Nav.Item as="li">
+                                <Nav.Link eventKey="dependent">Dependent</Nav.Link>
+                            </Nav.Item>
                         </Nav>
                     </Card.Header>
                     <Card.Body className="p-0">
@@ -95,6 +98,9 @@ export default class PackageList extends Component {
                                     selectedPackages={selectedPackages}
                                     updateSelectedPackages={this.updateSelectedPackages}
                                 />
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="dependent">
+                                <div className="text-center p-5">It will be implemented soon</div>
                             </Tab.Pane>
                         </Tab.Content>
                     </Card.Body>
