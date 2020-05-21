@@ -11,7 +11,7 @@ import {
 
 import SidebarPage from "common/containers/SidebarPage";
 
-import { BUILDER_STAGES, NEXT_BUTTON_INACTIVE_STAGES } from "./config";
+import { BUILDER_STAGES, BACK_BUTTON_ACTIVE_STAGES, NEXT_BUTTON_INACTIVE_STAGES } from "./config";
 
 export default class Builder extends Component {
     constructor(props) {
@@ -20,6 +20,7 @@ export default class Builder extends Component {
         this.state = {
             currentStageKey: "initialization",
             nextButtonIsActive: true,
+            backButtonIsActive: false,
             buttonState: false,
 
             buildUUID: "",
@@ -31,8 +32,22 @@ export default class Builder extends Component {
         this.waitExecutingStage = false;
 
         this.builderCallback = this.builderCallback.bind(this);
+        this.onBack = this.onBack.bind(this);
         this.onNext = this.onNext.bind(this);
         this.processStageData = this.processStageData.bind(this);
+    }
+
+    onBack() {
+        this.setState((prevState) => {
+            const currentStageIndex = Object.keys(BUILDER_STAGES).findIndex((stageKey) => (
+                stageKey === prevState.currentStageKey
+            ));
+            const backStageKey = Object.keys(BUILDER_STAGES)[currentStageIndex - 1];
+            return {
+                currentStageKey: backStageKey,
+                backButtonIsActive: BACK_BUTTON_ACTIVE_STAGES.includes(backStageKey),
+            };
+        });
     }
 
     onNext() {
@@ -71,6 +86,7 @@ export default class Builder extends Component {
                     return {
                         currentStageKey: nextStageKey,
                         nextButtonIsActive: !NEXT_BUTTON_INACTIVE_STAGES.includes(nextStageKey),
+                        backButtonIsActive: BACK_BUTTON_ACTIVE_STAGES.includes(nextStageKey),
                     };
                 });
             }
@@ -79,7 +95,7 @@ export default class Builder extends Component {
 
     render() {
         const {
-            currentStageKey, nextButtonIsActive,
+            currentStageKey, backButtonIsActive, nextButtonIsActive,
             buildUUID,
             device,
             os,
@@ -152,22 +168,33 @@ export default class Builder extends Component {
                                         );
                                     })}
                                 </Switch>
-
-                                {nextButtonIsActive && (
-                                    <div className="row">
-                                        <div className="col-md-9" />
-                                        <div className="col-md-3">
+                                <div className="row">
+                                    <div className="col-6">
+                                        {backButtonIsActive && (
+                                            <div>
+                                                <Button
+                                                    variant="primary"
+                                                    className="pl-5 pr-5"
+                                                    onClick={this.onBack}
+                                                >
+                                                    Back
+                                                </Button>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="col-6 d-inline-flex justify-content-end">
+                                        {nextButtonIsActive && (
                                             <Button
                                                 variant="primary"
-                                                block
+                                                className="pl-5 pr-5"
                                                 onClick={this.onNext}
                                                 disabled={buttonState}
                                             >
                                                 Next
                                             </Button>
-                                        </div>
+                                        )}
                                     </div>
-                                )}
+                                </div>
                             </div>
                         </SidebarPage>
                     </Router>
