@@ -3,15 +3,32 @@ import PropTypes from "prop-types";
 import { Card, Nav, Tab } from "react-bootstrap";
 
 import Blackmagic from "api/rpc/blackmagic";
+import * as API from "api/http/images";
 
 import PackagesTable from "./components/PackagesTable/PackagesTable";
 
 export default class PackageList extends Component {
+    static formatDeviceTitle(device) {
+        let title = "";
+        if (device.name) {
+            title = `${title} ${device.name}`;
+        }
+        if (device.generation) {
+            title = `${title} ${device.generation}`;
+        }
+        if (device.model) {
+            title = `${title} ${device.model}`;
+        }
+
+        return title.trim();
+    }
+
     constructor(props) {
         super(props);
 
         this.state = {
             selectedPackages: [],
+            packagesUrl: null,
         };
 
         this.blackmagic = new Blackmagic();
@@ -25,11 +42,40 @@ export default class PackageList extends Component {
         this.updateSelectedPackages = this.updateSelectedPackages.bind(this);
     }
 
+    componentDidMount() {
+        API.listDevice()
+            .then((response) => {
+                this.setState(() => ({
+                    packagesUrl: this.getPackagesUrl(response.data),
+                }));
+            });
+    }
+
     onTabSelect(tabKey) {
         const tabRef = this.tabRefs[tabKey];
         if (tabRef) {
             tabRef.current.fetchPackages();
         }
+    }
+
+    getPackagesUrl(devices) {
+        const { os, device } = this.props;
+
+        const currentDevice = devices.find((element) => (
+            device === PackageList.formatDeviceTitle(element)
+        ));
+
+        if (currentDevice) {
+            const currentOs = currentDevice.os.find((element) => (
+                os === element.short_name
+            ));
+
+            if (currentOs) {
+                return currentOs.packages_url;
+            }
+        }
+
+        return null;
     }
 
     updateSelectedPackages(selectedPackages) {
@@ -44,7 +90,9 @@ export default class PackageList extends Component {
     }
 
     render() {
-        const { selectedPackages } = this.state;
+        const { packagesUrl, selectedPackages } = this.state;
+        const { os } = this.props;
+
         return [
             <Tab.Container key="tabs-container" defaultActiveKey="all" onSelect={this.onTabSelect}>
                 <Card className="card-primary card-outline card-outline-tabs border-0">
@@ -73,6 +121,8 @@ export default class PackageList extends Component {
                                     fetchPackagesNumberFunc={this.blackmagic.fetchPackagesNumber}
                                     selectedPackages={selectedPackages}
                                     updateSelectedPackages={this.updateSelectedPackages}
+                                    os={os}
+                                    packagesUrl={packagesUrl}
                                 />
                             </Tab.Pane>
                             <Tab.Pane eventKey="base">
@@ -85,6 +135,8 @@ export default class PackageList extends Component {
                                     }
                                     selectedPackages={selectedPackages}
                                     updateSelectedPackages={this.updateSelectedPackages}
+                                    os={os}
+                                    packagesUrl={packagesUrl}
                                 />
                             </Tab.Pane>
                             <Tab.Pane eventKey="selected">
@@ -97,6 +149,8 @@ export default class PackageList extends Component {
                                     }
                                     selectedPackages={selectedPackages}
                                     updateSelectedPackages={this.updateSelectedPackages}
+                                    os={os}
+                                    packagesUrl={packagesUrl}
                                 />
                             </Tab.Pane>
                             <Tab.Pane eventKey="dependent">
@@ -112,4 +166,6 @@ export default class PackageList extends Component {
 
 PackageList.propTypes = {
     builderCallback: PropTypes.func.isRequired,
+    device: PropTypes.string.isRequired,
+    os: PropTypes.string.isRequired,
 };

@@ -241,6 +241,22 @@ export default class PackagesTable extends Component {
         return packageObj;
     }
 
+    packageLink(currentPackage) {
+        const { packagesUrl, os } = this.props;
+
+        if (!packagesUrl) {
+            return null;
+        }
+
+        const link = `${packagesUrl}${currentPackage.package}`;
+
+        if (os === "devuan-jessie-armhf") {
+            return `${link}_${currentPackage.version}.html`;
+        }
+
+        return link;
+    }
+
     render() {
         const { currentPagePackages } = this.state;
         const { allowAction } = this.props;
@@ -299,11 +315,23 @@ export default class PackagesTable extends Component {
                                 const preparedPackageObj = this.prepareTableItem(packageObj);
                                 return (
                                     <tr key={packageObj.package}>
-                                        {fieldsNameCopy.map((field) => (
-                                            <td className={field} key={field}>
-                                                {preparedPackageObj[field]}
-                                            </td>
-                                        ))}
+                                        {fieldsNameCopy.map((field) => {
+                                            const packageLink = this.packageLink(packageObj);
+
+                                            return (
+                                                <td className={field} key={field}>
+                                                    {field === "package" && packageLink ? (
+                                                        <a
+                                                            rel="noopener noreferrer"
+                                                            target="_blank"
+                                                            href={packageLink}
+                                                        >
+                                                            {preparedPackageObj[field]}
+                                                        </a>
+                                                    ) : preparedPackageObj[field]}
+                                                </td>
+                                            );
+                                        })}
                                     </tr>
                                 );
                             })}
@@ -325,9 +353,13 @@ PackagesTable.propTypes = {
     fetchPackagesNumberFunc: PropTypes.func.isRequired,
     selectedPackages: PropTypes.arrayOf(PropTypes.string).isRequired,
     updateSelectedPackages: PropTypes.func.isRequired,
+    packagesUrl: PropTypes.string,
+    os: PropTypes.string,
 };
 
 PackagesTable.defaultProps = {
     actionByDefault: null,
     allowAction: true,
+    packagesUrl: null,
+    os: null,
 };
