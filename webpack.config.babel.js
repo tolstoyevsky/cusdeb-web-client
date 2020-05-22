@@ -34,7 +34,7 @@ module.exports = {
         path.join(srcPath, "root/index.jsx"),
     ],
     output: {
-        filename: "[name].bundle.js",
+        filename: "[name].[contenthash].js",
         publicPath: "/",
     },
     optimization: {
@@ -85,7 +85,7 @@ module.exports = {
             generateStatsFile: true,
             statsOptions: { source: false },
         }),
-        new ExtractTextWebpackPlugin("[name].css"),
+        new ExtractTextWebpackPlugin("[name].[hash].css"),
         new HtmlWebPackPlugin({
             template: "./public/index.html",
             filename: "./index.html",
