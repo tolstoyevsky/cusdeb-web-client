@@ -11,6 +11,10 @@ export default class Regular extends Component {
         addBodyClass("layout-top-nav");
     }
 
+    componentWillUnmount() {
+        document.body.classList.remove("layout-top-nav");
+    }
+
     render() {
         const { children } = this.props;
         return (

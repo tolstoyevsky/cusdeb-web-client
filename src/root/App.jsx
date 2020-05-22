@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import * as API from "api/http/users";
 
-import Routes from "./Routes";
+import Routes from "./Routes/Routes";
 
 export default class App extends Component {
     constructor(props) {
