@@ -1,6 +1,7 @@
 import path from "path";
 import webpack from "webpack";
 import HtmlWebPackPlugin from "html-webpack-plugin";
+import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 
 const rootPath = path.resolve(__dirname, "./");
 const srcPath = path.resolve(rootPath, "./src");
@@ -79,6 +80,11 @@ module.exports = {
         ],
     },
     plugins: [
+        new BundleAnalyzerPlugin({
+            analyzerMode: "disabled",
+            generateStatsFile: true,
+            statsOptions: { source: false },
+        }),
         new HtmlWebPackPlugin({
             template: "./public/index.html",
             filename: "./index.html",
