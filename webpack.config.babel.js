@@ -1,5 +1,6 @@
 import path from "path";
 import webpack from "webpack";
+import ExtractTextWebpackPlugin from "extract-text-webpack-plugin";
 import HtmlWebPackPlugin from "html-webpack-plugin";
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 
@@ -71,11 +72,10 @@ module.exports = {
             },
             {
                 test: /\.(css|scss)$/,
-                use: [
-                    "style-loader",
-                    "css-loader",
-                    "sass-loader",
-                ],
+                use: ExtractTextWebpackPlugin.extract({
+                    fallback: "style-loader",
+                    use: ["css-loader", "sass-loader"],
+                }),
             },
         ],
     },
@@ -85,6 +85,7 @@ module.exports = {
             generateStatsFile: true,
             statsOptions: { source: false },
         }),
+        new ExtractTextWebpackPlugin("[name].css"),
         new HtmlWebPackPlugin({
             template: "./public/index.html",
             filename: "./index.html",
