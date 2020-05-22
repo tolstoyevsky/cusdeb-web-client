@@ -32,7 +32,13 @@ module.exports = {
         path.join(srcPath, "root/index.jsx"),
     ],
     output: {
+        filename: "[name].bundle.js",
         publicPath: "/",
+    },
+    optimization: {
+        splitChunks: {
+            chunks: "all",
+        },
     },
     resolve: {
         modules: [srcPath, "node_modules"],
