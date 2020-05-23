@@ -6,10 +6,12 @@ import { Button, InputGroup } from "react-bootstrap";
 import Input from "common/components/Input";
 
 import * as API from "api/http/users";
+import { setTokens } from "utils/localStorage";
 
 import { validSignUpForm } from "./functions";
 import {
     defaultInputGroupSize,
+    signInSuccessCode,
     signUpSuccessCode,
     signUpErrorCode,
 } from "./config";
@@ -55,7 +57,19 @@ export default class FormSignUp extends Component {
             API.signUp(formData)
                 .then((response) => {
                     if (response.status === signUpSuccessCode) {
-                        window.location.href = "/dashboard";
+                        API.signIn(formData)
+                            .then((responseSignIn) => {
+                                if (responseSignIn.status === signInSuccessCode) {
+                                    setTokens(
+                                        responseSignIn.data.access,
+                                        responseSignIn.data.refresh,
+                                    );
+                                    window.location.href = "/dashboard";
+                                }
+                            })
+                            .catch(() => {
+                                window.location.href = "/signin";
+                            });
                     }
                 })
                 .catch((error) => {
