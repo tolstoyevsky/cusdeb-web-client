@@ -5,22 +5,23 @@ import Select from "./Select";
 
 export default class SelectSearch extends Component {
     componentDidMount() {
-        const { id } = this.props;
+        const { id, onChange } = this.props;
         $(`#${id}`).select2({
             width: "100%",
+        }).on("change", function () {
+            onChange(this.value);
         });
     }
 
     render() {
         const {
-            id, label, options, styleName, onChange,
+            id, label, options, styleName,
         } = this.props;
         return (
             <Select
                 id={id}
                 label={label}
                 options={options}
-                onChange={onChange}
                 styleName={styleName}
             />
         );
