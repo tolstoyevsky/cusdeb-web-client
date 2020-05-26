@@ -40,13 +40,27 @@ export default class RootModal extends Component {
     }
 
     componentDidMount() {
-        this.blackmagic.fetchDefaultRootPassword()
-            .then((rootPassword) => {
-                this.setState(() => ({
-                    password: rootPassword,
-                    retypePassword: rootPassword,
-                }));
-            });
+        const password = localStorage.getItem("rootPassword");
+
+        if (password) {
+            this.setState(() => ({
+                password,
+                retypePassword: password,
+            }));
+        } else {
+            this.blackmagic.fetchDefaultRootPassword()
+                .then((rootPassword) => {
+                    this.setState(() => ({
+                        password: rootPassword,
+                        retypePassword: rootPassword,
+                    }));
+                });
+        }
+    }
+
+    componentWillUnmount() {
+        const { password } = this.state;
+        localStorage.setItem("rootPassword", password);
     }
 
     onChangeModalStatus() {

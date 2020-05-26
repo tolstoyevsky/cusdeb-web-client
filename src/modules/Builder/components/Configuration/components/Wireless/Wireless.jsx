@@ -24,10 +24,40 @@ export default class Wireless extends Component {
     }
 
     componentDidMount() {
-        this.blackmagic.fetchDefaultConfigurationParams()
-            .then((defaultConfig) => {
-                this.setState(() => ({ SSID: defaultConfig.SSID }));
+        const enableWireless = localStorage.getItem("enableWireless") === "true";
+        const SSID = localStorage.getItem("SSID");
+        const PSK = localStorage.getItem("PSK") ? localStorage.getItem("PSK") : "";
+
+        if (enableWireless || SSID || PSK) {
+            this.setState(() => {
+                const stateData = {};
+                if (enableWireless) {
+                    stateData.enableWireless = enableWireless;
+                }
+                if (PSK) {
+                    stateData.PSK = PSK;
+                }
+                if (SSID) {
+                    stateData.SSID = SSID;
+                }
+                return stateData;
             });
+        }
+
+        if (!SSID) {
+            this.blackmagic.fetchDefaultConfigurationParams()
+                .then((defaultConfig) => {
+                    this.setState(() => ({ SSID: defaultConfig.SSID }));
+                });
+        }
+    }
+
+    componentWillUnmount() {
+        const { enableWireless, SSID, PSK } = this.state;
+
+        localStorage.setItem("enableWireless", enableWireless);
+        localStorage.setItem("SSID", SSID);
+        localStorage.setItem("PSK", PSK);
     }
 
     onCheckboxChange() {
@@ -110,6 +140,7 @@ export default class Wireless extends Component {
                                 id="show-ordinary-password"
                                 label="Support Wi-Fi"
                                 onChange={this.onCheckboxChange}
+                                checked={enableWireless}
                             />
                         </Form.Group>
                         <Form.Group>

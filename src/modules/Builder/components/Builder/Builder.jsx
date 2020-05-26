@@ -37,6 +37,16 @@ export default class Builder extends Component {
         this.processStageData = this.processStageData.bind(this);
     }
 
+    componentDidMount() {
+        Object.values([
+            "PSK", "SSID", "enableWireless", "currentTimeZone",
+            "hostName", "ordinaryUsers", "rootPassword",
+            "rootPasswordIsChanged", "rootRetypePassword",
+        ]).forEach((key) => {
+            localStorage.removeItem(key);
+        });
+    }
+
     onBack() {
         this.setState((prevState) => {
             const currentStageIndex = Object.keys(BUILDER_STAGES).findIndex((stageKey) => (

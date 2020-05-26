@@ -25,6 +25,7 @@ export default class Main extends Component {
             currentTimeZone: "",
         };
 
+        this.timeZoneRef = React.createRef();
         this.blackmagic = new Blackmagic();
 
         this.onHostNameChange = this.onHostNameChange.bind(this);
@@ -33,18 +34,31 @@ export default class Main extends Component {
     }
 
     componentDidMount() {
+        const currentTimeZone = localStorage.getItem("currentTimeZone");
+        const hostName = localStorage.getItem("hostName");
+
         API.fetchTZData()
             .then((response) => {
                 const timeZones = response.data;
-                this.setState(() => ({
-                    timeZones,
-                    currentTimeZone: timeZones[0],
-                }));
+                this.setState(() => ({ timeZones }));
+                this.timeZoneRef.current.setValue(currentTimeZone || timeZones[0]);
             });
-        this.blackmagic.fetchDefaultConfigurationParams()
-            .then((defaultConfig) => {
-                this.setState(() => ({ hostName: defaultConfig.hostname }));
-            });
+
+        if (hostName) {
+            this.setState(() => ({ hostName }));
+        } else {
+            this.blackmagic.fetchDefaultConfigurationParams()
+                .then((defaultConfig) => {
+                    this.setState(() => ({ hostName: defaultConfig.hostname }));
+                });
+        }
+    }
+
+    componentWillUnmount() {
+        const { hostName, currentTimeZone } = this.state;
+
+        localStorage.setItem("hostName", hostName);
+        localStorage.setItem("currentTimeZone", currentTimeZone);
     }
 
     onHostNameChange(name, value) {
@@ -113,6 +127,7 @@ export default class Main extends Component {
                             </div>
                         </Form.Group>
                         <SelectSearch
+                            ref={this.timeZoneRef}
                             id="timeZones"
                             key="time-zone"
                             label="Time zone"
