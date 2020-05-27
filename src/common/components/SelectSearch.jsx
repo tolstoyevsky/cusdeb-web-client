@@ -13,6 +13,11 @@ export default class SelectSearch extends Component {
         });
     }
 
+    setValue(value) {
+        const { id } = this.props;
+        $(`#${id}`).val(value).trigger("change");
+    }
+
     render() {
         const {
             id, label, options, styleName,
