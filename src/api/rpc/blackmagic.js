@@ -84,7 +84,7 @@ export default class Blackmagic {
     }
 
     async fetchUsersList() {
-        return this.connection.emit(GET_USERS_LIST_RP);
+        return this.connection.emitForce(GET_USERS_LIST_RP);
     }
 
     async fetchDefaultRootPassword() {
