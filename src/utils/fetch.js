@@ -15,11 +15,15 @@ const createResponseInterceptor = (instance) => {
 
             instance.interceptors.response.eject(interceptor);
 
-            if (getToken("refreshToken")) {
+            const refreshToken = getToken("refreshToken") || localStorage.getItem("socialRefreshToken");
+            if (refreshToken) {
                 return instance.post("/auth/token/refresh/", {
-                    refresh: getToken("refreshToken"),
+                    refresh: refreshToken,
                 }).then((response) => {
-                    localStorage.setItem("accessToken", response.data.access);
+                    localStorage.setItem(
+                        getToken("refreshToken") ? "accessToken" : "socialAccessToken",
+                        response.data.access,
+                    );
                     error.response.config.headers.Authorization = `Bearer ${response.data.access}`;
 
                     return instance(error.response.config);
@@ -36,8 +40,9 @@ const createResponseInterceptor = (instance) => {
 
 const createRequestInterceptor = (instance) => {
     instance.interceptors.request.use((config) => {
-        if (getToken("accessToken")) {
-            config.headers = { Authorization: `Bearer ${getToken("accessToken")}` };
+        const accessToken = getToken("accessToken") || localStorage.getItem("socialAccessToken");
+        if (accessToken) {
+            config.headers = { Authorization: `Bearer ${accessToken}` };
         }
         return config;
     });
@@ -49,7 +54,10 @@ const fetch = (() => {
     });
 
     createRequestInterceptor(instance);
-    if (getToken("accessToken") || getToken("refreshToken")) {
+    if (
+        getToken("accessToken") || getToken("refreshToken")
+        || localStorage.getItem("socialAccessToken") || localStorage.getItem("socialRefreshToken")
+    ) {
         createResponseInterceptor(instance);
     }
     return instance;

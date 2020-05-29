@@ -13,6 +13,7 @@ import Dashboard from "modules/Dashboard/components/Dashboard/Dashboard";
 import Error404 from "modules/Error404/components/Error404/Error404";
 import SignIn from "modules/SignIn/components/SignIn/SignIn";
 import SignUp from "modules/SignUp/components/SignUp/SignUp";
+import SocialAuthRedirect from "modules/SocialAuthRedirect/SocialAuthRedirect";
 
 import AuthRoute from "./components/AuthRoute/AuthRoute";
 
@@ -29,6 +30,7 @@ const Routes = (props) => {
 
                     <Route exact path="/signin" component={SignIn} />
                     <Route exact path="/signup" component={SignUp} />
+                    <Route exact path="/social-auth-redirect" component={SocialAuthRedirect} />
 
                     <AuthRoute exact path="/dashboard" component={Dashboard} userIsAuth={userIsAuth} />
 

@@ -11,3 +11,7 @@ export const signIn = async (formData) => (
 export const signUp = async (formData) => (
     fetch.post("/auth/signup/", formData)
 );
+
+export const socialSignIn = async () => (
+    fetch.get("/social/token/")
+);
