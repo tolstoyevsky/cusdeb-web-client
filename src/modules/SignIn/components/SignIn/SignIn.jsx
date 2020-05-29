@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Card } from "react-bootstrap";
 
+import SocialAuth from "common/components/SocialAuth";
 import { addBodyClass } from "utils/misk";
 
 import FormSignIn from "./components/FormSignIn/FormSignIn";
@@ -19,6 +20,9 @@ export default class SignIn extends Component {
                     </p>
                     <Card.Body>
                         <FormSignIn />
+
+                        <SocialAuth />
+
                         <p className="mb-0 mt-3">
                             <a href="/signup">Register a new account</a>
                         </p>

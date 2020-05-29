@@ -11,4 +11,6 @@ export const getToken = (type) => ({
 export const resetTokens = () => {
     localStorage.setItem("accessToken", null);
     localStorage.setItem("refreshToken", null);
+    localStorage.setItem("socialAccessToken", null);
+    localStorage.setItem("socailRefreshToken", null);
 };
