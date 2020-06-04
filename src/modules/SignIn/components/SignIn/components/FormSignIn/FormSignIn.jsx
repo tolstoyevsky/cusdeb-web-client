@@ -9,12 +9,6 @@ import { setTokens } from "utils/localStorage";
 import * as API from "api/http/users";
 
 import { validSignInForm } from "./functions";
-import {
-    defaultInputGroupSize,
-    signInSuccessCode,
-    signInErrorCode,
-    signInErrorMsg,
-} from "./config";
 
 export default class FormSignIn extends Component {
     constructor(props) {
@@ -30,7 +24,7 @@ export default class FormSignIn extends Component {
                 password: true,
             },
 
-            errorMsg: "",
+            incorrectStatus: false,
         };
 
         this.onFieldsChange = this.onFieldsChange.bind(this);
@@ -51,15 +45,15 @@ export default class FormSignIn extends Component {
         if (validateResult.status) {
             API.signIn(formData)
                 .then((response) => {
-                    if (response.status === signInSuccessCode) {
+                    if (response.status === 200) {
                         setTokens(response.data.access, response.data.refresh);
                         window.location.href = "/dashboard";
                     }
                 })
                 .catch((error) => {
-                    if (error.response.status === signInErrorCode) {
+                    if (error.response.status === 400) {
                         this.setState(() => ({
-                            errorMsg: signInErrorMsg,
+                            incorrectStatus: true,
                         }));
                     }
                 });
@@ -74,10 +68,12 @@ export default class FormSignIn extends Component {
     }
 
     render() {
-        const { isValid, errorMsg, formData } = this.state;
+        const { isValid, incorrectStatus, formData } = this.state;
+        const classWarning = incorrectStatus ? "d-block" : "d-none";
+
         return (
             <form onSubmit={this.onSubmit}>
-                <InputGroup className={defaultInputGroupSize}>
+                <InputGroup className="mb-3">
                     <Input
                         autoFocus
                         type="text"
@@ -94,7 +90,7 @@ export default class FormSignIn extends Component {
                     </InputGroup.Append>
                 </InputGroup>
 
-                <InputGroup className={defaultInputGroupSize}>
+                <InputGroup className="mb-3">
                     <Input
                         type="password"
                         name="password"
@@ -110,7 +106,9 @@ export default class FormSignIn extends Component {
                     </InputGroup.Append>
                 </InputGroup>
 
-                <div className="form-error-msg">{errorMsg}</div>
+                <div className={`${classWarning} form-error-msg`}>
+                    Incorrect username or password
+                </div>
                 <Button variant="primary" type="submit" block>Sign in</Button>
             </form>
         );
