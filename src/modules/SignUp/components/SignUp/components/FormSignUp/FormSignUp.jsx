@@ -8,11 +8,6 @@ import Input from "common/components/Input";
 import * as API from "api/http/users";
 
 import { validSignUpForm } from "./functions";
-import {
-    defaultInputGroupSize,
-    signUpSuccessCode,
-    signUpErrorCode,
-} from "./config";
 
 export default class FormSignUp extends Component {
     constructor(props) {
@@ -54,12 +49,12 @@ export default class FormSignUp extends Component {
         if (status) {
             API.signUp(formData)
                 .then((response) => {
-                    if (response.status === signUpSuccessCode) {
+                    if (response.status === 201) {
                         window.location.href = "/dashboard";
                     }
                 })
                 .catch((error) => {
-                    if (error.response.status === signUpErrorCode) {
+                    if (error.response.status === 400) {
                         this.setState(() => ({
                             errorMsg: error.response.data.message,
                         }));
@@ -81,7 +76,7 @@ export default class FormSignUp extends Component {
 
         return (
             <form onSubmit={this.onSubmit}>
-                <InputGroup className={defaultInputGroupSize}>
+                <InputGroup className="mb-3">
                     <Input
                         autoFocus
                         type="text"
@@ -98,7 +93,7 @@ export default class FormSignUp extends Component {
                     </InputGroup.Append>
                 </InputGroup>
 
-                <InputGroup className={defaultInputGroupSize}>
+                <InputGroup className="mb-3">
                     <Input
                         type="email"
                         name="email"
@@ -114,7 +109,7 @@ export default class FormSignUp extends Component {
                     </InputGroup.Append>
                 </InputGroup>
 
-                <InputGroup className={defaultInputGroupSize}>
+                <InputGroup className="mb-3">
                     <Input
                         type="password"
                         name="password"
@@ -130,7 +125,7 @@ export default class FormSignUp extends Component {
                     </InputGroup.Append>
                 </InputGroup>
 
-                <InputGroup className={defaultInputGroupSize}>
+                <InputGroup className="mb-3">
                     <Input
                         type="password"
                         name="retypePassword"
