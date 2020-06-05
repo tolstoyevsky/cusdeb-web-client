@@ -7,13 +7,14 @@ import {
     Switch,
 } from "react-router-dom";
 
+import Fallback from "common/components/Fallback";
+
 import Dashboard from "modules/Dashboard/components/Dashboard/Dashboard";
 import Error404 from "modules/Error404/components/Error404/Error404";
 import SignIn from "modules/SignIn/components/SignIn/SignIn";
 import SignUp from "modules/SignUp/components/SignUp/SignUp";
 
 import AuthRoute from "./components/AuthRoute/AuthRoute";
-import Fallback from "./components/Fallback/Fallback";
 
 const Builder = React.lazy(() => import("modules/Builder/components/Builder/Builder"));
 
