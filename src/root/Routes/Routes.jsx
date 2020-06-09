@@ -10,6 +10,7 @@ import {
 import Fallback from "common/components/Fallback";
 
 import Dashboard from "modules/Dashboard/components/Dashboard/Dashboard";
+import EmailVerification from "modules/EmailVerification/EmailVerification";
 import Error404 from "modules/Error404/components/Error404/Error404";
 import ResetPassword from "modules/ResetPassword/ResetPassword";
 import ResetPasswordConfirm from "modules/ResetPasswordConfirm/ResetPasswordConfirm";
@@ -43,6 +44,8 @@ const Routes = (props) => {
                     <Route exact path="/signin" component={SignIn} />
                     <Route exact path="/signup" component={SignUp} />
                     <Route exact path="/social-auth-redirect" component={SocialAuthRedirect} />
+
+                    <Route exact path="/email_verification" component={EmailVerification} />
 
                     <Route exact path="/reset-password" component={ResetPassword} />
                     <Route exact path="/reset-password/confirm" component={ResetPasswordConfirm} />

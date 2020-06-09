@@ -6,6 +6,10 @@ const fetch = createFetch({
     createInterceptors: true,
 });
 
+export const emailVerification = async (token) => (
+    fetch.post("/auth/email_verification/", { token })
+);
+
 export const whoAmI = async () => (
     fetch.get("/users/whoami/")
 );
