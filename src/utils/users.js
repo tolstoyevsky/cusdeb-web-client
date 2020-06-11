@@ -1,6 +1,8 @@
-import { resetTokens } from "utils/localStorage";
-
 export const signOut = () => {
-    resetTokens();
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("socialAccessToken");
+    localStorage.removeItem("socailRefreshToken");
+
     window.location.reload();
 };

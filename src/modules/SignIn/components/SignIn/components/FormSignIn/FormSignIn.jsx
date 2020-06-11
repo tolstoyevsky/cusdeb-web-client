@@ -5,7 +5,6 @@ import { Button, InputGroup } from "react-bootstrap";
 
 import Input from "common/components/Input";
 
-import { setTokens } from "utils/localStorage";
 import * as API from "api/http/users";
 
 import { validSignInForm } from "./functions";
@@ -46,7 +45,9 @@ export default class FormSignIn extends Component {
             API.signIn(formData)
                 .then((response) => {
                     if (response.status === 200) {
-                        setTokens(response.data.access, response.data.refresh);
+                        const { access, refresh } = response.data;
+                        localStorage.setItem("accessToken", access);
+                        localStorage.setItem("refreshToken", refresh);
                         window.location.href = "/dashboard";
                     }
                 })

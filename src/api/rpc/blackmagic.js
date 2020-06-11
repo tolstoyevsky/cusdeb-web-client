@@ -1,6 +1,5 @@
 import Shirow from "shirow";
 import { blackmagicRpcURL } from "config/main";
-import { getToken } from "utils/localStorage";
 
 const INIT_RP = "init";
 const GET_BASE_PACKAGES_LIST_RP = "get_base_packages_list";
@@ -23,7 +22,7 @@ const BUILD_IMAGE_RP = "build";
 export default class Blackmagic {
     constructor() {
         if (!Blackmagic.prototype.connection) {
-            const token = getToken("accessToken");
+            const token = localStorage.getItem("accessToken");
             Blackmagic.prototype.connection = new Shirow(blackmagicRpcURL.replace("%token", token));
         }
 
