@@ -1,6 +1,5 @@
 import axios from "axios";
 
-import { getToken } from "utils/localStorage";
 import { cusdebAPIURL } from "config/main";
 
 /* eslint no-param-reassign: "error" */
@@ -15,13 +14,13 @@ const createResponseInterceptor = (instance) => {
 
             instance.interceptors.response.eject(interceptor);
 
-            const refreshToken = getToken("refreshToken") || localStorage.getItem("socialRefreshToken");
+            const refreshToken = localStorage.getItem("refreshToken") || localStorage.getItem("socialRefreshToken");
             if (refreshToken) {
                 return instance.post("/auth/token/refresh/", {
                     refresh: refreshToken,
                 }).then((response) => {
                     localStorage.setItem(
-                        getToken("refreshToken") ? "accessToken" : "socialAccessToken",
+                        localStorage.getItem("refreshToken") ? "accessToken" : "socialAccessToken",
                         response.data.access,
                     );
                     error.response.config.headers.Authorization = `Bearer ${response.data.access}`;
@@ -40,7 +39,7 @@ const createResponseInterceptor = (instance) => {
 
 const createRequestInterceptor = (instance) => {
     instance.interceptors.request.use((config) => {
-        const accessToken = getToken("accessToken") || localStorage.getItem("socialAccessToken");
+        const accessToken = localStorage.getItem("accessToken") || localStorage.getItem("socialAccessToken");
         if (accessToken) {
             config.headers = { Authorization: `Bearer ${accessToken}` };
         }
@@ -55,7 +54,7 @@ const fetch = (() => {
 
     createRequestInterceptor(instance);
     if (
-        getToken("accessToken") || getToken("refreshToken")
+        localStorage.getItem("accessToken") || localStorage.getItem("refreshToken")
         || localStorage.getItem("socialAccessToken") || localStorage.getItem("socialRefreshToken")
     ) {
         createResponseInterceptor(instance);
