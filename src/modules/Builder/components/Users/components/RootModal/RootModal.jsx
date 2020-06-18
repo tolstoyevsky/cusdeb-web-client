@@ -190,7 +190,7 @@ export default class RootModal extends Component {
                 <Modal.Footer>
                     <Button
                         variant="primary"
-                        disabled={!this.passwordValidation}
+                        disabled={!this.passwordValidation()}
                         onClick={this.onModalSubmit}
                     >
                         OK
