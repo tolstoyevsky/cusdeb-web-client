@@ -63,7 +63,11 @@ export default class FormSignUp extends Component {
 
         const { formData } = this.state;
 
-        API.signUp(formData)
+        API.signUp({
+            username: formData.username,
+            email: formData.email,
+            password: formData.password,
+        })
             .then((response) => {
                 if (response.status === 201) {
                     window.location.href = "/dashboard";
