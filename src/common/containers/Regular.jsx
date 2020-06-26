@@ -21,7 +21,7 @@ export default class Regular extends Component {
             <div className="wrapper">
                 <Header pushmenu={false} />
 
-                <div className="content-wrapper">
+                <div className="content-wrapper pb-3">
                     {children}
                 </div>
 
