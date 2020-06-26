@@ -1,15 +1,13 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import { addBodyClass } from "utils/misk";
-
 import Footer from "./Footer";
 import Header from "./Header";
 import Sidebar from "./Sidebar/Sidebar";
 
 export default class SidebarPage extends Component {
     componentDidMount() {
-        addBodyClass("sidebar-mini");
+        document.body.classList.add("sidebar-mini");
     }
 
     render() {
