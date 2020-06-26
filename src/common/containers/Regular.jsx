@@ -1,14 +1,12 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import { addBodyClass } from "utils/misk";
-
 import Footer from "./Footer";
 import Header from "./Header";
 
 export default class Regular extends Component {
     componentDidMount() {
-        addBodyClass("layout-top-nav");
+        document.body.classList.add("layout-top-nav");
     }
 
     componentWillUnmount() {
