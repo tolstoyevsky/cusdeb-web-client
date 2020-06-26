@@ -19,7 +19,7 @@ export default class SidebarPage extends Component {
                     {sidebarItems}
                 </Sidebar>
 
-                <div className="content-wrapper">
+                <div className="content-wrapper pb-3">
                     {children}
                 </div>
 
