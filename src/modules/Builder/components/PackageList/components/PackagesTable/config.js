@@ -16,11 +16,11 @@ const itemsPerPageOptions = [
     },
 ];
 
-const paginationPagesCount = 5;
+const paginationPagesMaxCount = 5;
 
 export {
     columnTitles,
     fieldsName,
     itemsPerPageOptions,
-    paginationPagesCount,
+    paginationPagesMaxCount,
 };

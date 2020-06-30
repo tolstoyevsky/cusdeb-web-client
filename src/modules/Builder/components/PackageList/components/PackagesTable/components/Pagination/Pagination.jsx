@@ -38,20 +38,20 @@ export default class Pagination extends Component {
 
     render() {
         const { currentPage } = this.state;
-        const { paginationPagesCount, totalPages } = this.props;
+        const { paginationPagesMaxCount, totalPages } = this.props;
 
-        const paginationMiddleValue = Math.round(paginationPagesCount / 2);
+        const paginationMiddleValue = Math.round(paginationPagesMaxCount / 2);
 
         let forValue;
         if (currentPage <= paginationMiddleValue) {
             forValue = 1;
         } else if (currentPage + paginationMiddleValue > totalPages) {
-            forValue = totalPages - paginationPagesCount + 1;
+            forValue = totalPages - paginationPagesMaxCount + 1;
         } else {
             forValue = currentPage - paginationMiddleValue + 1;
         }
 
-        const paginationPages = new Array(paginationPagesCount).fill(0).map(() => {
+        const paginationPages = new Array(paginationPagesMaxCount).fill(0).map(() => {
             const buf = forValue;
             forValue += 1;
             return buf;
@@ -77,11 +77,11 @@ export default class Pagination extends Component {
 
 Pagination.propTypes = {
     onChange: PropTypes.func.isRequired,
-    paginationPagesCount: PropTypes.number,
+    paginationPagesMaxCount: PropTypes.number,
     totalPages: PropTypes.number,
 };
 
 Pagination.defaultProps = {
-    paginationPagesCount: 0,
+    paginationPagesMaxCount: 0,
     totalPages: 0,
 };
