@@ -21,7 +21,7 @@ import {
     columnTitles,
     fieldsName,
     itemsPerPageOptions,
-    paginationPagesCount,
+    paginationPagesMaxCount,
 } from "./config";
 
 export default class PackagesTable extends Component {
@@ -122,7 +122,7 @@ export default class PackagesTable extends Component {
                 <div className="col-12 col-sm-6 d-inline-flex justify-content-sm-end justify-content-center">
                     <div key="pagination">
                         <Pagination
-                            paginationPagesCount={paginationPagesCount}
+                            paginationPagesMaxCount={paginationPagesMaxCount}
                             totalPages={this.totalPages}
                             onChange={this.onPageChange}
                         />
