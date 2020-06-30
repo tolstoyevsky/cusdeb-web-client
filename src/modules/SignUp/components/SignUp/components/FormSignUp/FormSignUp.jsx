@@ -75,9 +75,13 @@ export default class FormSignUp extends Component {
             })
             .catch((error) => {
                 if (error.response.status === 400) {
-                    this.setState({
+                    this.setState((prevState) => ({
                         errorsFromServer: error.response.data,
-                    });
+                        fieldsErrors: {
+                            ...prevState.fieldsErrors,
+                            passwordCompilxity: error.response.data["31"],
+                        },
+                    }));
 
                     Object.keys(this.fieldRefs).forEach((ref) => {
                         this.fieldRefs[ref].current.forceUpdate();
@@ -249,6 +253,14 @@ export default class FormSignUp extends Component {
                     </InputGroup.Append>
                     <div className="error invalid-feedback">{fieldsErrors.password}</div>
                 </InputGroup>
+
+                {fieldsErrors.passwordCompilxity && (
+                    <div className="invalid-feedback d-block mb-3">
+                        {fieldsErrors.passwordCompilxity.map((error) => (
+                            <p className="mb-1" key={error}>{error}</p>
+                        ))}
+                    </div>
+                )}
 
                 <Button variant="primary" type="submit" disabled={this.checkButtonStates()} block>Sign up</Button>
             </form>
