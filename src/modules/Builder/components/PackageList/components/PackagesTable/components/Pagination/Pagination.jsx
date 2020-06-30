@@ -13,6 +13,20 @@ export default class Pagination extends Component {
         this.onPageChange = this.onPageChange.bind(this);
     }
 
+    componentDidUpdate(prevProps) {
+        const { currentPage } = this.state;
+        const { paginationPagesMaxCount, totalPages } = this.props;
+
+        if (totalPages !== prevProps.totalPages && currentPage > totalPages) {
+            let paginationPagesCount = paginationPagesMaxCount;
+            if (totalPages < paginationPagesMaxCount) {
+                paginationPagesCount = totalPages;
+            }
+
+            this.setCurrentPage(paginationPagesCount);
+        }
+    }
+
     onPageChange(event) {
         if (event.target.classList.contains("disabled")) {
             return;
@@ -36,29 +50,51 @@ export default class Pagination extends Component {
         onChange(nextPageNumber);
     }
 
+    setCurrentPage(numberPage) {
+        const { currentPage } = this.state;
+        const { onChange } = this.props;
+
+        if (currentPage === numberPage) {
+            return;
+        }
+
+        this.setState(() => ({ currentPage: numberPage }));
+
+        onChange(numberPage);
+    }
+
     render() {
         const { currentPage } = this.state;
         const { paginationPagesMaxCount, totalPages } = this.props;
 
-        const paginationMiddleValue = Math.round(paginationPagesMaxCount / 2);
+        if (totalPages <= 1) {
+            return null;
+        }
+
+        let paginationPagesCount = paginationPagesMaxCount;
+        if (totalPages < paginationPagesMaxCount) {
+            paginationPagesCount = totalPages;
+        }
+
+        const paginationMiddleValue = Math.round(paginationPagesCount / 2);
 
         let forValue;
         if (currentPage <= paginationMiddleValue) {
             forValue = 1;
         } else if (currentPage + paginationMiddleValue > totalPages) {
-            forValue = totalPages - paginationPagesMaxCount + 1;
+            forValue = totalPages - paginationPagesCount + 1;
         } else {
             forValue = currentPage - paginationMiddleValue + 1;
         }
 
-        const paginationPages = new Array(paginationPagesMaxCount).fill(0).map(() => {
+        const paginationPages = new Array(paginationPagesCount).fill(0).map(() => {
             const buf = forValue;
             forValue += 1;
             return buf;
         });
 
         return (
-            <BootsrapPagination onClick={this.onPageChange} className="mb-0">
+            <BootsrapPagination onClick={this.onPageChange} onChange={this.setCurrentPage} className="mb-0">
                 <BootsrapPagination.Item id="prev" disabled={currentPage === 1}>‹</BootsrapPagination.Item>
                 {paginationPages.map((page) => (
                     <BootsrapPagination.Item
