@@ -64,7 +64,7 @@ export default class Blackmagic {
     }
 
     async fetchSelectedPackagesNumber() {
-        return this.connection.emit(GET_SELECTED_PACKAGES_NUMBER_RP);
+        return this.connection.emitForce(GET_SELECTED_PACKAGES_NUMBER_RP);
     }
 
     async searchPackagesp(packageName) {
