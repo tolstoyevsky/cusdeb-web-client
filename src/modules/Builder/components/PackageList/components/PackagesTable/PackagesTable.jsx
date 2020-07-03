@@ -14,7 +14,7 @@ import Input from "common/components/Input";
 import Select from "common/components/Select";
 
 import Blackmagic from "api/rpc/blackmagic";
-import { formatBytes, spaceSeparation } from "utils/filters";
+import { formatBytes, formatPackageDescription, spaceSeparation } from "utils/filters";
 
 import Pagination from "./components/Pagination/Pagination";
 import {
@@ -323,6 +323,14 @@ export default class PackagesTable extends Component {
                                                     const packageLink = this.packageLink(
                                                         packageObj,
                                                     );
+                                                    if (field === "description") {
+                                                        // eslint-disable-next-line max-len
+                                                        preparedPackageObj[field] = formatPackageDescription(
+                                                            preparedPackageObj[field],
+                                                            packageObj.package,
+                                                        );
+                                                    }
+
                                                     return (
                                                         <td className={field} key={field}>
                                                             {field === "package" && packageLink ? (
