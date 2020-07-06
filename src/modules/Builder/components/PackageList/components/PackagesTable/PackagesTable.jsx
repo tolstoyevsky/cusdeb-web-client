@@ -270,77 +270,86 @@ export default class PackagesTable extends Component {
 
         return (
             <Card className="packages-table-card mb-0 rounded-0 shadow-0">
-                <Card.Header>
-                    <div className="row">
-                        <div className="col-6">
-                            <Card.Title>
-                                <Select
-                                    styleName="form-control-sm"
-                                    options={itemsPerPageOptions}
-                                    onChange={this.onItemsPerPageChange}
-                                />
-                                rows
-                            </Card.Title>
-                        </div>
-                        <div className="col-6 d-inline-flex justify-content-end">
-                            <div className="card-tools m-0">
-                                <InputGroup size="sm">
-                                    <Input
-                                        type="text"
-                                        name="package-search"
-                                        placeholder="Package name"
-                                        onChange={this.onSearchFieldChange}
-                                    />
-                                    <InputGroup.Append>
-                                        <Button variant="default" onClick={this.onPackageSearch}>
-                                            <FontAwesomeIcon icon={faSearch} />
-                                        </Button>
-                                    </InputGroup.Append>
-                                </InputGroup>
+                {this.packagesNumber ? (
+                    <>
+                        <Card.Header>
+                            <div className="row">
+                                <div className="col-6">
+                                    <Card.Title>
+                                        <Select
+                                            styleName="form-control-sm"
+                                            options={itemsPerPageOptions}
+                                            onChange={this.onItemsPerPageChange}
+                                        />
+                                        rows
+                                    </Card.Title>
+                                </div>
+                                <div className="col-6 d-inline-flex justify-content-end">
+                                    <div className="card-tools m-0">
+                                        <InputGroup size="sm">
+                                            <Input
+                                                type="text"
+                                                name="package-search"
+                                                placeholder="Package name"
+                                                onChange={this.onSearchFieldChange}
+                                            />
+                                            <InputGroup.Append>
+                                                <Button variant="default" onClick={this.onPackageSearch}>
+                                                    <FontAwesomeIcon icon={faSearch} />
+                                                </Button>
+                                            </InputGroup.Append>
+                                        </InputGroup>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </Card.Header>
-                <Card.Body>
-                    <Table bsPrefix="table table-responsive-sm border-top-0">
-                        <thead>
-                            <tr>
-                                {columnTitlesCopy.map((title) => (
-                                    <th className={title} key={title}>{title}</th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {currentPagePackages.map((packageObj) => {
-                                const preparedPackageObj = this.prepareTableItem(packageObj);
-                                return (
-                                    <tr key={packageObj.package}>
-                                        {fieldsNameCopy.map((field) => {
-                                            const packageLink = this.packageLink(packageObj);
-
-                                            return (
-                                                <td className={field} key={field}>
-                                                    {field === "package" && packageLink ? (
-                                                        <a
-                                                            rel="noopener noreferrer"
-                                                            target="_blank"
-                                                            href={packageLink}
-                                                        >
-                                                            {preparedPackageObj[field]}
-                                                        </a>
-                                                    ) : preparedPackageObj[field]}
-                                                </td>
-                                            );
-                                        })}
+                        </Card.Header>
+                        <Card.Body>
+                            <Table bsPrefix="table table-responsive-sm border-top-0">
+                                <thead>
+                                    <tr>
+                                        {columnTitlesCopy.map((title) => (
+                                            <th className={title} key={title}>{title}</th>
+                                        ))}
                                     </tr>
-                                );
-                            })}
-                        </tbody>
-                    </Table>
-                </Card.Body>
-                <Card.Footer>
-                    {this.getCardFooter()}
-                </Card.Footer>
+                                </thead>
+                                <tbody>
+                                    {currentPagePackages.map((packageObj) => {
+                                        const preparedPackageObj = this.prepareTableItem(
+                                            packageObj,
+                                        );
+                                        return (
+                                            <tr key={packageObj.package}>
+                                                {fieldsNameCopy.map((field) => {
+                                                    const packageLink = this.packageLink(
+                                                        packageObj,
+                                                    );
+                                                    return (
+                                                        <td className={field} key={field}>
+                                                            {field === "package" && packageLink ? (
+                                                                <a
+                                                                    rel="noopener noreferrer"
+                                                                    target="_blank"
+                                                                    href={packageLink}
+                                                                >
+                                                                    {preparedPackageObj[field]}
+                                                                </a>
+                                                            ) : preparedPackageObj[field]}
+                                                        </td>
+                                                    );
+                                                })}
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </Table>
+                        </Card.Body>
+                        <Card.Footer>
+                            {this.getCardFooter()}
+                        </Card.Footer>
+                    </>
+                ) : (
+                    <h5 className="text-center p-4">Not found any packages</h5>
+                )}
             </Card>
         );
     }
