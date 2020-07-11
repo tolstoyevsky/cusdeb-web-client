@@ -109,7 +109,10 @@ export default class PackagesTable extends Component {
     getCardFooter() {
         const { currentPageNumber, itemsPerPage } = this.state;
         const packagesStartNumber = (currentPageNumber - 1) * itemsPerPage + 1;
-        const packagesEndNumber = currentPageNumber * itemsPerPage;
+        let packagesEndNumber = currentPageNumber * itemsPerPage;
+        if (currentPageNumber === this.totalPages) {
+            packagesEndNumber = this.packagesNumber;
+        }
 
         return (
             <div className="row">
