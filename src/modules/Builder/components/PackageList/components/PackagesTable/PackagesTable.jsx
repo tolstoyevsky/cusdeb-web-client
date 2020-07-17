@@ -324,10 +324,11 @@ export default class PackagesTable extends Component {
                                                         packageObj,
                                                     );
                                                     if (field === "description") {
-                                                        // eslint-disable-next-line max-len
-                                                        preparedPackageObj[field] = formatPackageDescription(
-                                                            preparedPackageObj[field],
-                                                            packageObj.package,
+                                                        preparedPackageObj[field] = (
+                                                            formatPackageDescription(
+                                                                preparedPackageObj[field],
+                                                                packageObj.package,
+                                                            )
                                                         );
                                                     }
 

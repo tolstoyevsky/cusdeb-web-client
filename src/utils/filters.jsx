@@ -13,49 +13,53 @@ export const spaceSeparation = (largeNumber) => {
     return results;
 };
 
-const formatPackageDescriptionList = (paragraph) => {
-    const itemsList = paragraph.split("*");
-
+const formatPackageDescriptionList = (listItems) => {
+    const listTitle = listItems[0].trim().endsWith(":") && listItems.splice(0, 1);
     return (
-        <div className="text-justify" key>
-            {paragraph.split("*").splice(0, 1)}
+        <>
+            {listTitle}
             <ul>
-                {itemsList.map((item) => (
-                    <li key={item.length}>
-                        {item}
-                    </li>
+                {listItems.map((item) => (
+                    <li key={item}>{item}</li>
                 ))}
             </ul>
-        </div>
+        </>
     );
 };
 
 export const formatPackageDescription = (description, packageName) => {
-    let content = description.split(".");
-
-    if (content.length - 1 < 2) {
+    const content = description.split("\n .\n").filter((paragraph) => paragraph.trim());
+    if (content.length === 1) {
         return description;
     }
 
-    const firstParagraph = content[0];
-    content = description.substr(firstParagraph.length + 1).split("\n .\n");
-    const collapseKey = packageName.replace(/\d/g, "");
+    const firstParagraph = content.splice(0, 1);
+    const collapseKey = `package-${packageName}`;
 
-    return [
-        <p className="text-justify" key="firstParagraph">{firstParagraph}</p>,
-        <div className={`collapse ${collapseKey}`} key={packageName}>
-            {content.map((paragraph) => (
-                paragraph.split("*").length - 1 < 2 ? (
-                    <p className="text-justify" key={paragraph.length}>
-                        {paragraph}
-                    </p>
-                )
-                    : formatPackageDescriptionList(paragraph)
-            ))}
-        </div>,
-        <div className="mt-n3" key="button">
+    return (
+        <>
+            <div className="text-justify">
+                <p>{firstParagraph}</p>
+                <div className={`collapse ${collapseKey}`}>
+                    {content.map((paragraph, index) => {
+                        const paragraphKey = `${collapseKey}-${index}`;
+                        const listItems = paragraph.split(" * ").filter((paragraphItem) => (
+                            paragraphItem.trim()
+                        ));
+
+                        if (listItems.length > 1) {
+                            return (
+                                <div key={paragraphKey}>
+                                    {formatPackageDescriptionList(listItems)}
+                                </div>
+                            );
+                        }
+                        return <p key={paragraphKey}>{paragraph}</p>;
+                    })}
+                </div>
+            </div>
             <button
-                className="btn btn-link pl-0"
+                className="btn btn-link pl-0 mt-n3"
                 type="button"
                 data-toggle="collapse"
                 data-target={`.${collapseKey}`}
@@ -65,6 +69,6 @@ export const formatPackageDescription = (description, packageName) => {
                 <span className={`collapse show ${collapseKey}`}>More</span>
                 <span className={`collapse ${collapseKey}`}>Less</span>
             </button>
-        </div>,
-    ];
+        </>
+    );
 };
