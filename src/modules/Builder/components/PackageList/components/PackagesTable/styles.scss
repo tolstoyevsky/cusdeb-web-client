@@ -7,6 +7,14 @@
 
     .Description,
     .description {
+        .collapsing {
+            transition: all .4s;
+        }
+
+        button .collapsing {
+            transition: none;
+        }
+
         @media screen and (max-width: 750px) {
             display: none;
         }
