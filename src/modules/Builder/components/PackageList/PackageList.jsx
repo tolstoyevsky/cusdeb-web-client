@@ -154,7 +154,7 @@ export default class PackageList extends Component {
                                 />
                             </Tab.Pane>
                             <Tab.Pane eventKey="dependent">
-                                <div className="text-center p-5">It will be implemented soon</div>
+                                <h5 className="text-center p-4">It will be implemented soon</h5>
                             </Tab.Pane>
                         </Tab.Content>
                     </Card.Body>
