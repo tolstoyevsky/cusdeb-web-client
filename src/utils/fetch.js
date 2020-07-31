@@ -1,7 +1,5 @@
 import axios from "axios";
 
-import { cusdebAPIURL } from "config/main";
-
 /* eslint no-param-reassign: "error" */
 
 const createResponseInterceptor = (instance) => {
@@ -47,19 +45,21 @@ const createRequestInterceptor = (instance) => {
     });
 };
 
-const fetch = (() => {
-    const instance = axios.create({
-        baseURL: cusdebAPIURL,
-    });
+const createFetch = ({ baseURL, createInterceptors = false }) => {
+    const baseConfig = { baseURL };
+    const instance = axios.create(baseConfig);
 
-    createRequestInterceptor(instance);
-    if (
-        localStorage.getItem("accessToken") || localStorage.getItem("refreshToken")
-        || localStorage.getItem("socialAccessToken") || localStorage.getItem("socialRefreshToken")
-    ) {
-        createResponseInterceptor(instance);
+    if (createInterceptors) {
+        createRequestInterceptor(instance);
+        if (
+            localStorage.getItem("accessToken") || localStorage.getItem("refreshToken")
+            || localStorage.getItem("socialAccessToken") || localStorage.getItem("socialRefreshToken")
+        ) {
+            createResponseInterceptor(instance);
+        }
     }
-    return instance;
-})();
 
-export default fetch;
+    return instance;
+};
+
+export default createFetch;

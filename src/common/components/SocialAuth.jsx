@@ -3,10 +3,10 @@ import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faGithub } from "@fortawesome/free-brands-svg-icons";
 
-import { cusdebAPIURL } from "config/main";
+import { cusdebApiPrefix, cusdebApiUrl } from "../../../config/main"; // TODO: resolve path to config
 
 const doSocialAuth = (social) => {
-    window.location.href = `${cusdebAPIURL}/social/login/${social}`;
+    window.location.href = `${cusdebApiUrl}/${cusdebApiPrefix}/social/login/${social}`;
 };
 
 const SocialAuth = () => (
