@@ -110,7 +110,6 @@ export default class Wireless extends Component {
         return SSIDValid;
     }
 
-
     PSKValidor(value) {
         const isValid = /(^$|^[.\w\d]{8,63}$)/i;
         const { buttonStateCallback } = this.props;
