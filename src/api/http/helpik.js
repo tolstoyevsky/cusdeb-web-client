@@ -1,8 +1,12 @@
-import axios from "axios";
-import { cusdebHelpikURL } from "config/main";
+import createFetch from "utils/fetch";
+import { cusdebHelpikPrefix, cusdebHelpikUrl, mode } from "../../../config/main"; // TODO: resolve path to config
+
+const fetch = createFetch({
+    baseURL: cusdebHelpikUrl && mode === "production" ? cusdebHelpikUrl : cusdebHelpikPrefix,
+});
 
 export const fetchHelpikData = async (pageName, languageName, section = null) => (
-    axios.get(`${cusdebHelpikURL}/get_synopsis/`, {
+    fetch.get("/get_synopsis", {
         params: {
             pageName,
             language: languageName,

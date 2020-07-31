@@ -1,5 +1,5 @@
 import Shirow from "shirow";
-import { blackmagicRpcURL } from "config/main";
+import { blackmagicUrl } from "../../../config/main"; // TODO: resolve path to config
 
 const INIT_RP = "init";
 const GET_BASE_PACKAGES_LIST_RP = "get_base_packages_list";
@@ -23,7 +23,7 @@ export default class Blackmagic {
     constructor() {
         if (!Blackmagic.prototype.connection) {
             const token = localStorage.getItem("accessToken");
-            Blackmagic.prototype.connection = new Shirow(blackmagicRpcURL.replace("%token", token));
+            Blackmagic.prototype.connection = new Shirow(blackmagicUrl.replace("%token", token));
         }
 
         this.fetchPackagesList = this.fetchPackagesList.bind(this);
