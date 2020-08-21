@@ -28,17 +28,7 @@ const Routes = (props) => {
         <Router>
             <React.Suspense fallback={<Fallback />}>
                 <Switch>
-                    <Route
-                        exact
-                        path="/"
-                        component={
-                            React.lazy(
-                                () => import("cusdeb-landing").catch(() => ({
-                                    default: () => <Redirect to="/dashboard" />,
-                                })),
-                            )
-                        }
-                    />
+                    <Route exact path="/" />
 
                     <Route exact path="/signin" component={SignIn} />
                     <Route exact path="/signup" component={SignUp} />
