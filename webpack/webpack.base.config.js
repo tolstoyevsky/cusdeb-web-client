@@ -4,12 +4,7 @@ import ExtractTextWebpackPlugin from "extract-text-webpack-plugin"; // eslint-di
 import HtmlWebPackPlugin from "html-webpack-plugin"; // eslint-disable-line import/no-extraneous-dependencies
 
 import * as mainConfig from "../config/main";
-import {
-    configPath,
-    cusdebLandingPath,
-    rootPath,
-    srcPath,
-} from "../config/paths";
+import { rootPath, srcPath } from "../config/paths";
 
 export default {
     entry: ["babel-polyfill", path.join(srcPath, "root/index.jsx")],
@@ -34,7 +29,7 @@ export default {
         rules: [
             {
                 test: /\.(js|jsx)$/,
-                include: [srcPath, configPath, cusdebLandingPath],
+                exclude: /node_modules/,
                 use: {
                     loader: "babel-loader",
                     options: {
