@@ -28,7 +28,7 @@ const Routes = (props) => {
         <Router>
             <React.Suspense fallback={<Fallback />}>
                 <Switch>
-                    <Route exact path="/" />
+                    <Redirect exact from="/" to="/dashboard" />
 
                     <Route exact path="/signin" component={SignIn} />
                     <Route exact path="/signup" component={SignUp} />
