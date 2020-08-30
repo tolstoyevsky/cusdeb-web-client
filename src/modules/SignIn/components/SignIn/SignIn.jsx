@@ -1,13 +1,16 @@
-import React, { Component } from "react";
+import React from "react";
 import { Card } from "react-bootstrap";
 
+import DOMElementsClassComponent from "common/components/DOMElementsClassComponent";
 import SocialAuth from "common/components/SocialAuth";
 
 import FormSignIn from "./components/FormSignIn/FormSignIn";
 
-export default class SignIn extends Component {
-    componentDidMount() {
-        document.body.classList.add("login-page");
+export default class SignIn extends DOMElementsClassComponent {
+    constructor(props) {
+        super(props);
+
+        this.bodyClass = "login-page";
     }
 
     render() {

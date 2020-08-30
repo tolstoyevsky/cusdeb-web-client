@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,9 +9,10 @@ import {
 } from "react-bootstrap";
 
 import * as API from "api/http/users";
+import DOMElementsClassComponent from "common/components/DOMElementsClassComponent";
 import Input from "common/components/Input";
 
-export default class ResetPassword extends Component {
+export default class ResetPassword extends DOMElementsClassComponent {
     constructor(props) {
         super(props);
 
@@ -21,13 +22,11 @@ export default class ResetPassword extends Component {
             resetSuccess: false,
         };
 
+        this.bodyClass = "login-page";
+        this.DOMElementsClass = { "#root": "login-page" };
+
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-    }
-
-    componentDidMount() {
-        document.body.classList.add("login-page");
-        document.getElementById("root").classList.add("login-page");
     }
 
     onChange(name, value) {

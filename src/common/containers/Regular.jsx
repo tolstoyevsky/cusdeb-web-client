@@ -1,16 +1,15 @@
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
+import DOMElementsClassComponent from "common/components/DOMElementsClassComponent";
 import Footer from "./Footer";
 import Header from "./Header";
 
-export default class Regular extends Component {
-    componentDidMount() {
-        document.body.classList.add("layout-top-nav");
-    }
+export default class Regular extends DOMElementsClassComponent {
+    constructor(props) {
+        super(props);
 
-    componentWillUnmount() {
-        document.body.classList.remove("layout-top-nav");
+        this.bodyClass = "layout-top-nav";
     }
 
     render() {
