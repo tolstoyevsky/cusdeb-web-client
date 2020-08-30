@@ -1,13 +1,16 @@
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
+import DOMElementsClassComponent from "common/components/DOMElementsClassComponent";
 import Footer from "./Footer";
 import Header from "./Header";
 import Sidebar from "./Sidebar/Sidebar";
 
-export default class SidebarPage extends Component {
-    componentDidMount() {
-        document.body.classList.add("sidebar-mini");
+export default class SidebarPage extends DOMElementsClassComponent {
+    constructor(props) {
+        super(props);
+
+        this.bodyClass = "sidebar-mini";
     }
 
     render() {

@@ -12,11 +12,13 @@ export default class ResetPassword extends Component {
         this.state = {
             isValidToken: true,
         };
+
+        this.bodyClass = "login-page";
+        this.DOMElementsClass = { "#root": "login-page" };
     }
 
     componentDidMount() {
-        document.body.classList.add("login-page");
-        document.getElementById("root").classList.add("login-page");
+        super.componentDidMount();
 
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get("token");
