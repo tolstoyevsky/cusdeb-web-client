@@ -56,6 +56,7 @@ export default class PackagesTable extends Component {
         this.blackmagic = new Blackmagic();
 
         this.packagesNumber = 0;
+        this.paginationRef = React.createRef();
         this.totalPages = 0;
 
         this.onItemsPerPageChange = this.onItemsPerPageChange.bind(this);
@@ -89,11 +90,8 @@ export default class PackagesTable extends Component {
     }
 
     onPackageSearch() {
-        const { searchFieldValue } = this.state;
-        this.blackmagic.searchPackages(searchFieldValue)
-            .then((list) => {
-                console.log("search res", list);
-            });
+        this.paginationRef.current.setCurrentPage(1);
+        this.fetchPackages();
     }
 
     onSearchFieldChange(fieldName, searchFieldValue) {
@@ -125,6 +123,7 @@ export default class PackagesTable extends Component {
                 <div className="col-12 col-sm-6 d-inline-flex justify-content-sm-end justify-content-center">
                     <div key="pagination">
                         <Pagination
+                            ref={this.paginationRef}
                             paginationPagesMaxCount={paginationPagesMaxCount}
                             totalPages={this.totalPages}
                             onChange={this.onPageChange}
@@ -136,18 +135,30 @@ export default class PackagesTable extends Component {
     }
 
     fetchPackages() {
-        const { currentPageNumber, itemsPerPage } = this.state;
+        const { currentPageNumber, itemsPerPage, searchFieldValue } = this.state;
         const { fetchPackagesFunc, fetchPackagesNumberFunc } = this.props;
 
-        fetchPackagesNumberFunc()
-            .then((number) => {
-                this.packagesNumber = number;
-                this.totalPages = Math.ceil(number / itemsPerPage);
-            });
-        fetchPackagesFunc(currentPageNumber, itemsPerPage)
-            .then((currentPagePackages) => {
-                this.setState({ currentPagePackages });
-            });
+        if (searchFieldValue) {
+            this.blackmagic.fetchSearchPackagesNumber(searchFieldValue)
+                .then((number) => {
+                    this.packagesNumber = number;
+                    this.totalPages = Math.ceil(number / itemsPerPage);
+                });
+            this.blackmagic.searchPackages(searchFieldValue, currentPageNumber, itemsPerPage)
+                .then((currentPagePackages) => {
+                    this.setState({ currentPagePackages });
+                });
+        } else {
+            fetchPackagesNumberFunc()
+                .then((number) => {
+                    this.packagesNumber = number;
+                    this.totalPages = Math.ceil(number / itemsPerPage);
+                });
+            fetchPackagesFunc(currentPageNumber, itemsPerPage)
+                .then((currentPagePackages) => {
+                    this.setState({ currentPagePackages });
+                });
+        }
     }
 
     resolvePackage(packageName, action) {
@@ -261,7 +272,7 @@ export default class PackagesTable extends Component {
     }
 
     render() {
-        const { currentPagePackages } = this.state;
+        const { currentPagePackages, searchFieldValue } = this.state;
         const { allowAction } = this.props;
 
         const columnTitlesCopy = [...columnTitles];
@@ -291,6 +302,7 @@ export default class PackagesTable extends Component {
                                     <div className="card-tools m-0">
                                         <InputGroup size="sm">
                                             <Input
+                                                value={searchFieldValue}
                                                 type="text"
                                                 name="package-search"
                                                 placeholder="Package name"

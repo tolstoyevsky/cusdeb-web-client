@@ -11,6 +11,7 @@ export default class Pagination extends Component {
         };
 
         this.onPageChange = this.onPageChange.bind(this);
+        this.setCurrentPage = this.setCurrentPage.bind(this);
     }
 
     componentDidUpdate(prevProps) {

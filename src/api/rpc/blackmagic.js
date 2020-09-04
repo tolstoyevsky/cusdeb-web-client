@@ -7,6 +7,7 @@ const GET_PACKAGES_LIST_RP = "get_packages_list";
 const GET_SELECTED_PACKAGES_LIST_RP = "get_selected_packages_list";
 const GET_PACKAGES_NUMBER_RP = "get_packages_number";
 const GET_BASE_PACKAGES_NUMBER_RP = "get_base_packages_number";
+const GET_SEARCH_PACKAGES_NUMBER_RP = "get_search_packages_number";
 const GET_SELECTED_PACKAGES_NUMBER_RP = "get_selected_packages_number";
 const SEARCH_PACKAGES_RP = "search";
 const RESOLVE_PACKAGES_RP = "resolve";
@@ -63,12 +64,21 @@ export default class Blackmagic {
         return this.connection.emit(GET_BASE_PACKAGES_NUMBER_RP);
     }
 
+    async fetchSearchPackagesNumber(packageName) {
+        return this.connection.emit(GET_SEARCH_PACKAGES_NUMBER_RP, packageName);
+    }
+
     async fetchSelectedPackagesNumber() {
         return this.connection.emitForce(GET_SELECTED_PACKAGES_NUMBER_RP);
     }
 
-    async searchPackagesp(packageName) {
-        return this.connection.emit(SEARCH_PACKAGES_RP, packageName);
+    async searchPackages(packageName, currentPage, packagesPerPage) {
+        return this.connection.emitForce(
+            SEARCH_PACKAGES_RP,
+            packageName,
+            currentPage,
+            packagesPerPage,
+        );
     }
 
     async resolvePackages(packageList) {
