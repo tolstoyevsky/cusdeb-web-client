@@ -11,29 +11,26 @@ export default class SignIn extends DOMElementsClassComponent {
         super(props);
 
         this.bodyClass = "login-page";
+        this.DOMElementsClass = { "#root": "logix-box" };
     }
 
     render() {
         return (
-            <div className="login-box">
-                <Card className="login-card-body pb-0">
-                    <p className="login-box-msg">
-                        Sign in to build an image
+            <Card className="login-card-body pb-0">
+                <p className="login-box-msg">Sign in to build an image</p>
+                <Card.Body>
+                    <FormSignIn />
+
+                    <SocialAuth />
+
+                    <p className="mb-0 mt-3">
+                        <a href="/signup">Register a new account</a>
                     </p>
-                    <Card.Body>
-                        <FormSignIn />
-
-                        <SocialAuth />
-
-                        <p className="mb-0 mt-3">
-                            <a href="/signup">Register a new account</a>
-                        </p>
-                        <p className="mb-0 mt-1">
-                            <a href="/reset-password">Forgot password?</a>
-                        </p>
-                    </Card.Body>
-                </Card>
-            </div>
+                    <p className="mb-0 mt-1">
+                        <a href="/reset-password">Forgot password?</a>
+                    </p>
+                </Card.Body>
+            </Card>
         );
     }
 }
