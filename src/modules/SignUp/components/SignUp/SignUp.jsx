@@ -11,26 +11,23 @@ export default class SignUp extends DOMElementsClassComponent {
         super(props);
 
         this.bodyClass = "register-page";
+        this.DOMElementsClass = { "#root": "register-box" };
     }
 
     render() {
         return (
-            <div className="register-box">
-                <Card className="register-card-body pb-0">
-                    <p className="login-box-msg">
-                        New member registration
+            <Card className="register-card-body pb-0">
+                <p className="login-box-msg">New member registration</p>
+                <Card.Body>
+                    <FormSignUp />
+
+                    <SocialAuth />
+
+                    <p className="mb-0 mt-3">
+                        <a href="/signin">I already have an account</a>
                     </p>
-                    <Card.Body>
-                        <FormSignUp />
-
-                        <SocialAuth />
-
-                        <p className="mb-0 mt-3">
-                            <a href="/signin">I already have an account</a>
-                        </p>
-                    </Card.Body>
-                </Card>
-            </div>
+                </Card.Body>
+            </Card>
         );
     }
 }
