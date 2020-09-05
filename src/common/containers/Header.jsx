@@ -35,10 +35,10 @@ export default class Header extends Component {
         const { logo, pushmenu } = this.props;
         const { user, userIsAuth } = this.state;
         return (
-            <Navbar variant="white" className="main-header">
+            <Navbar variant="light" className="main-header bg-white" expand="sm">
                 <Container>
                     {logo && (
-                        <Navbar.Brand className="text-dark" href="/">
+                        <Navbar.Brand href="/">
                             CusDeb
                             <sup>beta</sup>
                         </Navbar.Brand>
@@ -46,7 +46,6 @@ export default class Header extends Component {
                     {pushmenu && (
                         <Nav>
                             <Nav.Link
-                                className="text-dark"
                                 data-target=""
                                 data-toggle="collapse"
                                 data-widget="pushmenu"
@@ -56,23 +55,26 @@ export default class Header extends Component {
                             </Nav.Link>
                         </Nav>
                     )}
-                    <Nav className="ml-auto">
-                        <Nav.Link className="text-dark" href="/dashboard">Dashboard</Nav.Link>
-                        <Nav.Link className="text-dark" href="/blog">Blog</Nav.Link>
-                        {userIsAuth ? (
-                            <Dropdown as={Nav.Item} alignRight>
-                                <Dropdown.Toggle className="text-dark" as={Nav.Link}>
-                                    {user.username}
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    <Dropdown.Item href="/profile">Profile</Dropdown.Item>
-                                    <Dropdown.Item onClick={signOut}>Sign out</Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        ) : (
-                            <Nav.Link className="text-dark" href="/signin">Sign in</Nav.Link>
-                        )}
-                    </Nav>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    <Navbar.Collapse id="basic-navbar-nav">
+                        <Nav className="ml-auto">
+                            <Nav.Link href="/dashboard">Dashboard</Nav.Link>
+                            <Nav.Link href="/blog">Blog</Nav.Link>
+                            {userIsAuth ? (
+                                <Dropdown as={Nav.Item} alignRight>
+                                    <Dropdown.Toggle as={Nav.Link}>
+                                        {user.username}
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu className="border-0 shadow">
+                                        <Dropdown.Item href="/profile">Profile</Dropdown.Item>
+                                        <Dropdown.Item onClick={signOut}>Sign out</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            ) : (
+                                <Nav.Link href="/signin">Sign in</Nav.Link>
+                            )}
+                        </Nav>
+                    </Navbar.Collapse>
                 </Container>
             </Navbar>
         );
