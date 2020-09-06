@@ -20,6 +20,7 @@ import SocialAuthRedirect from "modules/SocialAuthRedirect/SocialAuthRedirect";
 import AuthRoute from "./components/AuthRoute/AuthRoute";
 
 const Builder = React.lazy(() => import("modules/Builder/components/Builder/Builder"));
+const UserProfile = React.lazy(() => import("modules/UserProfile/UserProfile"));
 
 const Routes = (props) => {
     const { userIsAuth } = props;
@@ -43,6 +44,8 @@ const Routes = (props) => {
                     <Route path="/builder">
                         <Redirect to="/builder" />
                     </Route>
+
+                    <AuthRoute exact path="/profile" component={UserProfile} userIsAuth={userIsAuth} />
 
                     <Route exact path="*" component={Error404} />
                 </Switch>
