@@ -16,10 +16,12 @@ import ResetPasswordConfirm from "modules/ResetPasswordConfirm/ResetPasswordConf
 import SignIn from "modules/SignIn/components/SignIn/SignIn";
 import SignUp from "modules/SignUp/components/SignUp/SignUp";
 import SocialAuthRedirect from "modules/SocialAuthRedirect/SocialAuthRedirect";
+import { UserSettingsPages, UserSettingsRoutesBasename } from "modules/UserSettings/UserSettings";
 
 import AuthRoute from "./components/AuthRoute/AuthRoute";
 
 const Builder = React.lazy(() => import("modules/Builder/components/Builder/Builder"));
+const UserSettings = React.lazy(() => import("modules/UserSettings/UserSettings"));
 
 const Routes = (props) => {
     const { userIsAuth } = props;
@@ -42,6 +44,24 @@ const Routes = (props) => {
                     <AuthRoute exact path="/builder" component={Builder} userIsAuth={userIsAuth} />
                     <Route path="/builder">
                         <Redirect to="/builder" />
+                    </Route>
+
+                    {Object.keys(UserSettingsPages).map((pageKey) => (
+                        <AuthRoute
+                            key={pageKey}
+                            exact
+                            path={UserSettingsPages[pageKey].fullPath}
+                            component={UserSettings}
+                            userIsAuth={userIsAuth}
+                        />
+                    ))}
+                    <Route path={UserSettingsRoutesBasename}>
+                        <Redirect
+                            to={(() => {
+                                const firstRouteKey = Object.keys(UserSettingsPages)[0];
+                                return UserSettingsPages[firstRouteKey].fullPath;
+                            })()}
+                        />
                     </Route>
 
                     <Route exact path="*" component={Error404} />
