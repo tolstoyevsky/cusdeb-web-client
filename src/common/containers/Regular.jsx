@@ -16,7 +16,9 @@ export default class Regular extends DOMElementsClassComponent {
         const { children } = this.props;
         return (
             <div className="wrapper">
-                <Header pushmenu={false} />
+                <Header>
+                    <Header.Logo />
+                </Header>
 
                 <div className="content-wrapper pb-3">
                     {children}
