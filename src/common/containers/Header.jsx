@@ -32,29 +32,12 @@ export default class Header extends Component {
     }
 
     render() {
-        const { logo, pushmenu } = this.props;
+        const { children } = this.props;
         const { user, userIsAuth } = this.state;
         return (
             <Navbar variant="light" className="main-header bg-white" expand="sm">
                 <Container>
-                    {logo && (
-                        <Navbar.Brand href="/">
-                            CusDeb
-                            <sup>beta</sup>
-                        </Navbar.Brand>
-                    )}
-                    {pushmenu && (
-                        <Nav>
-                            <Nav.Link
-                                data-target=""
-                                data-toggle="collapse"
-                                data-widget="pushmenu"
-                                href="#"
-                            >
-                                <FontAwesomeIcon icon={faBars} />
-                            </Nav.Link>
-                        </Nav>
-                    )}
+                    {children}
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="ml-auto">
@@ -82,11 +65,31 @@ export default class Header extends Component {
 }
 
 Header.propTypes = {
-    logo: PropTypes.bool,
-    pushmenu: PropTypes.bool,
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node,
+    ]).isRequired,
 };
 
-Header.defaultProps = {
-    logo: true,
-    pushmenu: true,
-};
+const HeaderLogo = () => (
+    <Navbar.Brand href="/">
+        CusDeb
+        <sup>beta</sup>
+    </Navbar.Brand>
+);
+
+const HeaderPushMenu = () => (
+    <Nav>
+        <Nav.Link
+            data-target=""
+            data-toggle="collapse"
+            data-widget="pushmenu"
+            href="#"
+        >
+            <FontAwesomeIcon icon={faBars} />
+        </Nav.Link>
+    </Nav>
+);
+
+Header.Logo = HeaderLogo;
+Header.PushMenu = HeaderPushMenu;
