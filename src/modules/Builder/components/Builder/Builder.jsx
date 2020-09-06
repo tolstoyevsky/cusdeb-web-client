@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, NavLink } from "react-bootstrap";
+import { Button, Nav } from "react-bootstrap";
 import {
     BrowserRouter as Router,
     matchPath,
@@ -119,25 +119,50 @@ export default class Builder extends Component {
                     <Router>
                         <Redirect to={currentStage.path} />
 
-                        <SidebarPage
-                            sidebarItems={Object.keys(BUILDER_STAGES).map((stageKey) => {
-                                const stage = BUILDER_STAGES[stageKey];
-                                return (
-                                    <NavLink
-                                        active={matchPath(currentStage.path, stage)}
-                                        key={stage.title}
-                                    >
-                                        <FontAwesomeIcon
-                                            className={`nav-icon fas ${stage.icon_style}`}
-                                            icon={stage.icon}
-                                        />
-                                        <p className="sidebar-text collapse show">{stage.title}</p>
-                                    </NavLink>
-                                );
-                            })}
-                        >
-                            <div className="content-header">
-                                <div className="container-fluid">
+                        <SidebarPage>
+                            <SidebarPage.Sidebar>
+                                {Object.keys(BUILDER_STAGES).map((stageKey) => {
+                                    const stage = BUILDER_STAGES[stageKey];
+                                    return (
+                                        // TODO: rework with using SidebarItem
+                                        <Nav.Item as="li" key={stageKey}>
+                                            <Nav.Link
+                                                active={
+                                                    Boolean(matchPath(currentStage.path, stage))
+                                                }
+                                            >
+                                                <FontAwesomeIcon
+                                                    className={`nav-icon fas ${stage.icon_style}`}
+                                                    icon={stage.icon}
+                                                />
+                                                <p className="sidebar-text collapse show">
+                                                    {stage.title}
+                                                </p>
+                                            </Nav.Link>
+                                        </Nav.Item>
+                                    );
+                                })}
+                            </SidebarPage.Sidebar>
+                            <SidebarPage.Body>
+                                <div className="content-header">
+                                    <div className="container-fluid">
+                                        <Switch>
+                                            {Object.keys(BUILDER_STAGES).map((stageKey) => {
+                                                const stage = BUILDER_STAGES[stageKey];
+                                                return (
+                                                    <Route
+                                                        key={stage.title}
+                                                        path={stage.path}
+                                                        exact
+                                                    >
+                                                        <h3>{stage.title}</h3>
+                                                    </Route>
+                                                );
+                                            })}
+                                        </Switch>
+                                    </div>
+                                </div>
+                                <div className="content">
                                     <Switch>
                                         {Object.keys(BUILDER_STAGES).map((stageKey) => {
                                             const stage = BUILDER_STAGES[stageKey];
@@ -147,65 +172,49 @@ export default class Builder extends Component {
                                                     path={stage.path}
                                                     exact
                                                 >
-                                                    <h3>{stage.title}</h3>
+                                                    <stage.main
+                                                        ref={
+                                                            matchPath(currentStage.path, stage)
+                                                                ? this.currentStageRef : null
+                                                        }
+                                                        buildUUID={buildUUID}
+                                                        device={device}
+                                                        os={os}
+                                                        builderCallback={this.builderCallback}
+                                                    />
                                                 </Route>
                                             );
                                         })}
                                     </Switch>
-                                </div>
-                            </div>
-                            <div className="content">
-                                <Switch>
-                                    {Object.keys(BUILDER_STAGES).map((stageKey) => {
-                                        const stage = BUILDER_STAGES[stageKey];
-                                        return (
-                                            <Route
-                                                key={stage.title}
-                                                path={stage.path}
-                                                exact
-                                            >
-                                                <stage.main
-                                                    ref={
-                                                        matchPath(currentStage.path, stage)
-                                                            ? this.currentStageRef : null
-                                                    }
-                                                    buildUUID={buildUUID}
-                                                    device={device}
-                                                    os={os}
-                                                    builderCallback={this.builderCallback}
-                                                />
-                                            </Route>
-                                        );
-                                    })}
-                                </Switch>
-                                <div className="row">
-                                    <div className="col-6">
-                                        {backButtonIsActive && (
-                                            <div>
+                                    <div className="row">
+                                        <div className="col-6">
+                                            {backButtonIsActive && (
+                                                <div>
+                                                    <Button
+                                                        variant="primary"
+                                                        className="pl-5 pr-5"
+                                                        onClick={this.onBack}
+                                                    >
+                                                        Back
+                                                    </Button>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="col-6 d-inline-flex justify-content-end">
+                                            {nextButtonIsActive && (
                                                 <Button
                                                     variant="primary"
                                                     className="pl-5 pr-5"
-                                                    onClick={this.onBack}
+                                                    onClick={this.onNext}
+                                                    disabled={buttonState}
                                                 >
-                                                    Back
+                                                    Next
                                                 </Button>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="col-6 d-inline-flex justify-content-end">
-                                        {nextButtonIsActive && (
-                                            <Button
-                                                variant="primary"
-                                                className="pl-5 pr-5"
-                                                onClick={this.onNext}
-                                                disabled={buttonState}
-                                            >
-                                                Next
-                                            </Button>
-                                        )}
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </SidebarPage.Body>
                         </SidebarPage>
                     </Router>
                 </Switch>

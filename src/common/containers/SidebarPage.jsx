@@ -14,20 +14,13 @@ export default class SidebarPage extends DOMElementsClassComponent {
     }
 
     render() {
-        const { children, sidebarItems } = this.props;
+        const { children } = this.props;
         return (
             <div className="wrapper">
                 <Header fluid>
                     <Header.PushMenu />
                 </Header>
-                <Sidebar>
-                    {sidebarItems}
-                </Sidebar>
-
-                <div className="content-wrapper pb-3">
-                    {children}
-                </div>
-
+                {children}
                 <Footer />
             </div>
         );
@@ -39,5 +32,20 @@ SidebarPage.propTypes = {
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node,
     ]).isRequired,
-    sidebarItems: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
+
+const SidebarPageBody = ({ children }) => (
+    <div className="content-wrapper pb-3">
+        {children}
+    </div>
+);
+
+SidebarPageBody.propTypes = {
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node,
+    ]).isRequired,
+};
+
+SidebarPage.Body = SidebarPageBody;
+SidebarPage.Sidebar = Sidebar;
