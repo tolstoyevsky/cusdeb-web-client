@@ -17,7 +17,7 @@ export default class SidebarPage extends DOMElementsClassComponent {
         const { children, sidebarItems } = this.props;
         return (
             <div className="wrapper">
-                <Header>
+                <Header fluid>
                     <Header.PushMenu />
                 </Header>
                 <Sidebar>
