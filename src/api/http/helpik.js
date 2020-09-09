@@ -6,11 +6,11 @@ const fetch = createFetch({
 });
 
 export const fetchHelpikData = async (pageName, languageName, section = null) => (
-    fetch.get("/get_synopsis", {
+    fetch.get("/", {
         params: {
-            pageName,
-            language: languageName,
-            section,
+            page: pageName,
+            lang: languageName,
+            sec: section,
         },
     })
 );
