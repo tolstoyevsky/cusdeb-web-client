@@ -8,7 +8,6 @@ export const host = process.env.HOST || "0.0.0.0";
 export const mode = process.env.MODE || "development";
 
 export const cusdebApiPrefix = "/api/v1";
-export const cusdebHelpikPrefix = "/helpik_api";
 export const cusdebTzPrefix = "/tz";
 
 export const blackmagicUrl = process.env.BLACKMAGIC_URL;
