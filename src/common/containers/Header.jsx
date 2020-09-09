@@ -32,11 +32,11 @@ export default class Header extends Component {
     }
 
     render() {
-        const { children } = this.props;
+        const { children, fluid } = this.props;
         const { user, userIsAuth } = this.state;
         return (
             <Navbar variant="light" className="main-header bg-white" expand="sm">
-                <Container>
+                <Container fluid={fluid}>
                     {children}
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
@@ -69,6 +69,14 @@ Header.propTypes = {
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node,
     ]).isRequired,
+    fluid: PropTypes.oneOfType([
+        PropTypes.bool,
+        PropTypes.string,
+    ]),
+};
+
+Header.defaultProps = {
+    fluid: null,
 };
 
 const HeaderLogo = () => (
