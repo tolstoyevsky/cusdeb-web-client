@@ -21,7 +21,7 @@ export default {
     },
     output: {
         path: path.resolve("dist"),
-        filename: "[name].[hash].js",
+        filename: "[name].min.js?[hash]",
         publicPath: "/",
     },
     node: { fs: "empty" },
@@ -54,7 +54,7 @@ export default {
         ],
     },
     plugins: [
-        new ExtractTextWebpackPlugin("[name].[hash].css"),
+        new ExtractTextWebpackPlugin("[name].min.css?[hash]"),
         new HtmlWebPackPlugin({
             template: "./public/index.html",
             filename: "./index.html",
