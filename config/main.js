@@ -26,7 +26,7 @@ if (!cusdebApiUrl) {
 }
 export const cusdebHelpikUrl = process.env.CUSDEB_HELPIK_URL;
 if (!cusdebHelpikUrl) {
-    throw new Error("The CusDeb Helpik server adress is not specified.");
+    throw new Error("The CusDeb Helpik server address is not specified.");
 }
 export const cusdebTzURL = process.env.CUSDEB_TZ_URL;
 if (!cusdebTzURL) {
