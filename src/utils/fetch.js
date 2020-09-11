@@ -1,4 +1,7 @@
 import axios from "axios";
+import url from "url";
+
+import { mode } from "../../config/main"; // TODO: resolve path to config
 
 /* eslint no-param-reassign: "error" */
 
@@ -62,4 +65,9 @@ const createFetch = ({ baseURL, createInterceptors = false }) => {
     return instance;
 };
 
+const prepareBaseUrl = (baseUrl, prefix) => (
+    baseUrl && mode === "production" ? url.resolve(baseUrl, prefix) : prefix
+);
+
 export default createFetch;
+export { prepareBaseUrl };
