@@ -1,8 +1,8 @@
-import createFetch from "utils/fetch";
-import { cusdebHelpikPrefix, cusdebHelpikUrl, mode } from "../../../config/main"; // TODO: resolve path to config
+import createFetch, { prepareBaseUrl } from "utils/fetch";
+import { cusdebHelpikPrefix, cusdebHelpikUrl } from "../../../config/main"; // TODO: resolve path to config
 
 const fetch = createFetch({
-    baseURL: cusdebHelpikUrl && mode === "production" ? cusdebHelpikUrl : cusdebHelpikPrefix,
+    baseURL: prepareBaseUrl(cusdebHelpikUrl, cusdebHelpikPrefix),
 });
 
 export const fetchHelpikData = async (pageName, languageName, section = null) => (
