@@ -3,6 +3,7 @@ import { Card, Container } from "react-bootstrap";
 import { BrowserRouter, matchPath, Route } from "react-router-dom";
 
 import SidebarPage from "common/containers/SidebarPage";
+import Profile from "./components/Profile/Profile";
 
 const UserSettingsRoutesBasename = "/settings";
 const getUserSettingsPageFullPath = function getUserSettingsPageFullPath() {
@@ -15,6 +16,7 @@ const UserSettingsPages = {
             return getUserSettingsPageFullPath.apply(this);
         },
         title: "Profile",
+        content: Profile,
     },
     security: {
         path: "/security",

@@ -33,3 +33,11 @@ export const passwordResetConfirm = async (newPassword, token) => (
 export const passwordValidateToken = async (token) => (
     fetch.post("/users/password_reset/validate_token/", { token })
 );
+
+export const profileUpdate = async (username, email) => (
+    fetch.post("/users/profile_update", { username, email })
+);
+
+export const profileDelete = async (username, password) => (
+    fetch.post("users/profile_delete", { username, password })
+);
