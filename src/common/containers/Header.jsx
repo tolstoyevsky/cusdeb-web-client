@@ -49,7 +49,7 @@ export default class Header extends Component {
                                         {user.username}
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu className="border-0 shadow">
-                                        <Dropdown.Item href="/profile">Profile</Dropdown.Item>
+                                        <Dropdown.Item href="/settings/profile">Settings</Dropdown.Item>
                                         <Dropdown.Item onClick={signOut}>Sign out</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
