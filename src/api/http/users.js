@@ -41,3 +41,11 @@ export const profileUpdate = async (username, email) => (
 export const profileDelete = async (username, password) => (
     fetch.post("users/profile_delete", { username, password })
 );
+
+export const updatePassword = async (oldPassword, password, retypePassword) => (
+    fetch.post("users/password_update", {
+        old_password: oldPassword,
+        password,
+        retype_password: retypePassword,
+    })
+);
