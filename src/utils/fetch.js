@@ -42,7 +42,10 @@ const createRequestInterceptor = (instance) => {
     instance.interceptors.request.use((config) => {
         const accessToken = localStorage.getItem("accessToken") || localStorage.getItem("socialAccessToken");
         if (accessToken) {
-            config.headers = { Authorization: `Bearer ${accessToken}` };
+            config.headers = {
+                ...config.headers,
+                Authorization: `Bearer ${accessToken}`,
+            };
         }
         return config;
     });
