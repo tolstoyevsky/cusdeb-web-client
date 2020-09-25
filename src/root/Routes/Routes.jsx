@@ -30,8 +30,6 @@ const Routes = (props) => {
         <Router>
             <React.Suspense fallback={<Fallback />}>
                 <Switch>
-                    <Redirect exact from="/" to="/dashboard" />
-
                     <Route exact path="/signin" component={SignIn} />
                     <Route exact path="/signup" component={SignUp} />
                     <Route exact path="/social-auth-redirect" component={SocialAuthRedirect} />
@@ -39,30 +37,34 @@ const Routes = (props) => {
                     <Route exact path="/reset-password" component={ResetPassword} />
                     <Route exact path="/reset-password/confirm" component={ResetPasswordConfirm} />
 
-                    <AuthRoute exact path="/dashboard" component={Dashboard} userIsAuth={userIsAuth} />
+                    <AuthRoute path="/" userIsAuth={userIsAuth}>
+                        {Object.keys(UserSettingsPages).map((pageKey) => (
+                            <Route
+                                key={pageKey}
+                                exact
+                                path={UserSettingsPages[pageKey].fullPath}
+                                component={UserSettings}
+                            />
+                        ))}
+                        <Route path={UserSettingsRoutesBasename}>
+                            <Redirect
+                                to={(() => {
+                                    const firstRouteKey = Object.keys(UserSettingsPages)[0];
+                                    return UserSettingsPages[firstRouteKey].fullPath;
+                                })()}
+                            />
+                        </Route>
 
-                    <AuthRoute exact path="/builder" component={Builder} userIsAuth={userIsAuth} />
-                    <Route path="/builder">
-                        <Redirect to="/builder" />
-                    </Route>
+                        <Redirect exact from="/" to="/dashboard" />
+                        <Route exact path="/dashboard" component={Dashboard} />
 
-                    {Object.keys(UserSettingsPages).map((pageKey) => (
-                        <AuthRoute
-                            key={pageKey}
-                            exact
-                            path={UserSettingsPages[pageKey].fullPath}
-                            component={UserSettings}
-                            userIsAuth={userIsAuth}
-                        />
-                    ))}
-                    <Route path={UserSettingsRoutesBasename}>
-                        <Redirect
-                            to={(() => {
-                                const firstRouteKey = Object.keys(UserSettingsPages)[0];
-                                return UserSettingsPages[firstRouteKey].fullPath;
-                            })()}
-                        />
-                    </Route>
+                        <Route exact path="/builder" component={Builder} />
+                        <Route path="/builder">
+                            <Redirect to="/builder" />
+                        </Route>
+
+                        <Route exact path="*" component={Error404} />
+                    </AuthRoute>
 
                     <Route exact path="*" component={Error404} />
                 </Switch>
