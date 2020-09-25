@@ -1,6 +1,6 @@
 import React from "react";
 import { Nav } from "react-bootstrap";
-import Link from "react-router-dom/Link";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
 const Sidebar = ({ children }) => (
