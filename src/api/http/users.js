@@ -3,11 +3,15 @@ import { cusdebApiPrefix, cusdebApiUrl } from "../../../config/main"; // TODO: r
 
 const fetch = createFetch({
     baseURL: prepareBaseUrl(cusdebApiUrl, cusdebApiPrefix),
+});
+
+const authFetch = createFetch({
+    baseURL: prepareBaseUrl(cusdebApiUrl, cusdebApiPrefix),
     createInterceptors: true,
 });
 
 export const whoAmI = async () => (
-    fetch.get("/users/whoami/")
+    authFetch.get("/users/whoami/")
 );
 
 export const signIn = async (formData) => (
@@ -35,15 +39,15 @@ export const passwordValidateToken = async (token) => (
 );
 
 export const loginUpdate = async (username, email) => (
-    fetch.post("/users/login_update", { username, email })
+    authFetch.post("/users/login_update", { username, email })
 );
 
 export const profileDelete = async (username, password) => (
-    fetch.post("users/profile_delete", { username, password })
+    authFetch.post("users/profile_delete", { username, password })
 );
 
 export const updatePassword = async (oldPassword, password, retypePassword) => (
-    fetch.post("users/password_update", {
+    authFetch.post("users/password_update", {
         old_password: oldPassword,
         password,
         retype_password: retypePassword,
