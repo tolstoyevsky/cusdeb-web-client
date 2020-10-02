@@ -3,7 +3,6 @@ import { cusdebApiPrefix, cusdebApiUrl } from "../../../config/main"; // TODO: r
 
 const fetch = createFetch({
     baseURL: prepareBaseUrl(cusdebApiUrl, cusdebApiPrefix),
-    createInterceptors: true,
 });
 
 // There is a default export.
