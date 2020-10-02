@@ -4,6 +4,7 @@ import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer"; // eslint-disabl
 
 import baseConfig from "./webpack.base.config";
 import {
+    cusdebAnonymousUrl,
     cusdebApiUrl,
     cusdebHelpikUrl,
     cusdebTzURL,
@@ -34,6 +35,9 @@ export default {
         publicPath: "/",
         historyApiFallback: true,
         proxy: {
+            "/anonymous": {
+                target: cusdebAnonymousUrl,
+            },
             "/api/v1": {
                 target: cusdebApiUrl,
             },

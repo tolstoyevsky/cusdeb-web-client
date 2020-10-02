@@ -67,6 +67,7 @@ export default {
             BLACKMAGIC_URL: mainConfig.blackmagicUrl,
             DOMINION_URL: mainConfig.dominionUrl,
 
+            CUSDEB_ANONYMOUS_URL: mainConfig.cusdebAnonymousUrl,
             CUSDEB_API_URL: mainConfig.cusdebApiUrl,
             CUSDEB_HELPIK_URL: mainConfig.cusdebHelpikUrl,
             CUSDEB_TZ_URL: mainConfig.cusdebTzURL,
