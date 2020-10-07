@@ -75,7 +75,7 @@ export default class Profile extends React.Component {
         event.preventDefault();
 
         const { username, email } = this.state;
-        API.profileUpdate(username, email)
+        API.loginUpdate(username, email)
             .then(() => {
                 window.location.reload();
             })
