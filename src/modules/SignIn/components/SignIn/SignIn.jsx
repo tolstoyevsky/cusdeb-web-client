@@ -11,7 +11,7 @@ export default class SignIn extends DOMElementsClassComponent {
         super(props);
 
         this.bodyClass = "login-page";
-        this.DOMElementsClass = { "#root": "logix-box" };
+        this.DOMElementsClass = { "#root": "login-box" };
     }
 
     render() {
