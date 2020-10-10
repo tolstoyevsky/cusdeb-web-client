@@ -107,7 +107,7 @@ export default class FormSignIn extends Component {
                         ref={this.fieldRefs.username}
                         type="text"
                         name="username"
-                        placeholder="Username"
+                        placeholder="Username or email"
                         onChange={this.onFieldsChange}
                         validationFunc={this.usernameValidor}
                         value={formData.username}
@@ -117,7 +117,7 @@ export default class FormSignIn extends Component {
                             <FontAwesomeIcon icon={faUser} />
                         </InputGroup.Text>
                     </InputGroup.Append>
-                    <div className="error invalid-feedback">Username cannot be empty</div>
+                    <div className="error invalid-feedback">Both username and email cannot be empty</div>
                 </InputGroup>
 
                 <InputGroup className="mb-3">
