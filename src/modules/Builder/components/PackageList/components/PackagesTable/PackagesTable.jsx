@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from "prop-types";
 import {
-    Button,
     Card,
     InputGroup,
     Spinner,
@@ -60,7 +59,6 @@ export default class PackagesTable extends Component {
 
         this.onItemsPerPageChange = this.onItemsPerPageChange.bind(this);
         this.onPackageActionClick = this.onPackageActionClick.bind(this);
-        this.onPackageSearch = this.onPackageSearch.bind(this);
         this.onPageChange = this.onPageChange.bind(this);
         this.onSearchFieldChange = this.onSearchFieldChange.bind(this);
         this.getCardFooter = this.getCardFooter.bind(this);
@@ -71,9 +69,10 @@ export default class PackagesTable extends Component {
     }
 
     componentDidUpdate(_prevProps, prevState) {
-        const { currentPageNumber, itemsPerPage } = this.state;
+        const { currentPageNumber, itemsPerPage, searchFieldValue } = this.state;
         if (prevState.currentPageNumber !== currentPageNumber
-            || prevState.itemsPerPage !== itemsPerPage) {
+            || prevState.itemsPerPage !== itemsPerPage
+            || prevState.searchFieldValue !== searchFieldValue) {
             this.fetchPackages();
         }
     }
@@ -88,16 +87,10 @@ export default class PackagesTable extends Component {
         this.setState(() => ({ currentPageNumber }));
     }
 
-    onPackageSearch() {
-        const { searchFieldValue } = this.state;
-        this.blackmagic.searchPackages(searchFieldValue)
-            .then((list) => {
-                console.log("search res", list);
-            });
-    }
-
     onSearchFieldChange(fieldName, searchFieldValue) {
-        this.setState(() => ({ searchFieldValue }));
+        this.setState({ searchFieldValue });
+
+        this.fetchPackages();
     }
 
     onPackageActionClick(event) {
@@ -136,15 +129,15 @@ export default class PackagesTable extends Component {
     }
 
     fetchPackages() {
-        const { currentPageNumber, itemsPerPage } = this.state;
+        const { currentPageNumber, itemsPerPage, searchFieldValue } = this.state;
         const { fetchPackagesFunc, fetchPackagesNumberFunc } = this.props;
 
-        fetchPackagesNumberFunc()
+        fetchPackagesNumberFunc(searchFieldValue)
             .then((number) => {
                 this.packagesNumber = number;
                 this.totalPages = Math.ceil(number / itemsPerPage);
             });
-        fetchPackagesFunc(currentPageNumber, itemsPerPage)
+        fetchPackagesFunc(currentPageNumber, itemsPerPage, searchFieldValue)
             .then((currentPagePackages) => {
                 this.setState({ currentPagePackages });
             });
@@ -262,7 +255,7 @@ export default class PackagesTable extends Component {
 
     render() {
         const { currentPagePackages } = this.state;
-        const { allowAction } = this.props;
+        const { allowAction, searchAvailable } = this.props;
 
         const columnTitlesCopy = [...columnTitles];
         const fieldsNameCopy = [...fieldsName];
@@ -273,39 +266,42 @@ export default class PackagesTable extends Component {
 
         return (
             <Card className="packages-table-card mb-0 rounded-0 shadow-0">
-                {this.packagesNumber ? (
-                    <>
-                        <Card.Header>
-                            <div className="row">
-                                <div className="col-6">
-                                    <Card.Title>
-                                        <Select
-                                            styleName="form-control-sm"
-                                            options={itemsPerPageOptions}
-                                            onChange={this.onItemsPerPageChange}
+                <Card.Header>
+                    <div className="row">
+                        <div className="col-6">
+                            <Card.Title>
+                                <Select
+                                    styleName="form-control-sm"
+                                    options={itemsPerPageOptions}
+                                    onChange={this.onItemsPerPageChange}
+                                />
+                                rows
+                            </Card.Title>
+                        </div>
+                        { searchAvailable && (
+                            <div className="col-6 d-inline-flex justify-content-end">
+                                <div className="card-tools m-0">
+                                    <InputGroup size="sm">
+                                        <Input
+                                            type="text"
+                                            name="package-search"
+                                            placeholder="Package name"
+                                            onChange={this.onSearchFieldChange}
                                         />
-                                        rows
-                                    </Card.Title>
-                                </div>
-                                <div className="col-6 d-inline-flex justify-content-end">
-                                    <div className="card-tools m-0">
-                                        <InputGroup size="sm">
-                                            <Input
-                                                type="text"
-                                                name="package-search"
-                                                placeholder="Package name"
-                                                onChange={this.onSearchFieldChange}
-                                            />
-                                            <InputGroup.Append>
-                                                <Button variant="default" onClick={this.onPackageSearch}>
-                                                    <FontAwesomeIcon icon={faSearch} />
-                                                </Button>
-                                            </InputGroup.Append>
-                                        </InputGroup>
-                                    </div>
+                                        <InputGroup.Append>
+                                            <InputGroup.Text>
+                                                <FontAwesomeIcon icon={faSearch} />
+                                            </InputGroup.Text>
+                                        </InputGroup.Append>
+                                    </InputGroup>
                                 </div>
                             </div>
-                        </Card.Header>
+                        )}
+                    </div>
+                </Card.Header>
+
+                {this.packagesNumber ? (
+                    <>
                         <Card.Body>
                             <Table bsPrefix="table table-responsive-sm border-top-0">
                                 <thead>
@@ -376,6 +372,7 @@ PackagesTable.propTypes = {
     updateSelectedPackages: PropTypes.func.isRequired,
     packagesUrl: PropTypes.string,
     os: PropTypes.string,
+    searchAvailable: PropTypes.bool,
 };
 
 PackagesTable.defaultProps = {
@@ -383,4 +380,5 @@ PackagesTable.defaultProps = {
     allowAction: true,
     packagesUrl: null,
     os: null,
+    searchAvailable: false,
 };

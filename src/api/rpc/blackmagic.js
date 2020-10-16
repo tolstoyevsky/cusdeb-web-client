@@ -8,7 +8,6 @@ const GET_SELECTED_PACKAGES_LIST_RP = "get_selected_packages_list";
 const GET_PACKAGES_NUMBER_RP = "get_packages_number";
 const GET_BASE_PACKAGES_NUMBER_RP = "get_base_packages_number";
 const GET_SELECTED_PACKAGES_NUMBER_RP = "get_selected_packages_number";
-const SEARCH_PACKAGES_RP = "search";
 const RESOLVE_PACKAGES_RP = "resolve";
 const GET_DEFAULT_CONFIGURATION_RP = "get_default_configuration";
 const SYNC_CONFIGURATION_RP = "sync_configuration";
@@ -45,8 +44,10 @@ export default class Blackmagic {
         return this.connection.emitForce(GET_BASE_PACKAGES_LIST_RP, currentPage, packagesPerPage);
     }
 
-    async fetchPackagesList(currentPage, packagesPerPage) {
-        return this.connection.emitForce(GET_PACKAGES_LIST_RP, currentPage, packagesPerPage);
+    async fetchPackagesList(currentPage, packagesPerPage, searchToken = null) {
+        return this.connection.emitForce(
+            GET_PACKAGES_LIST_RP, currentPage, packagesPerPage, searchToken,
+        );
     }
 
     async fetchSelectedPackagesList(currentPage, packagesPerPage) {
@@ -55,8 +56,8 @@ export default class Blackmagic {
         );
     }
 
-    async fetchPackagesNumber() {
-        return this.connection.emit(GET_PACKAGES_NUMBER_RP);
+    async fetchPackagesNumber(searchToken = null) {
+        return this.connection.emit(GET_PACKAGES_NUMBER_RP, searchToken);
     }
 
     async fetchBasePackagesNumber() {
@@ -65,10 +66,6 @@ export default class Blackmagic {
 
     async fetchSelectedPackagesNumber() {
         return this.connection.emitForce(GET_SELECTED_PACKAGES_NUMBER_RP);
-    }
-
-    async searchPackagesp(packageName) {
-        return this.connection.emit(SEARCH_PACKAGES_RP, packageName);
     }
 
     async resolvePackages(packageList) {

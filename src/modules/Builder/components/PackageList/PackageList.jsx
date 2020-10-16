@@ -123,6 +123,7 @@ export default class PackageList extends Component {
                                     updateSelectedPackages={this.updateSelectedPackages}
                                     os={os}
                                     packagesUrl={packagesUrl}
+                                    searchAvailable
                                 />
                             </Tab.Pane>
                             <Tab.Pane eventKey="base">
