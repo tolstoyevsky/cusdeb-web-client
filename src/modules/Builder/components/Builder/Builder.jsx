@@ -119,7 +119,7 @@ export default class Builder extends Component {
                     <Router>
                         <Redirect to={currentStage.path} />
 
-                        <SidebarPage>
+                        <SidebarPage collapseSidebar>
                             <SidebarPage.Sidebar>
                                 {Object.keys(BUILDER_STAGES).map((stageKey) => {
                                     const stage = BUILDER_STAGES[stageKey];
