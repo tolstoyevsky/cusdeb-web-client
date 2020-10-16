@@ -6,14 +6,28 @@ import { getToken } from "api/http/anonymous";
 import Fallback from "common/components/Fallback";
 import { connect } from "react-redux";
 
+const TIMEOUT = 5;
+
 class AnonymousFallback extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = { loading: true };
+        this.state = {
+            loading: true,
+            counter: TIMEOUT,
+        };
     }
 
     componentDidMount() {
+        const intervalID = setInterval(() => {
+            const { counter } = this.state;
+            const currentCount = counter - 1;
+            this.setState(() => ({ counter: currentCount }));
+            if (currentCount < 1) {
+                clearInterval(intervalID);
+            }
+        }, 1000);
+
         getToken()
             .then((response) => {
                 window.localStorage.setItem("accessToken", response.data);
@@ -25,12 +39,15 @@ class AnonymousFallback extends React.Component {
     }
 
     render() {
-        const { loading } = this.state;
+        const { loading, counter } = this.state;
         const { component: Component } = this.props;
 
         return (
             loading ? (
-                <Fallback />
+                <Fallback
+                    text="The CusDeb display case is being prepared..."
+                    count={counter}
+                />
             ) : (
                 <Component />
             )
