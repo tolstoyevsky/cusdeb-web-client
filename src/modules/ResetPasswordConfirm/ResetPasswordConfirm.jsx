@@ -6,7 +6,7 @@ import * as API from "api/http/users";
 import DOMElementsClassComponent from "common/components/DOMElementsClassComponent";
 import FormResetPasswordConfirm from "./components/FormResetPasswordConfirm";
 
-export default class ResetPassword extends DOMElementsClassComponent {
+export default class ResetPasswordConfirm extends DOMElementsClassComponent {
     constructor(props) {
         super(props);
 
