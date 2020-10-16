@@ -1,11 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
 import { Card } from "react-bootstrap";
 
 import * as API from "api/http/users";
 
+import DOMElementsClassComponent from "common/components/DOMElementsClassComponent";
 import FormResetPasswordConfirm from "./components/FormResetPasswordConfirm";
 
-export default class ResetPassword extends Component {
+export default class ResetPassword extends DOMElementsClassComponent {
     constructor(props) {
         super(props);
 
