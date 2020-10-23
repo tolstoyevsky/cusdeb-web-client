@@ -8,7 +8,7 @@ import {
 
 import Build from "modules/Builder/components/Build/Build";
 import Configuration from "modules/Builder/components/Configuration/Configuration";
-import Initialization from "modules/Builder/components/Initialization/Initialization";
+import Initialization from "modules/Builder/components/Initialization/components/Initialization/Initialization";
 import PackageList from "modules/Builder/components/PackageList/PackageList";
 import Users from "modules/Builder/components/Users/Users";
 
