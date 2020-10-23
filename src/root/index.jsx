@@ -1,7 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import { applyMiddleware, createStore } from "redux";
+import { composeWithDevTools } from "redux-devtools-extension";
+import createSagaMiddleware from "redux-saga";
 
-import App from "./App";
+import App from "modules/App/components/App/App";
+import rootReducer from "./rootReducer";
+import rootSaga from "./rootSaga";
 
 import "styles/index.scss";
 // eslint-disable-next-line import/no-unresolved
@@ -9,4 +15,19 @@ import "admin-lte-js";
 import "bootstrap";
 import "select2";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+const sagaMiddleware = createSagaMiddleware();
+
+const store = createStore(
+    rootReducer,
+    composeWithDevTools(
+        applyMiddleware(sagaMiddleware),
+    ),
+);
+
+sagaMiddleware.run(rootSaga);
+
+ReactDOM.render((
+    <Provider store={store}>
+        <App />
+    </Provider>
+), document.getElementById("root"));
