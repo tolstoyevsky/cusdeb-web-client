@@ -20,7 +20,9 @@ import { UserSettingsPages, UserSettingsRoutesBasename } from "modules/UserSetti
 import AnonymousRoute from "./components/AnonymousRoute/AnonymousRoute";
 import AuthRoute from "./components/AuthRoute/AuthRoute";
 
-const Builder = React.lazy(() => import("modules/Builder/components/Builder/Builder"));
+const Builder = React.lazy(() => (
+    import("modules/Builder/components/Builder/components/Builder/Builder")
+));
 const UserSettings = React.lazy(() => import("modules/UserSettings/UserSettings"));
 
 const Routes = () => (
