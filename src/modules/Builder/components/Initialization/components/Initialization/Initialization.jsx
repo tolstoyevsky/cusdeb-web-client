@@ -5,7 +5,7 @@ import { Card, Spinner } from "react-bootstrap";
 
 import Blackmagic from "api/rpc/blackmagic";
 
-import SelectInitializationParams from "./components/SelectInitializationParams";
+import SelectInitializationParams from "../SelectInitializationParams";
 import { CODE, MSG, BUILD_TYPE_CODES } from "./config";
 
 export default class Initialization extends Component {
