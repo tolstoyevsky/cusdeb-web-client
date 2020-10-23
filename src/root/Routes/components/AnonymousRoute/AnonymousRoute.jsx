@@ -4,6 +4,7 @@ import { Route } from "react-router-dom";
 
 import { getToken } from "api/http/anonymous";
 import Fallback from "common/components/Fallback";
+import { connect } from "react-redux";
 
 class AnonymousFallback extends React.Component {
     constructor(props) {
@@ -41,12 +42,12 @@ AnonymousFallback.propTypes = {
     component: PropTypes.node.isRequired,
 };
 
-const AnonymousRoute = ({ component: Component, userIsAuth, ...args }) => (
+const AnonymousRoute = ({ component: Component, user, ...args }) => (
     <Route
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...args}
         render={() => (
-            userIsAuth ? (
+            user ? (
                 <Component />
             ) : (
                 <AnonymousFallback component={Component} />
@@ -56,8 +57,16 @@ const AnonymousRoute = ({ component: Component, userIsAuth, ...args }) => (
 );
 
 AnonymousRoute.propTypes = {
-    component: PropTypes.node.isRequired,
-    userIsAuth: PropTypes.bool.isRequired,
+    component: PropTypes.elementType.isRequired,
+    user: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
-export default AnonymousRoute;
+AnonymousRoute.defaultProps = {
+    user: null,
+};
+
+const mapStateToProps = ({ app }) => ({
+    user: app.user,
+});
+
+export default connect(mapStateToProps)(AnonymousRoute);

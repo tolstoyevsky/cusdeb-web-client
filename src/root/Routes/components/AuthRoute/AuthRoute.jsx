@@ -1,13 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Route, Redirect, Switch } from "react-router-dom";
+import { connect } from "react-redux";
 
-const AuthRoute = ({ userIsAuth, children, ...rest }) => (
+const AuthRoute = ({ children, user, ...rest }) => (
     <Route
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...rest}
         render={() => {
-            if (userIsAuth) {
+            if (user) {
                 return (
                     <Switch>
                         {children}
@@ -20,15 +21,20 @@ const AuthRoute = ({ userIsAuth, children, ...rest }) => (
 );
 
 AuthRoute.propTypes = {
-    userIsAuth: PropTypes.bool.isRequired,
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node,
     ]),
+    user: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 AuthRoute.defaultProps = {
     children: null,
+    user: null,
 };
 
-export default AuthRoute;
+const mapStateToProps = ({ app }) => ({
+    user: app.user,
+});
+
+export default connect(mapStateToProps)(AuthRoute);

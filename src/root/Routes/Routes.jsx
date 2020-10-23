@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import {
     BrowserRouter as Router,
     Redirect,
@@ -24,67 +23,50 @@ import AuthRoute from "./components/AuthRoute/AuthRoute";
 const Builder = React.lazy(() => import("modules/Builder/components/Builder/Builder"));
 const UserSettings = React.lazy(() => import("modules/UserSettings/UserSettings"));
 
-const Routes = (props) => {
-    const { userIsAuth } = props;
+const Routes = () => (
+    <Router>
+        <React.Suspense fallback={<Fallback />}>
+            <Switch>
+                <Route exact path="/signin" component={SignIn} />
+                <Route exact path="/signup" component={SignUp} />
+                <Route exact path="/social-auth-redirect" component={SocialAuthRedirect} />
 
-    return (
-        <Router>
-            <React.Suspense fallback={<Fallback />}>
-                <Switch>
-                    <Route exact path="/signin" component={SignIn} />
-                    <Route exact path="/signup" component={SignUp} />
-                    <Route exact path="/social-auth-redirect" component={SocialAuthRedirect} />
+                <Route exact path="/reset-password" component={ResetPassword} />
+                <Route exact path="/reset-password/confirm" component={ResetPasswordConfirm} />
 
-                    <Route exact path="/reset-password" component={ResetPassword} />
-                    <Route exact path="/reset-password/confirm" component={ResetPasswordConfirm} />
+                <AnonymousRoute exact path="/builder" component={Builder} />
+                <Route path="/builder">
+                    <Redirect to="/builder" />
+                </Route>
 
-                    <AnonymousRoute
-                        exact
-                        path="/builder"
-                        component={Builder}
-                        userIsAuth={userIsAuth}
-                    />
-                    <Route path="/builder">
-                        <Redirect to="/builder" />
+                <AuthRoute path="/">
+                    {Object.keys(UserSettingsPages).map((pageKey) => (
+                        <Route
+                            key={pageKey}
+                            exact
+                            path={UserSettingsPages[pageKey].fullPath}
+                            component={UserSettings}
+                        />
+                    ))}
+                    <Route path={UserSettingsRoutesBasename}>
+                        <Redirect
+                            to={(() => {
+                                const firstRouteKey = Object.keys(UserSettingsPages)[0];
+                                return UserSettingsPages[firstRouteKey].fullPath;
+                            })()}
+                        />
                     </Route>
 
-                    <AuthRoute path="/" userIsAuth={userIsAuth}>
-                        {Object.keys(UserSettingsPages).map((pageKey) => (
-                            <Route
-                                key={pageKey}
-                                exact
-                                path={UserSettingsPages[pageKey].fullPath}
-                                component={UserSettings}
-                            />
-                        ))}
-                        <Route path={UserSettingsRoutesBasename}>
-                            <Redirect
-                                to={(() => {
-                                    const firstRouteKey = Object.keys(UserSettingsPages)[0];
-                                    return UserSettingsPages[firstRouteKey].fullPath;
-                                })()}
-                            />
-                        </Route>
-
-                        <Redirect exact from="/" to="/dashboard" />
-                        <Route exact path="/dashboard" component={Dashboard} />
-
-                        <Route exact path="*" component={Error404} />
-                    </AuthRoute>
+                    <Redirect exact from="/" to="/dashboard" />
+                    <Route exact path="/dashboard" component={Dashboard} />
 
                     <Route exact path="*" component={Error404} />
-                </Switch>
-            </React.Suspense>
-        </Router>
-    );
-};
+                </AuthRoute>
 
-Routes.propTypes = {
-    userIsAuth: PropTypes.bool,
-};
-
-Routes.defaultProps = {
-    userIsAuth: false,
-};
+                <Route exact path="*" component={Error404} />
+            </Switch>
+        </React.Suspense>
+    </Router>
+);
 
 export default Routes;
