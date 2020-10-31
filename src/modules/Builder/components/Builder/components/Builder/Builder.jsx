@@ -1,6 +1,7 @@
+import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Nav } from "react-bootstrap";
+import { connect } from "react-redux";
 import {
     BrowserRouter as Router,
     matchPath,
@@ -8,12 +9,12 @@ import {
     Route,
     Switch,
 } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import SidebarPage from "common/containers/SidebarPage";
-
 import { BUILDER_STAGES, BACK_BUTTON_ACTIVE_STAGES, NEXT_BUTTON_INACTIVE_STAGES } from "./config";
 
-export default class Builder extends Component {
+class Builder extends Component {
     constructor(props) {
         super(props);
 
@@ -22,10 +23,6 @@ export default class Builder extends Component {
             nextButtonIsActive: true,
             backButtonIsActive: false,
             buttonState: false,
-
-            buildUUID: "",
-            device: "",
-            os: "",
         };
 
         this.currentStageRef = React.createRef();
@@ -74,13 +71,6 @@ export default class Builder extends Component {
 
     processStageData(data) {
         switch (data ? data.state : "") {
-            case "initialization":
-                this.setState(() => ({
-                    buildUUID: data.buildUUID,
-                    device: data.device,
-                    os: data.os,
-                }));
-                break;
             case "buttonState":
                 this.setState(({ buttonState: data.buttonState }));
                 break;
@@ -105,12 +95,12 @@ export default class Builder extends Component {
 
     render() {
         const {
-            currentStageKey, backButtonIsActive, nextButtonIsActive,
-            buildUUID,
-            device,
-            os,
+            currentStageKey,
+            backButtonIsActive,
+            nextButtonIsActive,
             buttonState,
         } = this.state;
+        const { buildUUID, device, distro } = this.props;
         const currentStage = BUILDER_STAGES[currentStageKey];
 
         return (
@@ -179,7 +169,7 @@ export default class Builder extends Component {
                                                         }
                                                         buildUUID={buildUUID}
                                                         device={device}
-                                                        os={os}
+                                                        os={distro}
                                                         builderCallback={this.builderCallback}
                                                     />
                                                 </Route>
@@ -222,3 +212,34 @@ export default class Builder extends Component {
         );
     }
 }
+
+Builder.propTypes = {
+    buildUUID: PropTypes.string,
+    device: PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        generation: PropTypes.string,
+        model: PropTypes.string,
+    }),
+    distro: PropTypes.shape({
+        id: PropTypes.number,
+        full_name: PropTypes.string,
+        short_name: PropTypes.string,
+        buildType: PropTypes.arrayOf(PropTypes.string),
+        packages_url: PropTypes.string,
+    }),
+};
+
+Builder.defaultProps = {
+    buildUUID: null,
+    device: null,
+    distro: null,
+};
+
+const mapStateToProps = ({ initialization }) => ({
+    buildUUID: initialization.buildUUID,
+    device: initialization.device,
+    distro: initialization.distro,
+});
+
+export default connect(mapStateToProps)(Builder);
