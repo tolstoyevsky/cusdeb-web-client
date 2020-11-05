@@ -19,13 +19,17 @@ import {
     setDevice,
     setDistro,
     setDistroList,
+    toggleContinueBuildModal,
 } from "../../actions/initialization";
+import ContinueBuildModal from "../ContinueBuildModal/ContinueBuildModal";
 
 const BUILD_TYPE_CODES = {
     "Classic image": 1,
     "Mender-compatible image": 2,
     "Mender artifact": 3,
 };
+
+const lastBuildUUDKey = "lastBuildUUID";
 
 const Initialization = forwardRef(({
     // Component props
@@ -47,6 +51,7 @@ const Initialization = forwardRef(({
     setDeviceAction,
     setDistroAction,
     setDistroListAction,
+    toggleContinueBuildModalAction,
 }, ref) => {
     useEffect(() => {
         // Try connect to blackmagic immediately after loading the page
@@ -54,6 +59,11 @@ const Initialization = forwardRef(({
         new Blackmagic();
 
         fetchDeviceListAction();
+
+        const lastBuildUUID = window.localStorage.getItem(lastBuildUUDKey);
+        if (lastBuildUUID) {
+            toggleContinueBuildModalAction();
+        }
     }, []);
 
     const onDeviceChange = (value) => {
@@ -79,7 +89,17 @@ const Initialization = forwardRef(({
             builderCallback();
         } else {
             setBuildUUIDAction(event);
+            window.localStorage.setItem(lastBuildUUDKey, event);
         }
+    };
+
+    const initExistingImage = () => {
+        const blackmagic = new Blackmagic();
+        const lastBuildUUID = window.localStorage.getItem(lastBuildUUDKey);
+        blackmagic.initExistingImage(lastBuildUUID)
+            .then(() => {
+                builderCallback();
+            });
     };
 
     const executeState = () => {
@@ -120,6 +140,7 @@ const Initialization = forwardRef(({
                         onChange={onBuildTypeChange}
                     />
                 </Card.Body>
+                <ContinueBuildModal onContinue={initExistingImage} />
             </Card>
         </>
     );
@@ -153,6 +174,7 @@ Initialization.propTypes = {
     setDeviceAction: PropTypes.func.isRequired,
     setDistroAction: PropTypes.func.isRequired,
     setDistroListAction: PropTypes.func.isRequired,
+    toggleContinueBuildModalAction: PropTypes.func.isRequired,
 };
 
 Initialization.defaultProps = {
@@ -178,6 +200,7 @@ const mapDispatchToProps = (dispatch) => ({
     setDeviceAction: (device) => dispatch(setDevice(device)),
     setDistroAction: (distro) => dispatch(setDistro(distro)),
     setDistroListAction: (distroList) => dispatch(setDistroList(distroList)),
+    toggleContinueBuildModalAction: () => dispatch(toggleContinueBuildModal()),
 });
 
 export default connect(

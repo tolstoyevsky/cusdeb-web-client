@@ -9,6 +9,7 @@ import {
     SET_DEVICE_LIST,
     SET_DISTRO,
     SET_DISTRO_LIST,
+    TOGGLE_CONTINUE_BUILD_MODAL,
 } from "../constants/initialization";
 
 export const fetchDeviceList = createAction(FETCH_DEVICE_LIST);
@@ -26,3 +27,5 @@ export const setDeviceList = createAction(SET_DEVICE_LIST);
 export const setDistro = createAction(SET_DISTRO);
 
 export const setDistroList = createAction(SET_DISTRO_LIST);
+
+export const toggleContinueBuildModal = createAction(TOGGLE_CONTINUE_BUILD_MODAL);
