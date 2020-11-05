@@ -8,6 +8,7 @@ import {
     SET_DEVICE_LIST,
     SET_DISTRO,
     SET_DISTRO_LIST,
+    TOGGLE_CONTINUE_BUILD_MODAL,
 } from "../constants/initialization";
 
 const defaultState = {
@@ -18,6 +19,7 @@ const defaultState = {
     deviceList: [],
     distro: null,
     distroList: [],
+    showContinueBuildModal: false,
 };
 
 export default handleActions(
@@ -49,6 +51,10 @@ export default handleActions(
         [SET_DISTRO_LIST]: (state, { payload: distroList }) => ({
             ...state,
             distroList,
+        }),
+        [TOGGLE_CONTINUE_BUILD_MODAL]: (state) => ({
+            ...state,
+            showContinueBuildModal: !state.showContinueBuildModal,
         }),
     },
     defaultState,
