@@ -2,7 +2,7 @@ import Shirow from "shirow";
 import { getAccessToken } from "utils/token";
 import { blackmagicUrl } from "../../../config/main"; // TODO: resolve path to config
 
-const INIT_RP = "init";
+const INIT_NEW_IMAGE_RP = "init_new_image";
 const INIT_EXISTING_IMAGE_RP = "init_existing_image";
 const GET_BASE_PACKAGES_LIST_RP = "get_base_packages_list";
 const GET_PACKAGES_LIST_RP = "get_packages_list";
@@ -35,8 +35,8 @@ export default class Blackmagic {
         this.fetchSelectedPackagesNumber = this.fetchSelectedPackagesNumber.bind(this);
     }
 
-    async initialization(firmwareName, device, distro, buildType, callback) {
-        return this.connection.emit(INIT_RP, firmwareName, device, distro, buildType)
+    async initNewImage(firmwareName, device, distro, buildType, callback) {
+        return this.connection.emit(INIT_NEW_IMAGE_RP, firmwareName, device, distro, buildType)
             .then((event) => {
                 callback(event);
             });
