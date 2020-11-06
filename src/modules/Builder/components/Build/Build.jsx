@@ -25,7 +25,7 @@ export default class Build extends Component {
         this.initTerminal();
 
         const { buildUUID } = this.props;
-        this.dominion.getRtBuildLog(buildUUID, (logLine) => {
+        this.dominion.getBuildLog(buildUUID, (logLine) => {
             this.terminal.write(logLine);
         });
     }
