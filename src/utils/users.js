@@ -1,8 +1,7 @@
+import { clearTokens } from "./token";
+
 export const signOut = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("socialAccessToken");
-    localStorage.removeItem("socialRefreshToken");
+    clearTokens();
 
     window.location.reload();
 };
