@@ -6,6 +6,7 @@ import { Button, InputGroup } from "react-bootstrap";
 import Input from "common/components/Input";
 
 import * as API from "api/http/users";
+import { setTokens } from "utils/token";
 
 export default class FormSignIn extends Component {
     constructor(props) {
@@ -47,8 +48,7 @@ export default class FormSignIn extends Component {
             .then((response) => {
                 if (response.status === 200) {
                     const { access, refresh } = response.data;
-                    localStorage.setItem("accessToken", access);
-                    localStorage.setItem("refreshToken", refresh);
+                    setTokens(access, refresh);
                     window.location.href = "/dashboard";
                 }
             })

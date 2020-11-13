@@ -1,5 +1,12 @@
 import axios from "axios";
 import url from "url";
+import {
+    checkTokens,
+    clearTokens,
+    getAccessToken,
+    getRefreshToken,
+    setAccessToken,
+} from "./token";
 
 import { mode } from "../../config/main"; // TODO: resolve path to config
 
@@ -15,21 +22,17 @@ const createResponseInterceptor = (instance) => {
 
             instance.interceptors.response.eject(interceptor);
 
-            const refreshToken = localStorage.getItem("refreshToken") || localStorage.getItem("socialRefreshToken");
+            const refreshToken = getRefreshToken();
             if (refreshToken) {
                 return instance.post("/auth/token/refresh/", {
                     refresh: refreshToken,
                 }).then((response) => {
-                    localStorage.setItem(
-                        localStorage.getItem("refreshToken") ? "accessToken" : "socialAccessToken",
-                        response.data.access,
-                    );
+                    setAccessToken(response.data.access);
                     error.response.config.headers.Authorization = `Bearer ${response.data.access}`;
 
                     return instance(error.response.config);
                 }).catch((refreshError) => {
-                    localStorage.clear();
-
+                    clearTokens();
                     return Promise.reject(refreshError);
                 });
             }
@@ -40,7 +43,7 @@ const createResponseInterceptor = (instance) => {
 
 const createRequestInterceptor = (instance) => {
     instance.interceptors.request.use((config) => {
-        const accessToken = localStorage.getItem("accessToken") || localStorage.getItem("socialAccessToken");
+        const accessToken = getAccessToken();
         if (accessToken) {
             config.headers = {
                 ...config.headers,
@@ -57,10 +60,7 @@ const createFetch = ({ baseURL, createInterceptors = false }) => {
 
     if (createInterceptors) {
         createRequestInterceptor(instance);
-        if (
-            localStorage.getItem("accessToken") || localStorage.getItem("refreshToken")
-            || localStorage.getItem("socialAccessToken") || localStorage.getItem("socialRefreshToken")
-        ) {
+        if (checkTokens()) {
             createResponseInterceptor(instance);
         }
     }

@@ -6,6 +6,8 @@ import { getToken } from "api/http/anonymous";
 import Fallback from "common/components/Fallback";
 import { connect } from "react-redux";
 
+import { setAccessToken } from "utils/token";
+
 class AnonymousFallback extends React.Component {
     constructor(props) {
         super(props);
@@ -16,7 +18,7 @@ class AnonymousFallback extends React.Component {
     componentDidMount() {
         getToken()
             .then((response) => {
-                window.localStorage.setItem("accessToken", response.data);
+                setAccessToken(response.data);
                 this.setState(() => ({ loading: false }));
             })
             .catch(() => {
