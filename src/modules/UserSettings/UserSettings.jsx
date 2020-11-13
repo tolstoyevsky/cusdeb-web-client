@@ -65,7 +65,7 @@ export default class UserSettings extends Component {
 
                             return (
                                 <SidebarPage.Sidebar.Item
-                                    key={page}
+                                    key={pageKey}
                                     active={active}
                                     onClick={() => this.onSidebarLinkClick(pageKey)}
                                     toPath={page.path}
