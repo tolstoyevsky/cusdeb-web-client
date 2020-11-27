@@ -8,7 +8,6 @@ import {
 } from "redux-saga/effects";
 
 import { listImages, updateImageNotes, deleteImage } from "api/http/images";
-import { formatImagesList } from "../helpers/images";
 import { fetchImagesListSucceeded, deleteImageSucceeded } from "../actions/dashboard";
 import { FETCH_IMAGES_LIST, UPDATE_NOTES, DELETE_IMAGE } from "../constants/dashboard";
 
@@ -30,7 +29,7 @@ function* watchCurrentDeleteImage() {
 function* fetchImagesList() {
     try {
         const { data } = yield call(() => listImages());
-        yield put(fetchImagesListSucceeded(formatImagesList(data)));
+        yield put(fetchImagesListSucceeded(data));
     } catch (_error) {
         // TODO: handle error
     }

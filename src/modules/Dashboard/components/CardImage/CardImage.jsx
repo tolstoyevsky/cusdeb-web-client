@@ -5,23 +5,36 @@ import PropTypes from "prop-types";
 import { toggleNotesModal, updateModalValue, deleteCurrentImage } from "modules/Dashboard/actions/dashboard";
 import { Button, Card } from "react-bootstrap";
 
-import { faStickyNote, faTrash, faDownload } from "@fortawesome/free-solid-svg-icons";
+import {
+    faQuestionCircle,
+    faExclamationCircle,
+    faHourglass,
+    faCheck,
+    faHammer,
+    faStickyNote,
+    faTrash,
+    faDownload,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { statusIcon } from "./config";
-
-const CardImage = ({ dispatch, imageId, userImage }) => {
-    const handleDeleteImage = () => dispatch(deleteCurrentImage(imageId));
-
-    const handleOpenModal = () => {
-        dispatch(updateModalValue(userImage.notes));
-        dispatch(toggleNotesModal(imageId));
-    };
-
+const CardImage = ({
+    handleDeleteImage,
+    handleOpenModal,
+    imageId,
+    userImage,
+}) => {
     const startedAtParse = (startedAt) => {
         const date = new Date();
         date.setTime(Date.parse(startedAt));
         return date.toGMTString();
+    };
+
+    const statusIcon = {
+        Undefined: faQuestionCircle,
+        Pending: faHourglass,
+        Building: faHammer,
+        Failed: faExclamationCircle,
+        Succeeded: faCheck,
     };
 
     return (
@@ -57,11 +70,11 @@ const CardImage = ({ dispatch, imageId, userImage }) => {
                         Download
                     </span>
                 </Button>
-                <Button variant="primary" className="ml-1" onClick={handleOpenModal}>
+                <Button variant="primary" className="ml-1" onClick={() => handleOpenModal(imageId, userImage.notes)}>
                     <FontAwesomeIcon icon={faStickyNote} className="mr-1" />
                     Add note
                 </Button>
-                <Button variant="primary" className="float-right pl-3" onClick={handleDeleteImage}>
+                <Button variant="primary" className="float-right pl-3" onClick={() => handleDeleteImage(imageId)}>
                     <FontAwesomeIcon icon={faTrash} className="fa-flip-horizontal mr-1" />
                     <span className="d-none d-sm-inline">
                         Delete
@@ -73,7 +86,8 @@ const CardImage = ({ dispatch, imageId, userImage }) => {
 };
 
 CardImage.propTypes = {
-    dispatch: PropTypes.func.isRequired,
+    handleDeleteImage: PropTypes.func.isRequired,
+    handleOpenModal: PropTypes.func.isRequired,
     imageId: PropTypes.string.isRequired,
     userImage: PropTypes.objectOf(PropTypes.string).isRequired,
 };
@@ -83,4 +97,12 @@ const mapStateToProps = ({ dashboard }) => ({
     showNotesModal: dashboard.showNotesModal,
 });
 
-export default connect(mapStateToProps)(CardImage);
+const mapDispatchToProps = (dispatch) => ({
+    handleDeleteImage: (imageId) => dispatch(deleteCurrentImage(imageId)),
+    handleOpenModal: (imageId, notes) => {
+        dispatch(updateModalValue(notes));
+        dispatch(toggleNotesModal(imageId));
+    },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CardImage);

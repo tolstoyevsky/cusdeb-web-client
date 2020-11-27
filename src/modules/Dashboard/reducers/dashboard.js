@@ -16,6 +16,17 @@ const defaultState = {
     modalValue: "",
 };
 
+const formatImagesList = (imagesList) => {
+    const imagesObject = {};
+
+    imagesList.forEach((image) => {
+        const { image_id, ...rest } = image; // eslint-disable-line camelcase
+        imagesObject[image_id] = rest;
+    });
+
+    return imagesObject;
+};
+
 export default handleActions(
     {
         [DELETE_IMAGE_SUCCEEDED]: (state, { payload: imageId }) => {
@@ -28,7 +39,7 @@ export default handleActions(
         },
         [FETCH_IMAGES_LIST_SUCCEEDED]: (state, { payload: imagesList }) => ({
             ...state,
-            imagesList,
+            imagesList: formatImagesList(imagesList),
         }),
         [TOGGLE_NOTES_MODAL]: (state, { payload: imageId }) => ({
             ...state,

@@ -11,36 +11,18 @@ import {
     UPDATE_NOTES_LOCALLY,
 } from "../constants/dashboard";
 
-export const deleteCurrentImage = createAction(
-    DELETE_IMAGE,
-    (imageId) => imageId,
-);
+export const deleteCurrentImage = createAction(DELETE_IMAGE);
 
-export const deleteImageSucceeded = createAction(
-    DELETE_IMAGE_SUCCEEDED,
-    (imageId) => imageId,
-);
+export const deleteImageSucceeded = createAction(DELETE_IMAGE_SUCCEEDED);
 
 export const fetchImagesList = createAction(FETCH_IMAGES_LIST);
 
-export const fetchImagesListSucceeded = createAction(
-    FETCH_IMAGES_LIST_SUCCEEDED,
-    (imageList) => imageList,
-);
+export const fetchImagesListSucceeded = createAction(FETCH_IMAGES_LIST_SUCCEEDED);
 
-export const toggleNotesModal = createAction(
-    TOGGLE_NOTES_MODAL,
-    (imageId) => imageId,
-);
+export const toggleNotesModal = createAction(TOGGLE_NOTES_MODAL);
 
-export const updateModalValue = createAction(
-    UPDATE_MODAL_VALUE,
-    (modalValue) => modalValue,
-);
+export const updateModalValue = createAction(UPDATE_MODAL_VALUE);
 
 export const updateNotes = createAction(UPDATE_NOTES);
 
-export const updateImageNotesLocally = createAction(
-    UPDATE_NOTES_LOCALLY,
-    (imageId) => imageId,
-);
+export const updateImageNotesLocally = createAction(UPDATE_NOTES_LOCALLY);

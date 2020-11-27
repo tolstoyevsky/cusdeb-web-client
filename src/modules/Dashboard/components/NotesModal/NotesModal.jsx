@@ -11,48 +11,43 @@ import {
 } from "modules/Dashboard/actions/dashboard";
 
 const NotesModal = ({
-    dispatch,
-    modalValue,
+    handleClose,
     imageId,
+    modalValue,
+    onChangeModalValue,
+    saveNotes,
     showNotesModal,
-}) => {
-    const handleClose = () => dispatch(toggleNotesModal(imageId));
-    const onChangeModalValue = (event) => dispatch(updateModalValue(event.target.value));
-    const saveNotes = () => {
-        dispatch(updateImageNotesLocally(imageId));
-        dispatch(updateNotes(imageId));
-    };
+}) => (
+    <Modal centered size="lg" show={showNotesModal} onHide={() => handleClose(imageId)}>
+        <Modal.Header>
+            <Modal.Title>
+                Notes about this image
+            </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+            <Form.Label>Notes</Form.Label>
+            <Form.Control
+                as="textarea"
+                rows={3}
+                value={modalValue}
+                onChange={onChangeModalValue}
+            />
+        </Modal.Body>
 
-    return (
-        <Modal centered size="lg" show={showNotesModal} onHide={handleClose}>
-            <Modal.Header>
-                <Modal.Title>
-                    Notes about this image
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form.Label>Notes</Form.Label>
-                <Form.Control
-                    as="textarea"
-                    rows={3}
-                    value={modalValue}
-                    onChange={onChangeModalValue}
-                />
-            </Modal.Body>
-
-            <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>Close</Button>
-                <Button variant="primary" type="submit" onClick={saveNotes}>Save</Button>
-            </Modal.Footer>
-        </Modal>
-    );
-};
+        <Modal.Footer>
+            <Button variant="secondary" onClick={() => handleClose(imageId)}>Close</Button>
+            <Button variant="primary" type="submit" onClick={() => saveNotes(imageId)}>Save</Button>
+        </Modal.Footer>
+    </Modal>
+);
 
 NotesModal.propTypes = {
-    dispatch: PropTypes.func.isRequired,
+    handleClose: PropTypes.func.isRequired,
     imageId: PropTypes.string,
-    showNotesModal: PropTypes.bool,
     modalValue: PropTypes.string.isRequired,
+    onChangeModalValue: PropTypes.func.isRequired,
+    saveNotes: PropTypes.func.isRequired,
+    showNotesModal: PropTypes.bool,
 };
 
 NotesModal.defaultProps = {
@@ -66,4 +61,13 @@ const mapStateToProps = ({ dashboard }) => ({
     modalValue: dashboard.modalValue,
 });
 
-export default connect(mapStateToProps)(NotesModal);
+const mapDispatchToProps = (dispatch) => ({
+    saveNotes: (imageId) => {
+        dispatch(updateImageNotesLocally(imageId));
+        dispatch(updateNotes(imageId));
+    },
+    handleClose: (imageId) => dispatch(toggleNotesModal(imageId)),
+    onChangeModalValue: (event) => dispatch(updateModalValue(event.target.value)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(NotesModal);

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
-import { fetchImagesList } from "modules/Dashboard/actions/dashboard";
+import { fetchImagesList as fetchImagesListAPI } from "modules/Dashboard/actions/dashboard";
 import Regular from "common/containers/Regular";
 
 import { Button } from "react-bootstrap";
@@ -13,8 +13,8 @@ import NotesModal from "../NotesModal/NotesModal";
 
 class Dashboard extends Component {
     componentDidMount() {
-        const { dispatch } = this.props;
-        dispatch(fetchImagesList());
+        const { fetchImagesList } = this.props;
+        fetchImagesList();
     }
 
     render() {
@@ -64,8 +64,8 @@ class Dashboard extends Component {
 }
 
 Dashboard.propTypes = {
-    dispatch: PropTypes.func.isRequired,
     imagesList: PropTypes.objectOf(PropTypes.object),
+    fetchImagesList: PropTypes.func.isRequired,
 };
 
 Dashboard.defaultProps = {
@@ -76,4 +76,10 @@ const mapStateToProps = ({ dashboard }) => ({
     imagesList: dashboard.imagesList,
 });
 
-export default connect(mapStateToProps)(Dashboard);
+const mapDispatchToProps = (dispatch) => ({
+    fetchImagesList: () => {
+        dispatch(fetchImagesListAPI());
+    },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
