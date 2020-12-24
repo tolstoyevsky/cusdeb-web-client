@@ -34,7 +34,7 @@ const NotesModal = ({
                 as="textarea"
                 rows={3}
                 value={modalValue}
-                onChange={onChangeModalValue}
+                onChange={(event) => onChangeModalValue(event.target.value)}
             />
             <Alert show={showSucceededMessage} variant="success" className="mt-3 mb-0">
                 Notes has been successfully updated
@@ -75,7 +75,7 @@ const mapStateToProps = ({ dashboard }) => ({
 const mapDispatchToProps = (dispatch) => ({
     saveNotes: (imageId) => dispatch(updateNotes(imageId)),
     handleClose: (imageId) => dispatch(toggleNotesModal(imageId)),
-    onChangeModalValue: ({ target }) => dispatch(updateModalValue(target.value)),
+    onChangeModalValue: (value) => dispatch(updateModalValue(value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotesModal);
