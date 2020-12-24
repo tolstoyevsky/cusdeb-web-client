@@ -8,7 +8,7 @@ import {
     Row,
 } from "react-bootstrap";
 import {
-    faQuestionCircle,
+    faQuestion,
     faExclamationCircle,
     faHourglass,
     faCheck,
@@ -19,7 +19,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { toggleNotesModal, updateModalValue, deleteCurrentImage } from "modules/Dashboard/actions/dashboard";
+import { toggleNotesModal, updateModalValue, deleteImage } from "modules/Dashboard/actions/dashboard";
 
 const startedAtParse = (startedAt) => {
     const date = new Date();
@@ -28,38 +28,48 @@ const startedAtParse = (startedAt) => {
 };
 
 const statusIcon = {
-    Undefined: faQuestionCircle,
-    Pending: faHourglass,
-    Building: faHammer,
-    Failed: faExclamationCircle,
-    Succeeded: faCheck,
+    Undefined: [faQuestion, "text-muted"],
+    Pending: [faHourglass, "text-warning"],
+    Building: [faHammer, "text-warning"],
+    Failed: [faExclamationCircle, "text-danger"],
+    Interrupted: [faQuestion, "text-muted"],
+    Succeeded: [faCheck, "text-success"],
 };
 
 const CardImage = ({
-    handleDeleteImage,
+    deleteCurrentImageAction,
     handleOpenModal,
     imageId,
     userImage,
 }) => (
     <Card style={{ height: "calc(100% - 1rem)" }}>
+        <Card.Header>
+            <h4 className="text-dark d-inline mb-0">
+                <strong>{userImage.distro_name}</strong>
+                &nbsp;for&nbsp;
+                <strong>{userImage.device_name}</strong>
+            </h4>
+            <FontAwesomeIcon
+                icon={statusIcon[userImage.status_display][0]}
+                size="lg"
+                className={`mt-1 float-right ${statusIcon[userImage.status_display][1]}`}
+            />
+        </Card.Header>
         <Card.Body>
             <Row>
                 <Col xs={12} sm={4} md={6}>
-                    <h4 className="text-dark">
-                        <strong>{userImage.distro_name}</strong>
-                        &nbsp;for&nbsp;
-                        <strong>{userImage.device_name}</strong>
-                    </h4>
                     <p className="mb-1">
-                        <strong>Build type:</strong>
-                        &nbsp;
+                        <strong>Build type: </strong>
                         {userImage.flavour_display}
                     </p>
                     <p className="mb-1">
-                        {`Status: ${userImage.status_display}`}
-                        <FontAwesomeIcon icon={statusIcon[userImage.status_display]} className="ml-1" />
+                        <strong>Status: </strong>
+                        {userImage.status_display}
                     </p>
-                    <p className="mb-1">{`Started at: ${startedAtParse(userImage.started_at)}`}</p>
+                    <p className="mb-1">
+                        <strong>Started at: </strong>
+                        {startedAtParse(userImage.started_at)}
+                    </p>
                 </Col>
             </Row>
         </Card.Body>
@@ -74,7 +84,7 @@ const CardImage = ({
                 <FontAwesomeIcon icon={faStickyNote} className="mr-1" />
                 Add note
             </Button>
-            <Button variant="primary" className="float-right pl-3" onClick={() => handleDeleteImage(imageId)}>
+            <Button variant="primary" className="float-right pl-3" onClick={() => deleteCurrentImageAction(imageId)}>
                 <FontAwesomeIcon icon={faTrash} className="fa-flip-horizontal mr-1" />
                 <span className="d-none d-sm-inline">
                     Delete
@@ -85,7 +95,7 @@ const CardImage = ({
 );
 
 CardImage.propTypes = {
-    handleDeleteImage: PropTypes.func.isRequired,
+    deleteCurrentImageAction: PropTypes.func.isRequired,
     handleOpenModal: PropTypes.func.isRequired,
     imageId: PropTypes.string.isRequired,
     userImage: PropTypes.objectOf(PropTypes.string).isRequired,
@@ -97,7 +107,7 @@ const mapStateToProps = ({ dashboard }) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    handleDeleteImage: (imageId) => dispatch(deleteCurrentImage(imageId)),
+    deleteCurrentImageAction: (imageId) => dispatch(deleteImage(imageId)),
     handleOpenModal: (imageId, notes) => {
         dispatch(updateModalValue(notes));
         dispatch(toggleNotesModal(imageId));

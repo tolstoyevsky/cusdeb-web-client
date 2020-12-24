@@ -11,7 +11,7 @@ import {
     UPDATE_NOTES_SUCCEEDED,
 } from "../constants/dashboard";
 
-export const deleteCurrentImage = createAction(DELETE_IMAGE);
+export const deleteImage = createAction(DELETE_IMAGE);
 
 export const deleteImageSucceeded = createAction(DELETE_IMAGE_SUCCEEDED);
 

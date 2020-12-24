@@ -75,7 +75,7 @@ const mapStateToProps = ({ dashboard }) => ({
 const mapDispatchToProps = (dispatch) => ({
     saveNotes: (imageId) => dispatch(updateNotes(imageId)),
     handleClose: (imageId) => dispatch(toggleNotesModal(imageId)),
-    onChangeModalValue: (event) => dispatch(updateModalValue(event.target.value)),
+    onChangeModalValue: ({ target }) => dispatch(updateModalValue(target.value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotesModal);
