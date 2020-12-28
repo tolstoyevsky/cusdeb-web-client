@@ -3,19 +3,16 @@ import { Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
+import CusDebLogoCircle from "assets/images/CusDebLogoCircle";
+
 const Sidebar = ({ children }) => (
     <div className="content-sidebar">
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
             <a href="/" className="brand-link">
-                <Nav.Item as="center">
-                    C
-                    <span className="brand-text">us</span>
-                    D
-                    <span className="brand-text">
-                        eb
-                        <sup>beta</sup>
-                    </span>
-                </Nav.Item>
+                <CusDebLogoCircle />
+                <span className="brand-text font-weight-light align-middle ml-4">
+                    CusDeb
+                </span>
             </a>
             <div className="sidebar mt-2">
                 <Nav className="nav-sidebar nav-treeview flex-column" as="ul" variant="pills">
