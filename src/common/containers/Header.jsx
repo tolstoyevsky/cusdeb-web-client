@@ -11,6 +11,8 @@ import {
 } from "react-bootstrap";
 
 import { signOut } from "utils/users";
+import CusDebLogo from "assets/images/CusDebLogo";
+import CusDebLogoText from "assets/images/CusDebLogoText";
 
 const Header = ({ children, fluid, user }) => (
     <Navbar variant="light" className="main-header bg-white" expand="sm">
@@ -59,8 +61,8 @@ Header.defaultProps = {
 
 const HeaderLogo = () => (
     <Navbar.Brand href="/">
-        CusDeb
-        <sup>beta</sup>
+        <CusDebLogo short />
+        <CusDebLogoText />
     </Navbar.Brand>
 );
 
