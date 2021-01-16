@@ -16,6 +16,7 @@ import SignIn from "modules/SignIn/components/SignIn/SignIn";
 import SignUp from "modules/SignUp/components/SignUp/SignUp";
 import SocialAuthRedirect from "modules/SocialAuthRedirect/SocialAuthRedirect";
 import { UserSettingsPages, UserSettingsRoutesBasename } from "modules/UserSettings/UserSettings";
+import ConfirmEmail from "modules/ConfirmEmail/components/ConfirmEmail/ConfirmEmail";
 
 import AnonymousRoute from "./components/AnonymousRoute/AnonymousRoute";
 import AuthRoute from "./components/AuthRoute/AuthRoute";
@@ -35,6 +36,8 @@ const Routes = () => (
 
                 <Route exact path="/reset-password" component={ResetPassword} />
                 <Route exact path="/reset-password/confirm" component={ResetPasswordConfirm} />
+
+                <Route exact path="/confirm-email/" component={ConfirmEmail} />
 
                 <AnonymousRoute exact path="/builder" component={Builder} />
                 <Route path="/builder">
