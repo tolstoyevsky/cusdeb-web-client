@@ -53,3 +53,7 @@ export const updatePassword = async (oldPassword, password, retypePassword) => (
         retype_password: retypePassword,
     })
 );
+
+export const confirmEmail = async (token) => (
+    fetch.post("users/confirm_email/", { token })
+);
