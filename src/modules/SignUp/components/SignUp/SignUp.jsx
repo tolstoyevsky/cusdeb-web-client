@@ -10,23 +10,53 @@ export default class SignUp extends DOMElementsClassComponent {
     constructor(props) {
         super(props);
 
+        this.state = {
+            email: "",
+            succeededMessage: false,
+        };
+
         this.bodyClass = "register-page";
         this.DOMElementsClass = { "#root": "register-box" };
+
+        this.onFormSubmit = this.onFormSubmit.bind(this);
+    }
+
+    onFormSubmit(email) {
+        this.setState(() => ({
+            email,
+            succeededMessage: true,
+        }));
     }
 
     render() {
+        const { email, succeededMessage } = this.state;
         return (
             <Card className="register-card-body pb-0">
-                <p className="login-box-msg">New member registration</p>
-                <Card.Body>
-                    <FormSignUp />
+                {succeededMessage ? (
+                    <>
+                        <h4 className="mb-4">
+                            Verify your e-mail to finish signing up for CusDeb
+                        </h4>
+                        <p>
+                            We have sent email to&nbsp;
+                            <b>{email}</b>
+                            &nbsp;to confirm the validity of your email address
+                        </p>
+                    </>
+                ) : (
+                    <>
+                        <p className="login-box-msg">New member registration</p>
+                        <Card.Body>
+                            <FormSignUp onFormSubmit={this.onFormSubmit} />
 
-                    <SocialAuth />
+                            <SocialAuth />
 
-                    <p className="mb-0 mt-3">
-                        <a href="/signin">I already have an account</a>
-                    </p>
-                </Card.Body>
+                            <p className="mb-0 mt-3">
+                                <a href="/signin">I already have an account</a>
+                            </p>
+                        </Card.Body>
+                    </>
+                )}
             </Card>
         );
     }

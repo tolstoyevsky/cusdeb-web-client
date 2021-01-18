@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
@@ -62,6 +63,7 @@ export default class FormSignUp extends Component {
         event.preventDefault();
 
         const { formData } = this.state;
+        const { onFormSubmit } = this.props;
 
         API.signUp({
             username: formData.username,
@@ -70,7 +72,7 @@ export default class FormSignUp extends Component {
         })
             .then((response) => {
                 if (response.status === 201) {
-                    window.location.href = "/dashboard";
+                    onFormSubmit(formData.email);
                 }
             })
             .catch((error) => {
@@ -255,3 +257,7 @@ export default class FormSignUp extends Component {
         );
     }
 }
+
+FormSignUp.propTypes = {
+    onFormSubmit: PropTypes.func.isRequired,
+};
