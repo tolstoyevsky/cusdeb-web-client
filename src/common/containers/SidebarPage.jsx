@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import DOMElementsClassComponent from "common/components/DOMElementsClassComponent";
 import Footer from "./Footer";
-import Header from "./Header";
+import Header from "./Header/Header";
 import Sidebar from "./Sidebar/Sidebar";
 
 export default class SidebarPage extends DOMElementsClassComponent {
