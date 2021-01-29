@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import DOMElementsClassComponent from "common/components/DOMElementsClassComponent";
 import Footer from "./Footer";
-import Header from "./Header";
+import Header from "./Header/Header";
 
 export default class Regular extends DOMElementsClassComponent {
     constructor(props) {
