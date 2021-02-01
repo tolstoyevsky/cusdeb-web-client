@@ -37,3 +37,5 @@ export const cusdebTzURL = process.env.CUSDEB_TZ_URL;
 if (!cusdebTzURL) {
     throw new Error("The CusDeb TZ server address is not specified.");
 }
+
+export const sentryDSN = process.env.SENTRY_DSN;
