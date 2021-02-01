@@ -82,5 +82,9 @@
     "shirow": "github:tolstoyevsky/shirow",
     "xterm": "^4.5.0",
     "xterm-addon-fit": "^0.3.0"
+  },
+  "optionalDependencies": {
+    "@sentry/react": "^6.0.3",
+    "@sentry/tracing": "^6.0.3"
   }
 }

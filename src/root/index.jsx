@@ -8,12 +8,15 @@ import createSagaMiddleware from "redux-saga";
 import App from "modules/App/components/App/App";
 import rootReducer from "./rootReducer";
 import rootSaga from "./rootSaga";
+import * as sentry from "./sentry";
 
 import "styles/index.scss";
 // eslint-disable-next-line import/no-unresolved
 import "admin-lte-js";
 import "bootstrap";
 import "select2";
+
+sentry.init();
 
 const sagaMiddleware = createSagaMiddleware();
 

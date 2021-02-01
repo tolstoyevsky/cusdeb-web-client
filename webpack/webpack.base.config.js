@@ -72,6 +72,8 @@ export default {
             CUSDEB_API_URL: mainConfig.cusdebApiUrl,
             CUSDEB_HELPIK_URL: mainConfig.cusdebHelpikUrl,
             CUSDEB_TZ_URL: mainConfig.cusdebTzURL,
+
+            SENTRY_DSN: mainConfig.sentryDSN,
         }),
     ],
 };
