@@ -215,19 +215,8 @@ class Builder extends Component {
 
 Builder.propTypes = {
     buildUUID: PropTypes.string,
-    device: PropTypes.shape({
-        id: PropTypes.number,
-        name: PropTypes.string,
-        generation: PropTypes.string,
-        model: PropTypes.string,
-    }),
-    distro: PropTypes.shape({
-        id: PropTypes.number,
-        full_name: PropTypes.string,
-        short_name: PropTypes.string,
-        buildType: PropTypes.arrayOf(PropTypes.string),
-        packages_url: PropTypes.string,
-    }),
+    device: PropTypes.string,
+    distro: PropTypes.string,
 };
 
 Builder.defaultProps = {

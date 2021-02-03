@@ -8,7 +8,6 @@ import Select from "common/components/Select";
 import {
     formatBuildTypeList,
     formatDeviceList,
-    formatDeviceTitle,
     formatDistroList,
 } from "modules/Builder/helpers/format";
 import {
@@ -16,8 +15,8 @@ import {
     setBuildType,
     setBuildTypeList,
     setBuildUUID,
-    setDevice,
-    setDistro,
+    setDeviceShortName,
+    setDistroShortName,
     setDistroList,
     toggleContinueBuildModal,
 } from "../../actions/initialization";
@@ -36,9 +35,9 @@ const Initialization = forwardRef(({
     builderCallback,
 
     // Redux state variables
-    device,
+    deviceShortName,
     deviceList,
-    distro,
+    distroShortName,
     distroList,
     buildType,
     buildTypeList,
@@ -48,8 +47,8 @@ const Initialization = forwardRef(({
     setBuildTypeAction,
     setBuildTypeListAction,
     setBuildUUIDAction,
-    setDeviceAction,
-    setDistroAction,
+    setDeviceShortNameAction,
+    setDistroShortNameAction,
     setDistroListAction,
     toggleContinueBuildModalAction,
 }, ref) => {
@@ -67,15 +66,15 @@ const Initialization = forwardRef(({
     }, []);
 
     const onDeviceChange = (value) => {
-        const currentDevice = deviceList.find((device_) => String(device_.id) === String(value));
-        setDeviceAction(currentDevice);
-        setDistroListAction(currentDevice.os);
+        const currentDevice = deviceList[value];
+        setDeviceShortNameAction(value);
+        setDistroListAction(currentDevice.distros);
     };
 
     const onDistroChange = (value) => {
-        const currentDistro = distroList.find((distro_) => distro_.short_name === value);
-        setDistroAction(currentDistro);
-        setBuildTypeListAction(currentDistro.build_type || []);
+        const currentDistro = distroList[value];
+        setDistroShortNameAction(value);
+        setBuildTypeListAction(currentDistro.build_types || []);
     };
 
     const onBuildTypeChange = (value) => {
@@ -106,8 +105,8 @@ const Initialization = forwardRef(({
         const blackmagic = new Blackmagic();
         blackmagic.initNewImage(
             "My image",
-            formatDeviceTitle(device),
-            distro.short_name,
+            deviceShortName,
+            distroShortName,
             BUILD_TYPE_CODES[buildType],
             initNewImageCallback,
         );
@@ -148,22 +147,22 @@ const Initialization = forwardRef(({
 
 Initialization.propTypes = {
     builderCallback: PropTypes.func.isRequired,
-
-    device: PropTypes.shape({
-        id: PropTypes.number,
-        name: PropTypes.string,
-        generation: PropTypes.string,
+    deviceShortName: PropTypes.string,
+    deviceList: PropTypes.objectOf(PropTypes.shape({
+        distros: PropTypes.objectOf(PropTypes.object),
+        generation: PropTypes.number,
         model: PropTypes.string,
-    }),
-    deviceList: PropTypes.arrayOf(PropTypes.object).isRequired,
-    distro: PropTypes.shape({
-        id: PropTypes.number,
-        full_name: PropTypes.string,
-        short_name: PropTypes.string,
-        buildType: PropTypes.arrayOf(PropTypes.string),
+        name: PropTypes.string,
+    })).isRequired,
+    distroShortName: PropTypes.string,
+    distroList: PropTypes.objectOf(PropTypes.shape({
+        build_types: PropTypes.arrayOf(PropTypes.string),
+        codename: PropTypes.string,
+        name: PropTypes.string,
         packages_url: PropTypes.string,
-    }),
-    distroList: PropTypes.arrayOf(PropTypes.object).isRequired,
+        port: PropTypes.string,
+        version: PropTypes.number,
+    })).isRequired,
     buildType: PropTypes.string,
     buildTypeList: PropTypes.arrayOf(PropTypes.string).isRequired,
 
@@ -171,15 +170,15 @@ Initialization.propTypes = {
     setBuildTypeAction: PropTypes.func.isRequired,
     setBuildTypeListAction: PropTypes.func.isRequired,
     setBuildUUIDAction: PropTypes.func.isRequired,
-    setDeviceAction: PropTypes.func.isRequired,
-    setDistroAction: PropTypes.func.isRequired,
+    setDeviceShortNameAction: PropTypes.func.isRequired,
+    setDistroShortNameAction: PropTypes.func.isRequired,
     setDistroListAction: PropTypes.func.isRequired,
     toggleContinueBuildModalAction: PropTypes.func.isRequired,
 };
 
 Initialization.defaultProps = {
-    device: null,
-    distro: null,
+    deviceShortName: null,
+    distroShortName: null,
     buildType: null,
 };
 
@@ -187,8 +186,8 @@ const mapStateToProps = ({ initialization }) => ({
     deviceList: initialization.deviceList,
     distroList: initialization.distroList,
     buildTypeList: initialization.buildTypeList,
-    device: initialization.device,
-    distro: initialization.distro,
+    deviceShortName: initialization.deviceShortName,
+    distroShortName: initialization.distroShortName,
     buildType: initialization.buildType,
 });
 
@@ -197,8 +196,8 @@ const mapDispatchToProps = (dispatch) => ({
     setBuildTypeAction: (buildType) => dispatch(setBuildType(buildType)),
     setBuildTypeListAction: (buildTypeList) => dispatch(setBuildTypeList(buildTypeList)),
     setBuildUUIDAction: (buildUUID) => dispatch(setBuildUUID(buildUUID)),
-    setDeviceAction: (device) => dispatch(setDevice(device)),
-    setDistroAction: (distro) => dispatch(setDistro(distro)),
+    setDeviceShortNameAction: (deviceShortName) => dispatch(setDeviceShortName(deviceShortName)),
+    setDistroShortNameAction: (distroShortName) => dispatch(setDistroShortName(distroShortName)),
     setDistroListAction: (distroList) => dispatch(setDistroList(distroList)),
     toggleContinueBuildModalAction: () => dispatch(toggleContinueBuildModal()),
 });
