@@ -13,23 +13,38 @@ export const formatDeviceTitle = (device) => {
     return title.trim();
 };
 
+export const formatDistroTitle = (distro) => {
+    let title = "";
+    if (distro.name) {
+        title = `${title} ${distro.name}`;
+    }
+    if (distro.version) {
+        title = `${title} ${distro.version}`;
+    }
+    if (distro.codename) {
+        title = `${title} ${distro.codename}`;
+    }
+
+    return title.trim();
+};
+
 export const formatDeviceList = (deviceList) => (
-    deviceList.map((device) => ({
-        value: device.id,
-        text: formatDeviceTitle(device),
+    Object.keys(deviceList).map((deviceShortName) => ({
+        value: deviceShortName,
+        text: formatDeviceTitle(deviceList[deviceShortName]),
     }))
 );
 
 export const formatDistroList = (distroList) => (
-    distroList.map((distro) => ({
-        value: distro.short_name,
-        text: distro.full_name,
+    Object.keys(distroList).map((distroShortName) => ({
+        value: distroShortName,
+        text: formatDistroTitle(distroList[distroShortName]),
     }))
 );
 
 export const formatBuildTypeList = (buildTypeList) => (
     buildTypeList.map((buildType) => ({
         value: buildType,
-        text: buildType,
+        text: buildType[0].toUpperCase() + buildType.slice(1),
     }))
 );

@@ -61,14 +61,10 @@ export default class PackageList extends Component {
     getPackagesUrl(devices) {
         const { os, device } = this.props;
 
-        const currentDevice = devices.find((element) => (
-            device === PackageList.formatDeviceTitle(element)
-        ));
+        const currentDevice = devices[device];
 
         if (currentDevice) {
-            const currentOs = currentDevice.os.find((element) => (
-                os === element.short_name
-            ));
+            const currentOs = currentDevice.distros[os];
 
             if (currentOs) {
                 return currentOs.packages_url;
