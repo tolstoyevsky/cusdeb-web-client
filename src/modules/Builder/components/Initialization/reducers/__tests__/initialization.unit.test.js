@@ -2,7 +2,12 @@ import InitializationReducer from "../initialization";
 import {
     setBuildType,
     setBuildTypeList,
-    setBuildUUID, setDevice, setDeviceList, setDistro, setDistroList, toggleContinueBuildModal,
+    setBuildUUID,
+    setDeviceShortName,
+    setDeviceList,
+    setDistroShortName,
+    setDistroList,
+    toggleContinueBuildModal,
 } from "../../actions/initialization";
 
 describe("Initialization reducer", () => {
@@ -11,10 +16,10 @@ describe("Initialization reducer", () => {
             buildType: null,
             buildTypeList: [],
             buildUUID: null,
-            device: null,
-            deviceList: [],
-            distro: null,
-            distroList: [],
+            deviceShortName: null,
+            deviceList: {},
+            distroShortName: null,
+            distroList: {},
             showContinueBuildModal: false,
         });
     });
@@ -37,92 +42,90 @@ describe("Initialization reducer", () => {
         expect(reducer).toEqual({ buildUUID });
     });
 
-    it("SET_DEVICE", () => {
-        const device = {
-            id: 1,
-            name: "Raspberry Pi",
-            generation: "",
-            model: "Model B and B+",
-            os: [
-                {
-                    id: 2,
-                    full_name: "Raspbian 10 \"Buster\" (32-bit)",
-                    short_name: "raspbian-buster-armhf",
-                    build_type: ["Classic image"],
-                    packages_url: "",
-                },
-            ],
-        };
-        const reducer = InitializationReducer({}, setDevice(device));
-        expect(reducer).toEqual({ device });
+    it("SET_DEVICE_SHORT_NAME", () => {
+        const deviceShortName = "opi-pc-plus";
+        const reducer = InitializationReducer({}, setDeviceShortName(deviceShortName));
+        expect(reducer).toEqual({ deviceShortName });
     });
 
     it("SET_DEVICE_LIST", () => {
-        const deviceList = [
-            {
-                id: 1,
-                name: "Raspberry Pi",
-                generation: "",
-                model: "Model B and B+",
-                os: [
-                    {
-                        id: 2,
-                        full_name: "Raspbian 10 \"Buster\" (32-bit)",
-                        short_name: "raspbian-buster-armhf",
-                        build_type: ["Classic image"],
-                        packages_url: "",
+        const deviceList = {
+            "opi-pc-plus": {
+                distros: {
+                    "debian-buster-armhf": {
+                        build_types: ["classic"],
+                        codename: "Buster",
+                        name: "Debian",
+                        packages_url: "https://packages.debian.org/buster/",
+                        port: "armhf",
+                        version: 10,
                     },
-                ],
+                    "kali-rolling-armhf": {
+                        build_types: ["classic"],
+                        codename: null,
+                        name: "Kali Rolling",
+                        packages_url: null,
+                        port: "armhf",
+                        version: null,
+                    },
+                },
+                generation: null,
+                model: "PC Plus",
+                name: "Orange Pi",
             },
-            {
-                id: 2,
-                name: "Raspberry Pi",
-                generation: "2",
+            "rpi-3-b": {
+                distros: {
+                    "alpine-3.12-armhf": {
+                        build_types: ["classic"],
+                        codename: null,
+                        name: "Alpine",
+                        packages_url: "https://pkgs.alpinelinux.org/package/v3.12/",
+                        port: "armhf",
+                        version: 3.12,
+                    },
+                    "raspbian-buster-armhf": {
+                        build_types: ["classic", "mender", "artifact"],
+                        codename: "Buster",
+                        name: "Raspbian",
+                        packages_url: null,
+                        port: "armhf",
+                        version: 10,
+                    },
+                },
+                generation: 3,
                 model: "Model B",
-                os: [
-                    {
-                        id: 1,
-                        full_name: "Devuan 1 \"Jessie\" (32-bit)",
-                        short_name: "devuan-jessie-armhf",
-                        build_type: ["Classic image"],
-                        packages_url: "https://pkginfo.devuan.org/stage/jessie/jessie/",
-                    },
-                    {
-                        id: 2,
-                        full_name: "Raspbian 10 \"Buster\" (32-bit)",
-                        short_name: "raspbian-buster-armhf",
-                        build_type: ["Classic image"],
-                        packages_url: "",
-                    },
-                ],
+                name: "Raspberry Pi",
             },
-        ];
+        };
         const reducer = InitializationReducer({}, setDeviceList(deviceList));
         expect(reducer).toEqual({ deviceList });
     });
 
-    it("SET_DISTRO", () => {
-        const distro = {
-            id: 2,
-            full_name: "Raspbian 10 \"Buster\" (32-bit)",
-            short_name: "raspbian-buster-armhf",
-            build_type: ["Classic image"],
-            packages_url: "",
-        };
-        const reducer = InitializationReducer({}, setDistro(distro));
-        expect(reducer).toEqual({ distro });
+    it("SET_DISTRO_SHORT_NAME", () => {
+        const distroShortName = "debian-buster-armhf";
+        const reducer = InitializationReducer({}, setDistroShortName(distroShortName));
+        expect(reducer).toEqual({ distroShortName });
     });
 
     it("SET_DISTRO_LIST", () => {
-        const distroList = [
-            {
-                id: 2,
-                full_name: "Raspbian 10 \"Buster\" (32-bit)",
-                short_name: "raspbian-buster-armhf",
-                build_type: ["Classic image"],
-                packages_url: "",
+        const distroList = {
+            "alpine-3.12-armhf": {
+                build_types: ["classic"],
+                codename: null,
+                name: "Alpine",
+                packages_url: "https://pkgs.alpinelinux.org/package/v3.12/",
+                port: "armhf",
+                version: 3.12,
             },
-        ];
+            "raspbian-buster-armhf": {
+                build_types: ["classic", "mender", "artifact"],
+                codename: "Buster",
+                name: "Raspbian",
+                packages_url: null,
+                port: "armhf",
+                version: 10,
+            },
+        };
         const reducer = InitializationReducer({}, setDistroList(distroList));
         expect(reducer).toEqual({ distroList });
     });
