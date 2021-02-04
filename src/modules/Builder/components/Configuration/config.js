@@ -3,7 +3,7 @@ const wirelessSupportOS = [
 ];
 
 const wirelessSupportDevices = [
-    "Raspberry Pi 3 Model B",
+    "rpi-3-b",
 ];
 
 export { wirelessSupportOS, wirelessSupportDevices };
