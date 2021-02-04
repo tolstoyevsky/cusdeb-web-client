@@ -100,7 +100,7 @@ class Builder extends Component {
             nextButtonIsActive,
             buttonState,
         } = this.state;
-        const { buildUUID, device, distro } = this.props;
+        const { buildUUID, deviceShortName, distroShortName } = this.props;
         const currentStage = BUILDER_STAGES[currentStageKey];
 
         return (
@@ -168,8 +168,8 @@ class Builder extends Component {
                                                                 ? this.currentStageRef : null
                                                         }
                                                         buildUUID={buildUUID}
-                                                        device={device}
-                                                        os={distro}
+                                                        device={deviceShortName}
+                                                        os={distroShortName}
                                                         builderCallback={this.builderCallback}
                                                     />
                                                 </Route>
@@ -215,20 +215,20 @@ class Builder extends Component {
 
 Builder.propTypes = {
     buildUUID: PropTypes.string,
-    device: PropTypes.string,
-    distro: PropTypes.string,
+    deviceShortName: PropTypes.string,
+    distroShortName: PropTypes.string,
 };
 
 Builder.defaultProps = {
     buildUUID: null,
-    device: null,
-    distro: null,
+    deviceShortName: null,
+    distroShortName: null,
 };
 
 const mapStateToProps = ({ initialization }) => ({
     buildUUID: initialization.buildUUID,
-    device: initialization.device,
-    distro: initialization.distro,
+    deviceShortName: initialization.deviceShortName,
+    distroShortName: initialization.distroShortName,
 });
 
 export default connect(mapStateToProps)(Builder);
