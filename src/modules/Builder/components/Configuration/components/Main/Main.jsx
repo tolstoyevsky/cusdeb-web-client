@@ -1,146 +1,125 @@
-import React, { Component } from "react";
 import PropTypes from "prop-types";
+import React, { useEffect, useRef } from "react";
 import { Card, Form } from "react-bootstrap";
+import { DebounceInput } from "react-debounce-input";
+import { connect } from "react-redux";
 
-import * as API from "api/http/cdtz";
-import Blackmagic from "api/rpc/blackmagic";
-
-import Input from "common/components/Input";
 import SelectSearch from "common/components/SelectSearch";
+import { validate } from "utils/yup";
+import { DEBOUNCE_TIMEOUT } from "../../../../../../../config/main";
+import {
+    fetchTimeZonesList,
+    setFieldStatus,
+    updateConfigurationParams,
+} from "../../actions/configuration";
+import { mainSchema } from "../../schemas/configuration";
 
-export default class Main extends Component {
-    static formatTimeZones(timeZones) {
-        return timeZones.map((item) => ({
-            value: item,
-            text: item,
-        }));
-    }
+const formatTimeZones = (timeZones) => (
+    timeZones.map((item) => ({
+        value: item,
+        text: item,
+    }))
+);
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            hostName: "",
-            timeZones: [],
+const Main = ({
+    configurationParams,
+    fetchTimeZonesListAction,
+    setFieldStatusAction,
+    timeZonesList,
+    updateConfigurationParamsAction,
+}) => {
+    // Sets to true after the first change of the field value by the user.
+    const mainRef = useRef();
 
-            currentTimeZone: "",
-        };
+    useEffect(() => {
+        fetchTimeZonesListAction();
+    }, []);
 
-        this.timeZoneRef = React.createRef();
-        this.blackmagic = new Blackmagic();
+    const onFieldChange = (event) => {
+        const { target: { name, value } } = event;
 
-        this.onHostNameChange = this.onHostNameChange.bind(this);
-        this.onTimeZoneChange = this.onTimeZoneChange.bind(this);
-        this.hostNameValidor = this.hostNameValidor.bind(this);
-    }
-
-    componentDidMount() {
-        const currentTimeZone = localStorage.getItem("currentTimeZone");
-        const hostName = localStorage.getItem("hostName");
-
-        API.fetchTZData()
-            .then((response) => {
-                const timeZones = response.data;
-                this.setState(() => ({ timeZones }));
-                this.timeZoneRef.current.setValue(currentTimeZone || timeZones[0]);
-            });
-
-        if (hostName) {
-            this.setState(() => ({ hostName }));
+        if (mainRef.current) {
+            mainRef.current[name] = true;
         } else {
-            this.blackmagic.fetchDefaultConfigurationParams()
-                .then((defaultConfig) => {
-                    this.setState(() => ({ hostName: defaultConfig.hostname }));
-                });
-        }
-    }
-
-    componentWillUnmount() {
-        const { hostName, currentTimeZone } = this.state;
-
-        localStorage.setItem("hostName", hostName);
-        localStorage.setItem("currentTimeZone", currentTimeZone);
-    }
-
-    onHostNameChange(name, value) {
-        this.setState(() => ({
-            [name]: value,
-        }));
-    }
-
-    onTimeZoneChange(value) {
-        const { timeZones } = this.state;
-        const currentTimeZone = timeZones.find((item) => item === value);
-        this.setState(() => ({
-            currentTimeZone,
-        }));
-    }
-
-    hostNameValidor(value) {
-        const { buttonStateCallback } = this.props;
-        const isValid = /(^$|^[.\da-z]{1,253}$)/i;
-
-        let hostNameValid = true;
-        if (isValid.test(value)) {
-            hostNameValid = true;
-        } else {
-            hostNameValid = false;
-        }
-        if (value === "") {
-            hostNameValid = false;
+            mainRef.current = { [name]: true };
         }
 
-        buttonStateCallback("mainHostName", hostNameValid);
+        updateConfigurationParamsAction(name, value);
 
-        return hostNameValid;
-    }
+        const fieldErrors = validate(mainSchema, { [name]: value });
+        setFieldStatusAction(name, !Object.keys(fieldErrors).includes(name));
+    };
 
-    syncConfigParams() {
-        const { hostName, currentTimeZone } = this.state;
-        this.blackmagic.syncConfigurationParams(
-            {
-                hostname: hostName,
-                timezone: currentTimeZone,
-            },
-        );
-    }
+    const fieldErrors = validate(mainSchema, {
+        host_name: configurationParams.host_name,
+    });
 
-    render() {
-        const { hostName, timeZones } = this.state;
-        const selectTimeZones = Main.formatTimeZones(timeZones);
-        return (
-            <Card>
-                <Card.Body>
-                    <div className="configuration-main">
-                        <Form.Group>
-                            <Form.Label>Host name</Form.Label>
-                            <Input
-                                id="hostNameId"
-                                name="hostName"
-                                type="text"
-                                value={hostName}
-                                onChange={this.onHostNameChange}
-                                validationFunc={this.hostNameValidor}
-                            />
-                            <div className="error invalid-feedback">
-                                Host name must be between 1 and 253 characters of Latin letters,
-                                numbers or a dot character
-                            </div>
-                        </Form.Group>
-                        <SelectSearch
-                            ref={this.timeZoneRef}
-                            id="timeZones"
-                            key="time-zone"
-                            label="Time zone"
-                            options={selectTimeZones}
-                            onChange={this.onTimeZoneChange}
+    return (
+        <Card>
+            <Card.Body>
+                <Form>
+                    <Form.Group controlId="host_name">
+                        <Form.Label>Host name</Form.Label>
+                        <Form.Control
+                            as={DebounceInput}
+                            debounceTimeout={DEBOUNCE_TIMEOUT}
+                            name="host_name"
+                            type="text"
+                            value={configurationParams.host_name}
+                            onChange={onFieldChange}
+                            isInvalid={
+                                !!fieldErrors.host_name && (
+                                    (mainRef.current && mainRef.current.hostname)
+                                    || configurationParams.host_name
+                                )
+                            }
                         />
-                    </div>
-                </Card.Body>
-            </Card>
-        );
-    }
-}
+                        <Form.Control.Feedback type="invalid">
+                            {fieldErrors.host_name}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                    <SelectSearch
+                        id="timeZones"
+                        label="Time zone"
+                        defaultValue={configurationParams.time_zone}
+                        options={formatTimeZones(timeZonesList)}
+                        onChange={(value) => updateConfigurationParamsAction(
+                            "time_zone", value,
+                        )}
+                    />
+                </Form>
+            </Card.Body>
+        </Card>
+    );
+};
 
 Main.propTypes = {
-    buttonStateCallback: PropTypes.func.isRequired,
+    configurationParams: PropTypes.shape({
+        host_name: PropTypes.string,
+        time_zone: PropTypes.string,
+        WPA_SSID: PropTypes.string,
+        WPA_PSK: PropTypes.string,
+        enable_wireless: PropTypes.bool,
+    }).isRequired,
+    fetchTimeZonesListAction: PropTypes.func.isRequired,
+    setFieldStatusAction: PropTypes.func.isRequired,
+    timeZonesList: PropTypes.arrayOf(PropTypes.string).isRequired,
+    updateConfigurationParamsAction: PropTypes.func.isRequired,
 };
+
+const mapStateToProps = ({ configuration }) => ({
+    configurationParams: configuration.configurationParams,
+    timeZonesList: configuration.timeZonesList,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    fetchTimeZonesListAction: () => dispatch(fetchTimeZonesList()),
+    setFieldStatusAction: (fieldName, fieldStatus) => dispatch(
+        setFieldStatus({ [fieldName]: fieldStatus }),
+    ),
+    updateConfigurationParamsAction: (key, value) => dispatch(
+        updateConfigurationParams({ key, value }),
+    ),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
