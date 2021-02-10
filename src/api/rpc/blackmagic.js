@@ -11,8 +11,8 @@ const GET_PACKAGES_NUMBER_RP = "get_packages_number";
 const GET_BASE_PACKAGES_NUMBER_RP = "get_base_packages_number";
 const GET_SELECTED_PACKAGES_NUMBER_RP = "get_selected_packages_number";
 const RESOLVE_PACKAGES_RP = "resolve";
-const GET_DEFAULT_CONFIGURATION_RP = "get_default_configuration";
-const SYNC_CONFIGURATION_RP = "sync_configuration";
+const GET_CONFIGURATION_RP = "get_configuration";
+const SET_CONFIGURATION_RP = "set_configuration";
 const GET_USERS_LIST_RP = "get_users_list";
 const GET_DEFAULT_ROOT_PASSWORD_RP = "get_default_root_password";
 const CHANGE_ROOT_PASSWORD_RP = "change_root_password";
@@ -33,6 +33,7 @@ export default class Blackmagic {
         this.fetchPackagesNumber = this.fetchPackagesNumber.bind(this);
         this.fetchBasePackagesNumber = this.fetchBasePackagesNumber.bind(this);
         this.fetchSelectedPackagesNumber = this.fetchSelectedPackagesNumber.bind(this);
+        this.fetchConfiguration = this.fetchConfiguration.bind(this);
     }
 
     async initNewImage(firmwareName, device, distro, buildType) {
@@ -75,12 +76,12 @@ export default class Blackmagic {
         return this.connection.emitForce(RESOLVE_PACKAGES_RP, packageList);
     }
 
-    async fetchDefaultConfigurationParams() {
-        return this.connection.emit(GET_DEFAULT_CONFIGURATION_RP);
+    async fetchConfiguration() {
+        return this.connection.emit(GET_CONFIGURATION_RP);
     }
 
-    async syncConfigurationParams(configuration) {
-        return this.connection.emit(SYNC_CONFIGURATION_RP, configuration);
+    async setConfiguration(configuration) {
+        return this.connection.emit(SET_CONFIGURATION_RP, configuration);
     }
 
     async fetchUsersList() {
