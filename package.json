@@ -58,6 +58,7 @@
     "js-cookie": "^2.2.1",
     "daterangepicker": "^3.0.5",
     "dotenv": "^8.2.0",
+    "history": "^5.0.0",
     "icheck-bootstrap": "^3.0.1",
     "jquery": "^3.4.1",
     "jquery-knob": "^1.2.11",
