@@ -24,6 +24,9 @@ export default class Configuration extends Component {
     }
 
     executeState() {
+        return false;
+
+        // eslint-disable-next-line no-unreachable
         const { builderCallback } = this.props;
         builderCallback();
         Object.keys(this.componentsRefs).forEach((key) => {
@@ -32,6 +35,9 @@ export default class Configuration extends Component {
     }
 
     buttonStateCallback(name, buttonVariable) {
+        return false;
+
+        // eslint-disable-next-line no-unreachable
         const { builderCallback } = this.props;
         const { buttonStates } = this.state;
         this.setState((prevState) => ({
