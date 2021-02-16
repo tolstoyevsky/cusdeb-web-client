@@ -35,11 +35,8 @@ export default class Blackmagic {
         this.fetchSelectedPackagesNumber = this.fetchSelectedPackagesNumber.bind(this);
     }
 
-    async initNewImage(firmwareName, device, distro, buildType, callback) {
-        return this.connection.emit(INIT_NEW_IMAGE_RP, firmwareName, device, distro, buildType)
-            .then((event) => {
-                callback(event);
-            });
+    async initNewImage(firmwareName, device, distro, buildType) {
+        return this.connection.emit(INIT_NEW_IMAGE_RP, firmwareName, device, distro, buildType);
     }
 
     async initExistingImage(buildUUID) {
