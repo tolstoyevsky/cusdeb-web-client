@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { forwardRef, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Card } from "react-bootstrap";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
@@ -27,7 +27,7 @@ import { toNextStage } from "../../../Builder/helpers/stages";
 
 export const lastBuildUUDKey = "lastBuildUUID";
 
-const Initialization = forwardRef(({
+const Initialization = ({
     history,
 
     // Redux state variables
@@ -44,7 +44,7 @@ const Initialization = forwardRef(({
     setDistroShortNameAction,
     setDistroListAction,
     toggleContinueBuildModalAction,
-}, ref) => {
+}) => {
     useEffect(() => {
         // Try connect to blackmagic immediately after loading the page
         // eslint-disable-next-line no-new
@@ -99,7 +99,7 @@ const Initialization = forwardRef(({
             </Card>
         </>
     );
-});
+};
 
 Initialization.propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
