@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import React, { forwardRef, useEffect } from "react";
 import { Card } from "react-bootstrap";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
 import Blackmagic from "api/rpc/blackmagic";
 import Select from "common/components/Select";
@@ -12,6 +13,7 @@ import {
 } from "modules/Builder/helpers/format";
 import {
     fetchDeviceList,
+    initExistingImage,
     setBuildType,
     setBuildTypeList,
     setBuildUUID,
@@ -21,32 +23,23 @@ import {
     toggleContinueBuildModal,
 } from "../../actions/initialization";
 import ContinueBuildModal from "../ContinueBuildModal/ContinueBuildModal";
+import { toNextStage } from "../../../Builder/helpers/stages";
 
-const BUILD_TYPE_CODES = {
-    "Classic image": 1,
-    "Mender-compatible image": 2,
-    "Mender artifact": 3,
-};
-
-const lastBuildUUDKey = "lastBuildUUID";
+export const lastBuildUUDKey = "lastBuildUUID";
 
 const Initialization = forwardRef(({
-    // Component props
-    builderCallback,
+    history,
 
     // Redux state variables
-    deviceShortName,
     deviceList,
-    distroShortName,
     distroList,
-    buildType,
     buildTypeList,
 
     // Redux actions
     fetchDeviceListAction,
+    initExistingImageAction,
     setBuildTypeAction,
     setBuildTypeListAction,
-    setBuildUUIDAction,
     setDeviceShortNameAction,
     setDistroShortNameAction,
     setDistroListAction,
@@ -82,43 +75,6 @@ const Initialization = forwardRef(({
         setBuildTypeAction(currentBuildType);
     };
 
-    const initNewImageCallback = (event) => {
-        // Ready status code
-        if (event === 10) {
-            builderCallback();
-        } else {
-            setBuildUUIDAction(event);
-            window.localStorage.setItem(lastBuildUUDKey, event);
-        }
-    };
-
-    const initExistingImage = () => {
-        const blackmagic = new Blackmagic();
-        const lastBuildUUID = window.localStorage.getItem(lastBuildUUDKey);
-        blackmagic.initExistingImage(lastBuildUUID)
-            .then(() => {
-                builderCallback();
-            });
-    };
-
-    const executeState = () => {
-        const blackmagic = new Blackmagic();
-        blackmagic.initNewImage(
-            "My image",
-            deviceShortName,
-            distroShortName,
-            BUILD_TYPE_CODES[buildType],
-            initNewImageCallback,
-        );
-    };
-
-    if (ref) {
-        // A hack that allows you to interact with a component as class-based component.
-        // @TODO: implement state execution via redux.
-        // eslint-disable-next-line no-param-reassign
-        ref.current = { executeState };
-    }
-
     return (
         <>
             <Card>
@@ -139,22 +95,22 @@ const Initialization = forwardRef(({
                         onChange={onBuildTypeChange}
                     />
                 </Card.Body>
-                <ContinueBuildModal onContinue={initExistingImage} />
+                <ContinueBuildModal onContinue={() => initExistingImageAction(history)} />
             </Card>
         </>
     );
 });
 
 Initialization.propTypes = {
-    builderCallback: PropTypes.func.isRequired,
-    deviceShortName: PropTypes.string,
+    // eslint-disable-next-line react/forbid-prop-types
+    history: PropTypes.object.isRequired,
+
     deviceList: PropTypes.objectOf(PropTypes.shape({
         distros: PropTypes.objectOf(PropTypes.object),
         generation: PropTypes.number,
         model: PropTypes.string,
         name: PropTypes.string,
     })).isRequired,
-    distroShortName: PropTypes.string,
     distroList: PropTypes.objectOf(PropTypes.shape({
         build_types: PropTypes.arrayOf(PropTypes.string),
         codename: PropTypes.string,
@@ -163,36 +119,29 @@ Initialization.propTypes = {
         port: PropTypes.string,
         version: PropTypes.number,
     })).isRequired,
-    buildType: PropTypes.string,
     buildTypeList: PropTypes.arrayOf(PropTypes.string).isRequired,
 
     fetchDeviceListAction: PropTypes.func.isRequired,
+    initExistingImageAction: PropTypes.func.isRequired,
     setBuildTypeAction: PropTypes.func.isRequired,
     setBuildTypeListAction: PropTypes.func.isRequired,
-    setBuildUUIDAction: PropTypes.func.isRequired,
     setDeviceShortNameAction: PropTypes.func.isRequired,
     setDistroShortNameAction: PropTypes.func.isRequired,
     setDistroListAction: PropTypes.func.isRequired,
     toggleContinueBuildModalAction: PropTypes.func.isRequired,
 };
 
-Initialization.defaultProps = {
-    deviceShortName: null,
-    distroShortName: null,
-    buildType: null,
-};
-
 const mapStateToProps = ({ initialization }) => ({
     deviceList: initialization.deviceList,
     distroList: initialization.distroList,
     buildTypeList: initialization.buildTypeList,
-    deviceShortName: initialization.deviceShortName,
-    distroShortName: initialization.distroShortName,
-    buildType: initialization.buildType,
 });
 
 const mapDispatchToProps = (dispatch) => ({
     fetchDeviceListAction: () => dispatch(fetchDeviceList()),
+    initExistingImageAction: (history) => dispatch(initExistingImage(
+        () => toNextStage(history),
+    )),
     setBuildTypeAction: (buildType) => dispatch(setBuildType(buildType)),
     setBuildTypeListAction: (buildTypeList) => dispatch(setBuildTypeList(buildTypeList)),
     setBuildUUIDAction: (buildUUID) => dispatch(setBuildUUID(buildUUID)),
@@ -202,9 +151,11 @@ const mapDispatchToProps = (dispatch) => ({
     toggleContinueBuildModalAction: () => dispatch(toggleContinueBuildModal()),
 });
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-    null,
-    { forwardRef: true },
-)(Initialization);
+export default withRouter(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps,
+        null,
+        { forwardRef: true },
+    )(Initialization),
+);
