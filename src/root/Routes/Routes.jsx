@@ -39,10 +39,7 @@ const Routes = () => (
 
                 <Route exact path="/confirm-email/" component={ConfirmEmail} />
 
-                <AnonymousRoute exact path="/builder" component={Builder} />
-                <Route path="/builder">
-                    <Redirect to="/builder" />
-                </Route>
+                <AnonymousRoute path="/builder" component={Builder} />
 
                 <AuthRoute path="/">
                     {Object.keys(UserSettingsPages).map((pageKey) => (
