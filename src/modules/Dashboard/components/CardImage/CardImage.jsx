@@ -72,10 +72,12 @@ const CardImage = ({ deleteCurrentImageAction, image }) => {
                                 <strong>Status: </strong>
                                 {image.status}
                             </p>
-                            <p className="mb-1">
-                                <strong>Started at: </strong>
-                                {parseDateString(image.started_at)}
-                            </p>
+                            {!!image.started_at && (
+                                <p className="mb-1">
+                                    <strong>Started at: </strong>
+                                    {parseDateString(image.started_at)}
+                                </p>
+                            )}
                         </Col>
                     </Row>
                 </Card.Body>
