@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import { Terminal } from "xterm";
 import { FitAddon } from "xterm-addon-fit";
 
 import Blackmagic from "api/rpc/blackmagic";
 import Dominion from "api/rpc/dominion";
 
-export default class Build extends Component {
+class Build extends Component {
     constructor(props) {
         super(props);
 
@@ -72,3 +73,9 @@ export default class Build extends Component {
 Build.propTypes = {
     buildUUID: PropTypes.string.isRequired,
 };
+
+const mapStateToProps = ({ initialization }) => ({
+    buildUUID: initialization.buildUUID,
+});
+
+export default connect(mapStateToProps)(Build);
