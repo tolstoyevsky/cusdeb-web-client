@@ -22,7 +22,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { parseDateString } from "utils/date";
 import { deleteImage } from "../../actions/dashboard";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
+import DownloadInfoModal from "../DownloadInfoModal/DownloadInfoModal";
 import NotesModal from "../NotesModal/NotesModal";
+
+const downloadImageUrl = "/download-image";
+const imageFileExtension = ".img";
 
 const statusIcon = {
     Undefined: [faQuestion, "text-muted"],
@@ -41,6 +45,17 @@ const CardImage = ({ deleteCurrentImageAction, image }) => {
     const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false);
     const openConfirmDeleteModal = () => setShowConfirmDeleteModal(true);
     const closeConfirmDeleteModal = () => setShowConfirmDeleteModal(false);
+
+    const [showDownloadInfoModal, setDownloadInfoModal] = useState(false);
+    const openDownloadInfoModal = () => setDownloadInfoModal(true);
+    const closeDownloadInfoModal = () => setDownloadInfoModal(false);
+
+    const downloadAction = (event) => {
+        if (image.status !== "Succeeded") {
+            event.preventDefault();
+            openDownloadInfoModal();
+        }
+    };
 
     const [icon, iconClass] = statusIcon[image.status];
 
@@ -84,7 +99,11 @@ const CardImage = ({ deleteCurrentImageAction, image }) => {
                 <Card.Footer>
                     <Row>
                         <Col xs={6}>
-                            <Button variant="primary">
+                            <Button
+                                onClick={downloadAction}
+                                href={`${downloadImageUrl}/${image.image_id}${imageFileExtension}`}
+                                download
+                            >
                                 <FontAwesomeIcon icon={faDownload} className="mr-sm-1" />
                                 <span className="d-none d-sm-inline">Download</span>
                             </Button>
@@ -119,6 +138,11 @@ const CardImage = ({ deleteCurrentImageAction, image }) => {
                 handleClose={closeNotesModal}
                 show={showNotesModal}
                 initialValue={image.notes}
+            />
+            <DownloadInfoModal
+                handleClose={closeDownloadInfoModal}
+                show={showDownloadInfoModal}
+                imageStatus={image.status}
             />
         </>
     );
