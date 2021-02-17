@@ -22,7 +22,7 @@ function* deleteImage({ payload: imageId }) {
 function* fetchImagesList() {
     try {
         const { data: imagesList } = yield call(listImages);
-        yield put(fetchImagesListSucceeded(imagesList));
+        yield put(fetchImagesListSucceeded(imagesList.reverse()));
     } catch (_error) {
         // TODO: handle error
     }
