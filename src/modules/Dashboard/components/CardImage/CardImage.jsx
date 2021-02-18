@@ -20,6 +20,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { parseDateString } from "utils/date";
+import { formatDeviceTitle, formatDistroTitle } from "modules/Builder/helpers/format";
 import { deleteImage } from "../../actions/dashboard";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
 import DownloadInfoModal from "../DownloadInfoModal/DownloadInfoModal";
@@ -37,7 +38,7 @@ const statusIcon = {
     Succeeded: [faCheck, "text-success"],
 };
 
-const CardImage = ({ deleteCurrentImageAction, image }) => {
+const CardImage = ({ deviceList, deleteCurrentImageAction, image }) => {
     const [showNotesModal, setNotesModal] = useState(false);
     const openNotesModal = () => setNotesModal(true);
     const closeNotesModal = () => setNotesModal(false);
@@ -59,6 +60,10 @@ const CardImage = ({ deleteCurrentImageAction, image }) => {
 
     const [icon, iconClass] = statusIcon[image.status];
 
+    const device = deviceList[image.device_name];
+    const fullDeviceName = formatDeviceTitle(device);
+    const fullDistroName = formatDistroTitle(device.distros[image.distro_name]);
+
     return (
         <>
             <Card style={{ height: "calc(100% - 1rem)" }}>
@@ -66,9 +71,9 @@ const CardImage = ({ deleteCurrentImageAction, image }) => {
                     <Row>
                         <Col xs={11}>
                             <h4 className="text-dark d-inline mb-0">
-                                <strong>{image.distro_name}</strong>
+                                <strong>{fullDistroName}</strong>
                                 &nbsp;for&nbsp;
-                                <strong>{image.device_name}</strong>
+                                <strong>{fullDeviceName}</strong>
                             </h4>
                         </Col>
                         <Col xs={1} className="d-flex flex-row justify-content-end align-items-center">
@@ -150,6 +155,12 @@ const CardImage = ({ deleteCurrentImageAction, image }) => {
 
 CardImage.propTypes = {
     deleteCurrentImageAction: PropTypes.func.isRequired,
+    deviceList: PropTypes.objectOf(PropTypes.shape({
+        distros: PropTypes.objectOf(PropTypes.object),
+        generation: PropTypes.number,
+        model: PropTypes.string,
+        name: PropTypes.string,
+    })).isRequired,
     image: PropTypes.shape({
         device_name: PropTypes.string,
         distro_name: PropTypes.string,
@@ -161,7 +172,8 @@ CardImage.propTypes = {
     }).isRequired,
 };
 
-const mapStateToProps = ({ dashboard }) => ({
+const mapStateToProps = ({ dashboard, initialization }) => ({
+    deviceList: initialization.deviceList,
     dispatch: PropTypes.func.isRequired,
     showNotesModal: dashboard.showNotesModal,
 });
