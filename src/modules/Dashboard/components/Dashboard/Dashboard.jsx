@@ -11,11 +11,13 @@ import { faWrench } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Regular from "common/containers/Regular";
+import { fetchDeviceList } from "modules/Builder/components/Initialization/actions/initialization";
 import { fetchImagesList } from "../../actions/dashboard";
 import CardImage from "../CardImage/CardImage";
 
-const Dashboard = ({ fetchImagesListAction, images }) => {
+const Dashboard = ({ fetchDeviceListAction, fetchImagesListAction, images }) => {
     useEffect(() => {
+        fetchDeviceListAction();
         fetchImagesListAction();
     }, []);
 
@@ -55,6 +57,7 @@ const Dashboard = ({ fetchImagesListAction, images }) => {
 };
 
 Dashboard.propTypes = {
+    fetchDeviceListAction: PropTypes.func.isRequired,
     fetchImagesListAction: PropTypes.func.isRequired,
     images: PropTypes.objectOf(PropTypes.object).isRequired,
 };
@@ -64,6 +67,7 @@ const mapStateToProps = ({ dashboard }) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+    fetchDeviceListAction: () => dispatch(fetchDeviceList()),
     fetchImagesListAction: () => dispatch(fetchImagesList()),
 });
 
