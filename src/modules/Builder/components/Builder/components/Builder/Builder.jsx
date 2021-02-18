@@ -21,7 +21,7 @@ import {
 import SidebarPage from "common/containers/SidebarPage";
 import ChangeStageButton from "../ChangeStageButton/ChangeStageButton";
 import Build from "../../../Build/Build";
-import Configuration from "../../../Configuration/Configuration";
+import Configuration from "../../../Configuration/components/Configuration/Configuration";
 import Initialization from "../../../Initialization/components/Initialization/Initialization";
 import PackageList from "../../../PackageList/PackageList";
 import Users from "../../../Users/Users";
