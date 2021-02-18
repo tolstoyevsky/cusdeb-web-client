@@ -202,7 +202,7 @@ class Builder extends React.Component {
                                 {this.currentStage.nextStageAvailable && (
                                     <div className="col-6 d-inline-flex justify-content-end">
                                         <ChangeStageButton
-                                            disable={!buildStageAvailable}
+                                            disabled={!buildStageAvailable}
                                             onClick={this.onNextClick}
                                             text="Next"
                                         />
