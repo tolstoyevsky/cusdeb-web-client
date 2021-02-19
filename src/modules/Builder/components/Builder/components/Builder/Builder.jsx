@@ -55,8 +55,7 @@ class Builder extends React.Component {
 
     componentDidMount() {
         Object.values([
-            "PSK", "SSID", "enableWireless", "currentTimeZone",
-            "hostName", "ordinaryUsers", "rootPassword",
+            "ordinaryUsers", "rootPassword",
             "rootPasswordIsChanged", "rootRetypePassword",
         ]).forEach((key) => {
             localStorage.removeItem(key);
