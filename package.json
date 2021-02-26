@@ -8,7 +8,6 @@
     "dev": "babel-node ./node_modules/webpack-dev-server/bin/webpack-dev-server --config webpack/webpack.development.config.js",
     "build": "babel-node ./node_modules/webpack/bin/webpack --config webpack/webpack.production.config.js",
     "lint": "eslint --ext .js,.jsx .",
-    "pretest": "npm run lint",
     "test": "jest"
   },
   "jest": {
