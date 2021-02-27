@@ -53,13 +53,14 @@ export default class FormSignIn extends Component {
                 }
             })
             .catch((error) => {
-                if (error.response.status === 400) {
-                    const incorrectStatus = Object.keys(error.response.data).includes("non_field_errors");
-                    this.setState(() => ({ incorrectStatus }));
-
+                const { response: { status } } = error;
+                if (status === 400) {
                     Object.keys(this.fieldRefs).forEach((ref) => {
                         this.fieldRefs[ref].current.forceUpdate();
                     });
+                }
+                if (status === 401) {
+                    this.setState(() => ({ incorrectStatus: true }));
                 }
             });
     }
