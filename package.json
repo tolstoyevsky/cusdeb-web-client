@@ -80,7 +80,8 @@
     "select2": "^4.0.13",
     "shirow": "github:tolstoyevsky/shirow",
     "xterm": "^4.10.0",
-    "xterm-addon-fit": "^0.5.0"
+    "xterm-addon-fit": "^0.5.0",
+    "yup": "^0.32.9"
   },
   "optionalDependencies": {
     "@sentry/react": "^6.0.3",
