@@ -106,7 +106,7 @@ class Builder extends React.Component {
 
         return (
             <div className="builder">
-                <SidebarPage collapseSidebar>
+                <SidebarPage>
                     <SidebarPage.Sidebar>
                         <Nav.Item>
                             <Nav.Link

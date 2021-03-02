@@ -11,11 +11,6 @@ export default class SidebarPage extends DOMElementsClassComponent {
         super(props);
 
         this.bodyClass = "sidebar-mini";
-
-        const { collapseSidebar } = this.props;
-        if (collapseSidebar) {
-            this.DOMElementsClass = { body: "sidebar-collapse" };
-        }
     }
 
     render() {
