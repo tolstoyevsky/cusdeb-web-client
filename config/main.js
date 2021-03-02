@@ -2,6 +2,8 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+export const DEBOUNCE_TIMEOUT = 600;
+
 export const port = process.env.PORT || 8000;
 export const host = process.env.HOST || "0.0.0.0";
 
