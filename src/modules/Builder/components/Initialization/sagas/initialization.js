@@ -26,7 +26,6 @@ function* executeStage({ payload: callback }) {
 
     const blackmagic = new Blackmagic();
     const buildUUID = yield blackmagic.initNewImage(
-        "My image",
         deviceShortName,
         distroShortName,
         BUILD_TYPE_CODES[buildType],
