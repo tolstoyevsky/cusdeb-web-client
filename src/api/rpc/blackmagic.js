@@ -77,7 +77,7 @@ export default class Blackmagic {
     }
 
     async fetchConfiguration() {
-        return this.connection.emit(GET_CONFIGURATION_RP);
+        return this.connection.emitForce(GET_CONFIGURATION_RP);
     }
 
     async setConfiguration(configuration) {
