@@ -3,6 +3,7 @@ import { createAction } from "redux-actions";
 import {
     EXECUTE_STAGE,
     FETCH_DEVICE_LIST,
+    IMAGE_IS_AVAILABLE_FOR_RECOVERY,
     INIT_EXISTING_IMAGE,
     SET_BUILD_TYPE,
     SET_BUILD_TYPE_LIST,
@@ -11,12 +12,15 @@ import {
     SET_DEVICE_LIST,
     SET_DISTRO_SHORT_NAME,
     SET_DISTRO_LIST,
+    SET_LATEST_BUILD_IMAGE,
     TOGGLE_CONTINUE_BUILD_MODAL,
 } from "../constants/initialization";
 
 export const executeStage = createAction(EXECUTE_STAGE);
 
 export const fetchDeviceList = createAction(FETCH_DEVICE_LIST);
+
+export const isImageAvailableForRecovery = createAction(IMAGE_IS_AVAILABLE_FOR_RECOVERY);
 
 export const initExistingImage = createAction(INIT_EXISTING_IMAGE);
 
@@ -33,5 +37,7 @@ export const setDeviceList = createAction(SET_DEVICE_LIST);
 export const setDistroShortName = createAction(SET_DISTRO_SHORT_NAME);
 
 export const setDistroList = createAction(SET_DISTRO_LIST);
+
+export const setLatestBuildImage = createAction(SET_LATEST_BUILD_IMAGE);
 
 export const toggleContinueBuildModal = createAction(TOGGLE_CONTINUE_BUILD_MODAL);

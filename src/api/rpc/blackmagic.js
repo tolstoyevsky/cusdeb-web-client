@@ -4,6 +4,7 @@ import { blackmagicUrl } from "../../../config/main"; // TODO: resolve path to c
 
 const INIT_NEW_IMAGE_RP = "init_new_image";
 const INIT_EXISTING_IMAGE_RP = "init_existing_image";
+const IS_IMAGE_AVAILABLE_FOR_RECOVERY_RP = "is_image_available_for_recovery";
 const GET_BASE_PACKAGES_LIST_RP = "get_base_packages_list";
 const GET_PACKAGES_LIST_RP = "get_packages_list";
 const GET_SELECTED_PACKAGES_LIST_RP = "get_selected_packages_list";
@@ -34,6 +35,7 @@ export default class Blackmagic {
         this.fetchBasePackagesNumber = this.fetchBasePackagesNumber.bind(this);
         this.fetchSelectedPackagesNumber = this.fetchSelectedPackagesNumber.bind(this);
         this.fetchConfiguration = this.fetchConfiguration.bind(this);
+        this.isImageAvailableForRecovery = this.isImageAvailableForRecovery.bind(this);
     }
 
     async initNewImage(device, distro, buildType) {
@@ -42,6 +44,10 @@ export default class Blackmagic {
 
     async initExistingImage(buildUUID) {
         return this.connection.emit(INIT_EXISTING_IMAGE_RP, buildUUID);
+    }
+
+    isImageAvailableForRecovery(imageId) {
+        return this.connection.emit(IS_IMAGE_AVAILABLE_FOR_RECOVERY_RP, imageId);
     }
 
     async fetchBasePackagesList(currentPage, packagesPerPage) {

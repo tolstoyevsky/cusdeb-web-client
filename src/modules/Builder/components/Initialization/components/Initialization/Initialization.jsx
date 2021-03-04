@@ -13,6 +13,7 @@ import {
 } from "modules/Builder/helpers/format";
 import {
     fetchDeviceList,
+    isImageAvailableForRecovery,
     initExistingImage,
     setBuildType,
     setBuildTypeList,
@@ -20,7 +21,6 @@ import {
     setDeviceShortName,
     setDistroShortName,
     setDistroList,
-    toggleContinueBuildModal,
 } from "../../actions/initialization";
 import ContinueBuildModal from "../ContinueBuildModal/ContinueBuildModal";
 import { toNextStage } from "../../../Builder/helpers/stages";
@@ -37,13 +37,13 @@ const Initialization = ({
 
     // Redux actions
     fetchDeviceListAction,
+    isImageAvailableForRecoveryAction,
     initExistingImageAction,
     setBuildTypeAction,
     setBuildTypeListAction,
     setDeviceShortNameAction,
     setDistroShortNameAction,
     setDistroListAction,
-    toggleContinueBuildModalAction,
 }) => {
     useEffect(() => {
         // Try connect to blackmagic immediately after loading the page
@@ -54,7 +54,7 @@ const Initialization = ({
 
         const latestBuildUUID = window.localStorage.getItem(latestBuildUUDKey);
         if (latestBuildUUID) {
-            toggleContinueBuildModalAction();
+            isImageAvailableForRecoveryAction(latestBuildUUID);
         }
     }, []);
 
@@ -122,13 +122,13 @@ Initialization.propTypes = {
     buildTypeList: PropTypes.arrayOf(PropTypes.string).isRequired,
 
     fetchDeviceListAction: PropTypes.func.isRequired,
+    isImageAvailableForRecoveryAction: PropTypes.func.isRequired,
     initExistingImageAction: PropTypes.func.isRequired,
     setBuildTypeAction: PropTypes.func.isRequired,
     setBuildTypeListAction: PropTypes.func.isRequired,
     setDeviceShortNameAction: PropTypes.func.isRequired,
     setDistroShortNameAction: PropTypes.func.isRequired,
     setDistroListAction: PropTypes.func.isRequired,
-    toggleContinueBuildModalAction: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({ initialization }) => ({
@@ -139,6 +139,7 @@ const mapStateToProps = ({ initialization }) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     fetchDeviceListAction: () => dispatch(fetchDeviceList()),
+    isImageAvailableForRecoveryAction: (imageId) => dispatch(isImageAvailableForRecovery(imageId)),
     initExistingImageAction: (history) => dispatch(initExistingImage(
         () => toNextStage(history),
     )),
@@ -148,7 +149,6 @@ const mapDispatchToProps = (dispatch) => ({
     setDeviceShortNameAction: (deviceShortName) => dispatch(setDeviceShortName(deviceShortName)),
     setDistroShortNameAction: (distroShortName) => dispatch(setDistroShortName(distroShortName)),
     setDistroListAction: (distroList) => dispatch(setDistroList(distroList)),
-    toggleContinueBuildModalAction: () => dispatch(toggleContinueBuildModal()),
 });
 
 export default withRouter(
