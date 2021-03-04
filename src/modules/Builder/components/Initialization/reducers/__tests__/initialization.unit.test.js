@@ -20,6 +20,7 @@ describe("Initialization reducer", () => {
             deviceList: {},
             distroShortName: null,
             distroList: {},
+            latestBuildImage: {},
             showContinueBuildModal: false,
         });
     });
