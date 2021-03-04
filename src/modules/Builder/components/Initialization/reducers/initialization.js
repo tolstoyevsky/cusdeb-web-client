@@ -8,6 +8,7 @@ import {
     SET_DEVICE_LIST,
     SET_DISTRO_SHORT_NAME,
     SET_DISTRO_LIST,
+    SET_LATEST_BUILD_IMAGE,
     TOGGLE_CONTINUE_BUILD_MODAL,
 } from "../constants/initialization";
 
@@ -19,6 +20,7 @@ const defaultState = {
     deviceList: {},
     distroShortName: null,
     distroList: {},
+    latestBuildImage: {},
     showContinueBuildModal: false,
 };
 
@@ -51,6 +53,10 @@ export default handleActions(
         [SET_DISTRO_LIST]: (state, { payload: distroList }) => ({
             ...state,
             distroList,
+        }),
+        [SET_LATEST_BUILD_IMAGE]: (state, { payload: latestBuildImage }) => ({
+            ...state,
+            latestBuildImage,
         }),
         [TOGGLE_CONTINUE_BUILD_MODAL]: (state) => ({
             ...state,

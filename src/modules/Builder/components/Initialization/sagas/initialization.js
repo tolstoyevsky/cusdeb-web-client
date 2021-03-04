@@ -9,9 +9,19 @@ import {
 
 import { listDevice } from "api/http/images";
 import Blackmagic from "api/rpc/blackmagic";
-import { setBuildUUID, setDeviceList } from "../actions/initialization";
+import {
+    setBuildUUID,
+    setDeviceList,
+    setLatestBuildImage,
+    toggleContinueBuildModal,
+} from "../actions/initialization";
 import { latestBuildUUDKey } from "../components/Initialization/Initialization";
-import { EXECUTE_STAGE, FETCH_DEVICE_LIST, INIT_EXISTING_IMAGE } from "../constants/initialization";
+import {
+    EXECUTE_STAGE,
+    FETCH_DEVICE_LIST,
+    IMAGE_IS_AVAILABLE_FOR_RECOVERY,
+    INIT_EXISTING_IMAGE,
+} from "../constants/initialization";
 
 const getInitialization = (state) => state.initialization;
 
@@ -42,6 +52,21 @@ function* fetchListDevice() {
     yield put(setDeviceList(deviceList));
 }
 
+function* isImageAvailableForRecovery({ payload: imageId }) {
+    const blackmagic = new Blackmagic();
+
+    const query = blackmagic.isImageAvailableForRecovery(imageId);
+    query.catch(() => {
+        window.localStorage.removeItem(latestBuildUUDKey);
+    });
+
+    const latestBuildImage = yield query;
+    if (latestBuildImage) {
+        yield put(setLatestBuildImage(latestBuildImage));
+        yield put(toggleContinueBuildModal());
+    }
+}
+
 function* initExistingImage({ payload: callback }) {
     const blackmagic = new Blackmagic();
     const latestBuildUUID = window.localStorage.getItem(latestBuildUUDKey);
@@ -59,6 +84,10 @@ function* watchFetchListDevice() {
     yield takeEvery(FETCH_DEVICE_LIST, fetchListDevice);
 }
 
+function* watchIsImageAvailableForRecovery() {
+    yield takeEvery(IMAGE_IS_AVAILABLE_FOR_RECOVERY, isImageAvailableForRecovery);
+}
+
 function* watchInitExistingImage() {
     yield takeEvery(INIT_EXISTING_IMAGE, initExistingImage);
 }
@@ -67,6 +96,7 @@ export default function* builderSaga() {
     yield all([
         fork(watchExecuteStage),
         fork(watchFetchListDevice),
+        fork(watchIsImageAvailableForRecovery),
         fork(watchInitExistingImage),
     ]);
 }
