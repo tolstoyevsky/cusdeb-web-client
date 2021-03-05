@@ -10,7 +10,7 @@ import {
 import { listDevice } from "api/http/images";
 import Blackmagic from "api/rpc/blackmagic";
 import { setBuildUUID, setDeviceList } from "../actions/initialization";
-import { lastBuildUUDKey } from "../components/Initialization/Initialization";
+import { latestBuildUUDKey } from "../components/Initialization/Initialization";
 import { EXECUTE_STAGE, FETCH_DEVICE_LIST, INIT_EXISTING_IMAGE } from "../constants/initialization";
 
 const getInitialization = (state) => state.initialization;
@@ -31,7 +31,7 @@ function* executeStage({ payload: callback }) {
         BUILD_TYPE_CODES[buildType],
     );
 
-    window.localStorage.setItem(lastBuildUUDKey, buildUUID);
+    window.localStorage.setItem(latestBuildUUDKey, buildUUID);
     yield put(setBuildUUID(buildUUID));
 
     return callback();
@@ -44,9 +44,9 @@ function* fetchListDevice() {
 
 function* initExistingImage({ payload: callback }) {
     const blackmagic = new Blackmagic();
-    const lastBuildUUID = window.localStorage.getItem(lastBuildUUDKey);
+    const latestBuildUUID = window.localStorage.getItem(latestBuildUUDKey);
 
-    yield blackmagic.initExistingImage(lastBuildUUID);
+    yield blackmagic.initExistingImage(latestBuildUUID);
 
     return callback();
 }
