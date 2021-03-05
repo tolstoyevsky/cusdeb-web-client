@@ -25,7 +25,7 @@ import {
 import ContinueBuildModal from "../ContinueBuildModal/ContinueBuildModal";
 import { toNextStage } from "../../../Builder/helpers/stages";
 
-export const lastBuildUUDKey = "lastBuildUUID";
+export const latestBuildUUDKey = "latestBuildUUID";
 
 const Initialization = ({
     history,
@@ -52,8 +52,8 @@ const Initialization = ({
 
         fetchDeviceListAction();
 
-        const lastBuildUUID = window.localStorage.getItem(lastBuildUUDKey);
-        if (lastBuildUUID) {
+        const latestBuildUUID = window.localStorage.getItem(latestBuildUUDKey);
+        if (latestBuildUUID) {
             toggleContinueBuildModalAction();
         }
     }, []);
