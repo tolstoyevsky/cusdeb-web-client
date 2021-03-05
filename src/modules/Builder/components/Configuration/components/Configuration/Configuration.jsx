@@ -35,10 +35,14 @@ const Configuration = ({
     useEffect(() => {
         fetchConfigurationParamsAction();
 
-        return () => {
+        const setConfiguration = () => {
             const blackmagic = new Blackmagic();
             blackmagic.setConfiguration(configurationParamsRef.current);
         };
+
+        window.addEventListener("beforeunload", setConfiguration);
+
+        return setConfiguration;
     }, []);
 
     useEffect(() => {
