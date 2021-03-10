@@ -31,21 +31,27 @@ export const stages = {
     },
 };
 
-export const getStageIndex = (path_ = null) => {
+export const getStages = (path_ = null) => {
     const path = path_ || window.location.pathname;
-    return Object.values(stages).findIndex(
+    const stageValues = Object.values(stages);
+    const currentStageIndex = stageValues.findIndex(
         (stage) => matchPath(stage.path, path),
     );
+    return [
+        stageValues[currentStageIndex - 1],
+        stageValues[currentStageIndex],
+        stageValues[currentStageIndex + 1],
+    ];
 };
 
 export const toNextStage = (history) => {
-    const currentStageIndex = getStageIndex();
-    const nextStage = Object.values(stages)[currentStageIndex + 1];
+    // eslint-disable-next-line no-unused-vars
+    const [_prevStage, _currentStage, nextStage] = getStages();
     history.push(nextStage.path);
 };
 
 export const toPrevStage = (history) => {
-    const currentStageIndex = getStageIndex();
-    const prevStage = Object.values(stages)[currentStageIndex - 1];
+    // eslint-disable-next-line no-unused-vars
+    const [prevStage, _currentStage, _nextStage] = getStages();
     history.push(prevStage.path);
 };
