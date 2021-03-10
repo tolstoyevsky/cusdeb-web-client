@@ -26,7 +26,7 @@ import Initialization from "../../../Initialization/components/Initialization/In
 import PackageList from "../../../PackageList/PackageList";
 import Users from "../../../Users/Users";
 import {
-    getStageIndex,
+    getStages,
     stages,
     toNextStage,
     toPrevStage,
@@ -96,7 +96,9 @@ class Builder extends React.Component {
     }
 
     setCurrentStage() {
-        this.currentStage = Object.values(stages)[getStageIndex()];
+        // eslint-disable-next-line no-unused-vars
+        const [_prevStage, currentStage, _nextStage] = getStages();
+        this.currentStage = currentStage;
     }
 
     render() {
