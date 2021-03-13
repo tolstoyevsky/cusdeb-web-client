@@ -7,19 +7,30 @@ import {
     Row,
 } from "react-bootstrap";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import { faWrench } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Regular from "common/containers/Regular";
 import { fetchDeviceList } from "modules/Builder/components/Initialization/actions/initialization";
+import { urls } from "root/Routes/Routes";
 import { fetchImagesList } from "../../actions/dashboard";
 import CardImage from "../CardImage/CardImage";
 
-const Dashboard = ({ fetchDeviceListAction, fetchImagesListAction, images }) => {
+const Dashboard = ({
+    fetchDeviceListAction,
+    fetchImagesListAction,
+    history,
+    images,
+}) => {
     useEffect(() => {
         fetchDeviceListAction();
         fetchImagesListAction();
     }, []);
+
+    const toBuilder = () => {
+        history.push(urls.builder);
+    };
 
     return (
         <Regular>
@@ -34,7 +45,7 @@ const Dashboard = ({ fetchDeviceListAction, fetchImagesListAction, images }) => 
                         </Col>
                         <Col sm={6} className="d-flex flex-row justify-content-end">
                             <div>
-                                <Button variant="primary" href="/builder">
+                                <Button variant="primary" onClick={toBuilder}>
                                     <FontAwesomeIcon className="fa-flip-horizontal mr-1" icon={faWrench} />
                                     Build New
                                 </Button>
@@ -59,6 +70,8 @@ const Dashboard = ({ fetchDeviceListAction, fetchImagesListAction, images }) => 
 Dashboard.propTypes = {
     fetchDeviceListAction: PropTypes.func.isRequired,
     fetchImagesListAction: PropTypes.func.isRequired,
+    // eslint-disable-next-line react/forbid-prop-types
+    history: PropTypes.object.isRequired,
     images: PropTypes.objectOf(PropTypes.object).isRequired,
 };
 
@@ -71,4 +84,6 @@ const mapDispatchToProps = (dispatch) => ({
     fetchImagesListAction: () => dispatch(fetchImagesList()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default withRouter(
+    connect(mapStateToProps, mapDispatchToProps)(Dashboard),
+);
