@@ -71,4 +71,8 @@ const Routes = () => (
     </Router>
 );
 
+export const urls = {
+    builder: "/builder/initialization",
+};
+
 export default Routes;
