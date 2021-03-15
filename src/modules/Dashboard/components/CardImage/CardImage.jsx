@@ -27,7 +27,7 @@ import DownloadInfoModal from "../DownloadInfoModal/DownloadInfoModal";
 import NotesModal from "../NotesModal/NotesModal";
 
 const downloadImageUrl = "/download-image";
-const imageFileExtension = ".img";
+const imageFileExtension = ".img.gz";
 
 const statusIcon = {
     Undefined: [faQuestion, "text-muted"],
