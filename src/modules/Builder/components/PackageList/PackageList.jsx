@@ -1,13 +1,15 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Card, Nav, Tab } from "react-bootstrap";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
 import Blackmagic from "api/rpc/blackmagic";
 import * as API from "api/http/images";
 
 import PackagesTable from "./components/PackagesTable/PackagesTable";
 
-export default class PackageList extends Component {
+class PackageList extends Component {
     static formatDeviceTitle(device) {
         let title = "";
         if (device.name) {
@@ -59,12 +61,12 @@ export default class PackageList extends Component {
     }
 
     getPackagesUrl(devices) {
-        const { os, device } = this.props;
+        const { distroShortName, deviceShortName } = this.props;
 
-        const currentDevice = devices[device];
+        const currentDevice = devices[deviceShortName];
 
         if (currentDevice) {
-            const currentOs = currentDevice.distros[os];
+            const currentOs = currentDevice.distros[distroShortName];
 
             if (currentOs) {
                 return currentOs.packages_url;
@@ -87,7 +89,7 @@ export default class PackageList extends Component {
 
     render() {
         const { packagesUrl, selectedPackages } = this.state;
-        const { os } = this.props;
+        const { distroShortName } = this.props;
 
         return [
             <Tab.Container key="tabs-container" defaultActiveKey="all" onSelect={this.onTabSelect}>
@@ -117,7 +119,7 @@ export default class PackageList extends Component {
                                     fetchPackagesNumberFunc={this.blackmagic.fetchPackagesNumber}
                                     selectedPackages={selectedPackages}
                                     updateSelectedPackages={this.updateSelectedPackages}
-                                    os={os}
+                                    os={distroShortName}
                                     packagesUrl={packagesUrl}
                                     searchAvailable
                                 />
@@ -132,7 +134,7 @@ export default class PackageList extends Component {
                                     }
                                     selectedPackages={selectedPackages}
                                     updateSelectedPackages={this.updateSelectedPackages}
-                                    os={os}
+                                    os={distroShortName}
                                     packagesUrl={packagesUrl}
                                 />
                             </Tab.Pane>
@@ -146,7 +148,7 @@ export default class PackageList extends Component {
                                     }
                                     selectedPackages={selectedPackages}
                                     updateSelectedPackages={this.updateSelectedPackages}
-                                    os={os}
+                                    os={distroShortName}
                                     packagesUrl={packagesUrl}
                                 />
                             </Tab.Pane>
@@ -161,8 +163,17 @@ export default class PackageList extends Component {
     }
 }
 
+const mapStateToProps = ({ initialization }) => ({
+    deviceShortName: initialization.deviceShortName,
+    distroShortName: initialization.distroShortName,
+});
+
 PackageList.propTypes = {
     builderCallback: PropTypes.func.isRequired,
-    device: PropTypes.string.isRequired,
-    os: PropTypes.string.isRequired,
+    deviceShortName: PropTypes.string.isRequired,
+    distroShortName: PropTypes.string.isRequired,
 };
+
+export default withRouter(
+    connect(mapStateToProps)(PackageList),
+);
