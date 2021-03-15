@@ -50,7 +50,14 @@ const Initialization = ({
         // eslint-disable-next-line no-new
         new Blackmagic();
 
-        fetchDeviceListAction();
+        if (Object.keys(deviceList).length) {
+            const initialDeviceShortName = Object.keys(deviceList)[0];
+            setDeviceShortNameAction(initialDeviceShortName);
+            // eslint-disable-next-line no-use-before-define
+            onDeviceChange(initialDeviceShortName);
+        } else {
+            fetchDeviceListAction();
+        }
 
         const latestBuildUUID = window.localStorage.getItem(latestBuildUUDKey);
         if (latestBuildUUID) {
@@ -58,11 +65,11 @@ const Initialization = ({
         }
     }, []);
 
-    const onDeviceChange = (value) => {
+    function onDeviceChange(value) {
         const currentDevice = deviceList[value];
         setDeviceShortNameAction(value);
         setDistroListAction(currentDevice.distros);
-    };
+    }
 
     const onDistroChange = (value) => {
         const currentDistro = distroList[value];
