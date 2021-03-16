@@ -1,5 +1,6 @@
 import { matchPath } from "react-router-dom";
 
+import { configureStore } from "root/store";
 import { executeStage as executeInitializationStage } from "../../Initialization/actions/initialization";
 
 export const stages = {
@@ -24,6 +25,12 @@ export const stages = {
         prevStageAvailable: true,
         nextStageAvailable: true,
     },
+    authorization: {
+        path: "/builder/authorization",
+        prevStageAvailable: true,
+        nextStageAvailable: false,
+        skipForAuthorized: true,
+    },
     build: {
         path: "/builder/build",
         prevStageAvailable: false,
@@ -33,7 +40,14 @@ export const stages = {
 
 export const getStages = (path_ = null) => {
     const path = path_ || window.location.pathname;
-    const stageValues = Object.values(stages);
+    let stageValues = Object.values(stages);
+
+    const store = configureStore();
+    const { app: { user } } = store.getState();
+    if (user) {
+        stageValues = stageValues.filter((stage) => (!stage.skipForAuthorized));
+    }
+
     const currentStageIndex = stageValues.findIndex(
         (stage) => matchPath(stage.path, path),
     );

@@ -73,6 +73,7 @@ const Routes = () => (
 
 export const urls = {
     builder: "/builder/initialization",
+    signIn: "/signin",
 };
 
 export default Routes;
