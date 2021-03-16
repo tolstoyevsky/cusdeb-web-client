@@ -20,6 +20,7 @@ import {
 
 import SidebarPage from "common/containers/SidebarPage";
 import ChangeStageButton from "../ChangeStageButton/ChangeStageButton";
+import Authorization from "../../../Authorization/components/Authorization/Authorization";
 import Build from "../../../Build/Build";
 import Configuration from "../../../Configuration/components/Configuration/Configuration";
 import Initialization from "../../../Initialization/components/Initialization/Initialization";
@@ -188,6 +189,10 @@ class Builder extends React.Component {
                                     <Route
                                         path={stages.configuration.path}
                                         component={Configuration}
+                                    />
+                                    <Route
+                                        path={stages.authorization.path}
+                                        component={Authorization}
                                     />
                                     <Route path={stages.build.path} component={Build} />
                                 </Switch>
