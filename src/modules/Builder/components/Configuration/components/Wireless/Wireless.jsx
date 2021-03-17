@@ -59,7 +59,7 @@ const Wireless = ({
                             id="enable-wireless"
                             label="Support Wi-Fi"
                             onChange={onFieldChange}
-                            checked={configurationParams.enable_wireless}
+                            checked={!!configurationParams.enable_wireless}
                         />
                     </Form.Group>
                     <Form.Group className="position-relative" controlId="WPA_SSID">
