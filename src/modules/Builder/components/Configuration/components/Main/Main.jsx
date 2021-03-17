@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { Card, Form } from "react-bootstrap";
 import { DebounceInput } from "react-debounce-input";
 import { connect } from "react-redux";
@@ -28,9 +28,6 @@ const Main = ({
     timeZonesList,
     updateConfigurationParamsAction,
 }) => {
-    // Sets to true after the first change of the field value by the user.
-    const mainRef = useRef();
-
     const fieldErrors = validate(mainSchema, {
         host_name: configurationParams.host_name,
     });
@@ -45,12 +42,6 @@ const Main = ({
 
     const onFieldChange = (event) => {
         const { target: { name, value } } = event;
-
-        if (mainRef.current) {
-            mainRef.current[name] = true;
-        } else {
-            mainRef.current = { [name]: true };
-        }
 
         updateConfigurationParamsAction(name, value);
     };
@@ -68,12 +59,7 @@ const Main = ({
                             type="text"
                             value={configurationParams.host_name}
                             onChange={onFieldChange}
-                            isInvalid={
-                                !!fieldErrors.host_name && (
-                                    (mainRef.current && mainRef.current.hostname)
-                                    || configurationParams.host_name
-                                )
-                            }
+                            isInvalid={!!fieldErrors.host_name}
                         />
                         <Form.Control.Feedback type="invalid">
                             {fieldErrors.host_name}
