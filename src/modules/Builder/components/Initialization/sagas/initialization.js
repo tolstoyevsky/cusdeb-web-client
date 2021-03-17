@@ -10,8 +10,11 @@ import {
 import { listDevice } from "api/http/images";
 import Blackmagic from "api/rpc/blackmagic";
 import {
+    setBuildType,
     setBuildUUID,
     setDeviceList,
+    setDeviceShortName,
+    setDistroShortName,
     setLatestBuildImage,
     toggleContinueBuildModal,
 } from "../actions/initialization";
@@ -72,6 +75,11 @@ function* initExistingImage({ payload: callback }) {
     const latestBuildUUID = window.localStorage.getItem(latestBuildUUDKey);
 
     yield blackmagic.initExistingImage(latestBuildUUID);
+
+    const { latestBuildImage } = yield select(getInitialization);
+    yield put(setBuildType(latestBuildImage.flavor));
+    yield put(setDeviceShortName(latestBuildImage.device_name));
+    yield put(setDistroShortName(latestBuildImage.distro_name));
 
     return callback();
 }
