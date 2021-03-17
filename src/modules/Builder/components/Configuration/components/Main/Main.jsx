@@ -31,9 +31,17 @@ const Main = ({
     // Sets to true after the first change of the field value by the user.
     const mainRef = useRef();
 
+    const fieldErrors = validate(mainSchema, {
+        host_name: configurationParams.host_name,
+    });
+
     useEffect(() => {
         fetchTimeZonesListAction();
     }, []);
+
+    useEffect(() => {
+        setFieldStatusAction("host_name", !Object.keys(fieldErrors).includes("host_name"));
+    }, [configurationParams.host_name]);
 
     const onFieldChange = (event) => {
         const { target: { name, value } } = event;
@@ -45,14 +53,7 @@ const Main = ({
         }
 
         updateConfigurationParamsAction(name, value);
-
-        const fieldErrors = validate(mainSchema, { [name]: value });
-        setFieldStatusAction(name, !Object.keys(fieldErrors).includes(name));
     };
-
-    const fieldErrors = validate(mainSchema, {
-        host_name: configurationParams.host_name,
-    });
 
     return (
         <Card>
