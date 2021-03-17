@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useEffect } from "react";
 import { Card, Form } from "react-bootstrap";
 import { DebounceInput } from "react-debounce-input";
 import { connect } from "react-redux";
@@ -14,6 +14,23 @@ const Wireless = ({
     setFieldStatusAction,
     updateConfigurationParamsAction,
 }) => {
+    const fieldErrors = validate(wirelessSchema, {
+        enable_wireless: configurationParams.enable_wireless,
+        WPA_SSID: configurationParams.WPA_SSID,
+        WPA_PSK: configurationParams.WPA_PSK,
+    });
+
+    useEffect(() => {
+        const WpaSsidStatus = !configurationParams.enable_wireless || !Object.keys(fieldErrors).includes("WPA_SSID");
+        const WpaPskStatus = !configurationParams.enable_wireless || !Object.keys(fieldErrors).includes("WPA_PSK");
+        setFieldStatusAction("WPA_SSID", WpaSsidStatus);
+        setFieldStatusAction("WPA_PSK", WpaPskStatus);
+    }, [
+        configurationParams.enable_wireless,
+        configurationParams.WPA_PSK,
+        configurationParams.WPA_SSID,
+    ]);
+
     const onFieldChange = (event) => {
         const {
             target: {
@@ -26,27 +43,7 @@ const Wireless = ({
             fieldValue = checked;
         }
         updateConfigurationParamsAction(name, fieldValue);
-
-        const fieldErrors = validate(wirelessSchema, { [name]: fieldValue });
-        if (name === "enable_wireless") {
-            let WpaSsidStatus = !Object.keys(fieldErrors).includes("WPA_SSID");
-            let WpaPskStatus = !Object.keys(fieldErrors).includes("WPA_PSK");
-            if (!fieldValue) {
-                WpaSsidStatus = true;
-                WpaPskStatus = true;
-            }
-            setFieldStatusAction("WPA_SSID", WpaSsidStatus);
-            setFieldStatusAction("WPA_PSK", WpaPskStatus);
-        } else {
-            setFieldStatusAction(name, !Object.keys(fieldErrors).includes(name));
-        }
     };
-
-    const fieldErrors = validate(wirelessSchema, {
-        enable_wireless: configurationParams.enable_wireless,
-        WPA_SSID: configurationParams.WPA_SSID,
-        WPA_PSK: configurationParams.WPA_PSK,
-    });
 
     return (
         <Card>
