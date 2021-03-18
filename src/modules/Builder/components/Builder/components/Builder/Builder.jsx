@@ -54,15 +54,6 @@ class Builder extends React.Component {
         this.onNextClick = this.onNextClick.bind(this);
     }
 
-    componentDidMount() {
-        Object.values([
-            "ordinaryUsers", "rootPassword",
-            "rootPasswordIsChanged", "rootRetypePassword",
-        ]).forEach((key) => {
-            localStorage.removeItem(key);
-        });
-    }
-
     onSidebarLinkClick(event) {
         event.preventDefault();
 
