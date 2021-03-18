@@ -81,6 +81,18 @@ export default class OrdinaryModal extends Component {
                 };
             });
         });
+
+        this.blackmagic.fetchUser().then((user) => {
+            if (user) {
+                this.setState({
+                    username: user.username,
+                    password: user.password,
+                    retypePassword: user.password,
+                    comment: "",
+                });
+                this.onAddOrUpdateOrdinaryUser();
+            }
+        });
     }
 
     componentDidUpdate(prevProps) {
