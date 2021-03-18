@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { Card, Table } from "react-bootstrap";
 
 import Blackmagic from "api/rpc/blackmagic";
@@ -50,9 +49,9 @@ export default class Users extends Component {
 
         this.onChangeRootPassword = this.onChangeRootPassword.bind(this);
         this.onHideOrdinaryModal = this.onHideOrdinaryModal.bind(this);
+        this.dropStateToBlackmagic = this.dropStateToBlackmagic.bind(this);
         this.addOrUpdateOrdinaryUser = this.addOrUpdateOrdinaryUser.bind(this);
         this.deleteOrdinaryUser = this.deleteOrdinaryUser.bind(this);
-        this.executeState = this.executeState.bind(this);
         this.formatUser = this.formatUser.bind(this);
         this.isOrdinaryUser = this.isOrdinaryUser.bind(this);
         this.openModal = this.openModal.bind(this);
@@ -81,11 +80,12 @@ export default class Users extends Component {
                     users: Users.formatUsers(users),
                 }));
             });
+
+        window.addEventListener("beforeunload", this.dropStateToBlackmagic);
     }
 
     componentWillUnmount() {
-        const { ordinaryUsers } = this.state;
-        localStorage.setItem("ordinaryUsers", JSON.stringify(ordinaryUsers));
+        this.dropStateToBlackmagic();
     }
 
     onChangeRootPassword(rootPassword) {
@@ -98,6 +98,16 @@ export default class Users extends Component {
         this.setState(() => ({
             editedOrdinaryUser: null,
         }));
+    }
+
+    dropStateToBlackmagic() {
+        const { ordinaryUsers, rootPassword } = this.state;
+
+        ordinaryUsers.forEach((user) => {
+            this.blackmagic.addUser([user.username, user.password]);
+        });
+
+        this.blackmagic.changeRootPassword(rootPassword);
     }
 
     addOrUpdateOrdinaryUser(user) {
@@ -142,29 +152,6 @@ export default class Users extends Component {
                 ordinaryUsers: ordinaryUsers.splice(1, deletedUserIndex),
             };
         });
-    }
-
-    executeState() {
-        const { ordinaryUsers, rootPassword } = this.state;
-
-        ordinaryUsers.forEach((user) => {
-            this.blackmagic.addUser([
-                user.username,
-                user.password,
-                user.uid,
-                user.gid,
-                user.comment,
-                user.homedir,
-                user.shell,
-            ]);
-        });
-
-        if (rootPassword !== null) {
-            this.blackmagic.changeRootPassword(rootPassword);
-        }
-
-        const { builderCallback } = this.props;
-        builderCallback();
     }
 
     formatUser(user, type) {
@@ -308,7 +295,3 @@ export default class Users extends Component {
         ];
     }
 }
-
-Users.propTypes = {
-    builderCallback: PropTypes.func.isRequired,
-};
