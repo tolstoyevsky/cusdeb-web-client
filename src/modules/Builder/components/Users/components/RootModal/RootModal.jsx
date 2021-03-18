@@ -40,7 +40,7 @@ export default class RootModal extends Component {
     }
 
     componentDidMount() {
-        this.blackmagic.fetchDefaultRootPassword()
+        this.blackmagic.fetchRootPassword()
             .then((rootPassword) => {
                 this.setState(() => ({
                     password: rootPassword,

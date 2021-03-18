@@ -16,7 +16,7 @@ const RESOLVE_PACKAGES_RP = "resolve";
 const GET_CONFIGURATION_RP = "get_configuration";
 const SET_CONFIGURATION_RP = "set_configuration";
 const GET_USERS_LIST_RP = "get_users_list";
-const GET_DEFAULT_ROOT_PASSWORD_RP = "get_default_root_password";
+const GET_ROOT_PASSWORD_RP = "get_root_password";
 const CHANGE_ROOT_PASSWORD_RP = "change_root_password";
 const GET_SHELLS_LIST_RP = "get_shells_list";
 const ADD_USER_RP = "add_user";
@@ -99,8 +99,8 @@ export default class Blackmagic {
         return this.connection.emitForce(GET_USERS_LIST_RP);
     }
 
-    async fetchDefaultRootPassword() {
-        return this.connection.emit(GET_DEFAULT_ROOT_PASSWORD_RP);
+    async fetchRootPassword() {
+        return this.connection.emitForce(GET_ROOT_PASSWORD_RP);
     }
 
     async changeRootPassword(rootPassword) {
