@@ -58,22 +58,6 @@ export default class Users extends Component {
     }
 
     componentDidMount() {
-        const ordinaryUsers = JSON.parse(localStorage.getItem("ordinaryUsers"));
-        const rootPassword = localStorage.getItem("rootPassword");
-
-        if (ordinaryUsers || rootPassword) {
-            this.setState(() => {
-                const stateData = {};
-                if (ordinaryUsers) {
-                    stateData.ordinaryUsers = ordinaryUsers;
-                }
-                if (rootPassword) {
-                    stateData.rootPassword = rootPassword;
-                }
-                return stateData;
-            });
-        }
-
         this.blackmagic.fetchUsersList()
             .then((users) => {
                 this.setState(() => ({
