@@ -22,7 +22,7 @@ const Header = ({ children, fluid, user }) => (
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ml-auto">
                     <Nav.Link href="/dashboard">Dashboard</Nav.Link>
-                    <Nav.Link href="/blog">Blog</Nav.Link>
+                    <Nav.Link href="/en/blog">Blog</Nav.Link>
                     {user ? (
                         <Dropdown as={Nav.Item} alignRight>
                             <Dropdown.Toggle as={Nav.Link}>
