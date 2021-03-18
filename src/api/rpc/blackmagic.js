@@ -21,6 +21,7 @@ const CHANGE_ROOT_PASSWORD_RP = "change_root_password";
 const GET_SHELLS_LIST_RP = "get_shells_list";
 const ADD_USER_RP = "add_user";
 const BUILD_IMAGE_RP = "build";
+const GET_USER_RP = "get_user";
 
 export default class Blackmagic {
     constructor() {
@@ -93,6 +94,10 @@ export default class Blackmagic {
 
     async setConfiguration(configuration) {
         return this.connection.emit(SET_CONFIGURATION_RP, configuration);
+    }
+
+    async fetchUser() {
+        return this.connection.emitForce(GET_USER_RP);
     }
 
     async fetchUsersList() {
