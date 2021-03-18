@@ -51,6 +51,13 @@ class PackageList extends Component {
                     packagesUrl: this.getPackagesUrl(response.data),
                 }));
             });
+
+        this.blackmagic.fetchInitialSelectedPackagesList()
+            .then((initialSelectedPackages) => {
+                this.setState(() => ({
+                    selectedPackages: initialSelectedPackages,
+                }));
+            });
     }
 
     onTabSelect(tabKey) {

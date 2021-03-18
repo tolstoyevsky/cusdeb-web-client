@@ -8,6 +8,7 @@ const IS_IMAGE_AVAILABLE_FOR_RECOVERY_RP = "is_image_available_for_recovery";
 const GET_BASE_PACKAGES_LIST_RP = "get_base_packages_list";
 const GET_PACKAGES_LIST_RP = "get_packages_list";
 const GET_SELECTED_PACKAGES_LIST_RP = "get_selected_packages_list";
+const GET_INITIAL_SELECTED_PACKAGES = "get_initial_selected_packages_list";
 const GET_PACKAGES_NUMBER_RP = "get_packages_number";
 const GET_BASE_PACKAGES_NUMBER_RP = "get_base_packages_number";
 const GET_SELECTED_PACKAGES_NUMBER_RP = "get_selected_packages_number";
@@ -58,6 +59,10 @@ export default class Blackmagic {
         return this.connection.emitForce(
             GET_PACKAGES_LIST_RP, currentPage, packagesPerPage, searchToken,
         );
+    }
+
+    async fetchInitialSelectedPackagesList() {
+        return this.connection.emitForce(GET_INITIAL_SELECTED_PACKAGES);
     }
 
     async fetchSelectedPackagesList(currentPage, packagesPerPage) {
