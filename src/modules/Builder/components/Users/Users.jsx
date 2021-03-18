@@ -36,8 +36,6 @@ export default class Users extends Component {
             ordinaryUsers: [],
 
             editedOrdinaryUser: null,
-
-            rootPassword: null,
         };
 
         this.modalRefs = {
@@ -47,7 +45,6 @@ export default class Users extends Component {
 
         this.blackmagic = new Blackmagic();
 
-        this.onChangeRootPassword = this.onChangeRootPassword.bind(this);
         this.onHideOrdinaryModal = this.onHideOrdinaryModal.bind(this);
         this.dropStateToBlackmagic = this.dropStateToBlackmagic.bind(this);
         this.addOrUpdateOrdinaryUser = this.addOrUpdateOrdinaryUser.bind(this);
@@ -72,12 +69,6 @@ export default class Users extends Component {
         this.dropStateToBlackmagic();
     }
 
-    onChangeRootPassword(rootPassword) {
-        this.setState(() => ({
-            rootPassword,
-        }));
-    }
-
     onHideOrdinaryModal() {
         this.setState(() => ({
             editedOrdinaryUser: null,
@@ -85,13 +76,11 @@ export default class Users extends Component {
     }
 
     dropStateToBlackmagic() {
-        const { ordinaryUsers, rootPassword } = this.state;
+        const { ordinaryUsers } = this.state;
 
         ordinaryUsers.forEach((user) => {
             this.blackmagic.addUser([user.username, user.password]);
         });
-
-        this.blackmagic.changeRootPassword(rootPassword);
     }
 
     addOrUpdateOrdinaryUser(user) {
@@ -266,7 +255,6 @@ export default class Users extends Component {
             <RootModal
                 key="rootModal"
                 ref={this.modalRefs.root}
-                onChangePassword={this.onChangeRootPassword}
             />,
             <OrdinaryModal
                 key="ordinaryModal"

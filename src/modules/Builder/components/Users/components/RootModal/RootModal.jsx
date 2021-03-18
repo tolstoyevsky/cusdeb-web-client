@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import PropTypes from "prop-types";
 import {
     Button, Form, InputGroup, Modal,
 } from "react-bootstrap";
@@ -58,9 +57,8 @@ export default class RootModal extends Component {
     }
 
     onModalSubmit() {
-        const { onChangePassword } = this.props;
         const { password } = this.state;
-        onChangePassword(password);
+        this.blackmagic.changeRootPassword(password);
 
         this.onChangeModalStatus();
     }
@@ -200,7 +198,3 @@ export default class RootModal extends Component {
         );
     }
 }
-
-RootModal.propTypes = {
-    onChangePassword: PropTypes.func.isRequired,
-};
