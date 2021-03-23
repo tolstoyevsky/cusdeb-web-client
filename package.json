@@ -11,7 +11,8 @@
     "test": "jest"
   },
   "jest": {
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js|jsx)?$"
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js|jsx)?$",
+    "moduleDirectories": ["node_modules", "src"]
   },
   "keywords": [],
   "author": "Denis Gavrilyuk",
