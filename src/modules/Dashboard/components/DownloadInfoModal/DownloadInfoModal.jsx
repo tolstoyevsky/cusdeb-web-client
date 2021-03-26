@@ -2,8 +2,8 @@ import PropTypes from "prop-types";
 import React from "react";
 import { Modal } from "react-bootstrap";
 
-const failedText = "The build is failed. Try to build it again.";
-const waitText = "Your image is currently being built. Wait until the build is done.";
+export const failedText = "The build is failed. Try to build it again.";
+export const waitText = "Your image is currently being built. Wait until the build is done.";
 
 const statusText = {
     Undefined: failedText,
