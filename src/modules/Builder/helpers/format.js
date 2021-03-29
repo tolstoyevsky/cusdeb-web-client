@@ -18,11 +18,17 @@ export const formatDistroTitle = (distro) => {
     if (distro.name) {
         title = `${title} ${distro.name}`;
     }
+    if (distro.former_name) {
+        title = `${title} (formerly ${distro.former_name})`;
+    }
     if (distro.version) {
         title = `${title} ${distro.version}`;
     }
     if (distro.codename) {
         title = `${title} ${distro.codename}`;
+    }
+    if (distro.bits) {
+        title = `${title} ${distro.bits}-bit`;
     }
 
     return title.trim();
