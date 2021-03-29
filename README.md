@@ -1,53 +1,58 @@
+[![Tests and Linter](https://github.com/tolstoyevsky/cusdeb-web-client/actions/workflows/checks.yml/badge.svg)](https://github.com/tolstoyevsky/cusdeb-web-client/actions/workflows/checks.yml/badge.svg)
+[![Website cusdeb.com](https://img.shields.io/website-up-down-green-red/https/lbesson.bitbucket.io.svg)](https://cusdeb.com)
+
 # CusDeb Web Client
 
-CusDeb Web Client is a web client which relies on such CusDeb services as [CusDeb API](https://github.com/tolstoyevsky/cusdeb-api), [Black Magic](https://github.com/tolstoyevsky/blackmagic), [Dominion](https://github.com/tolstoyevsky/dominion) and [Orion](https://github.com/tolstoyevsky/orion).
+CusDeb Web Client exposes the whole [CusDeb](https://cusdeb.com)'s functionality to users, including customizing OS images for wide variety of single-board computers.
+
+![](./demo.gif)
 
 ## Table of Contents
 
-- [Requirements](#requirements)
 - [Configuration](#configuration)
-- [Building](#building)
+- [Deployment for development purposes](#deployment-for-development-purposes)
 - [Authors](#authors)
 - [Licensing](#licensing)
-
-## Requirements
-
-CusDeb Web Client requires
-
-* running [CusDeb API](https://github.com/tolstoyevsky/cusdeb-api) and [Black Magic](https://github.com/tolstoyevsky/blackmagic);
-* [Node.js](https://nodejs.org/) 12 or above.
 
 ## Configuration
 
 CusDeb Web Client can be configured via the following environment variables (called parameters).
 
-| Parameter        | Description |
-|------------------|-------------|
-| `BM_RPC_URL`     | The URL of the WebSocket API provided by Black Magic. If Black Magic listens on the port 8002, the value of the param *might* look like `ws://127.0.0.1:8002/rpc/token/%token` when running locally. |
-| `CUSDEB_API_URL` | The URL of CusDeb API, including its version. The value of the param *must be* `/api/v1` when running locally. |
-| `HOST`           | The address of the machine Webpack Dev Server is running on. It helps to check CusDeb Web Client on other devices in a local network. |
+| Parameter              | Description                                                                                                                           | Default                                     |
+|------------------------|---------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------|
+| `BLACKMAGIC_URL`       | The URL of the API endpoint provided by the [Black Magic](https://github.com/tolstoyevsky/blackmagic) service.                        | `ws://localhost:8002/bm/token/%token`       |
+| `CUSDEB_ANONYMOUS_URL` | The address of the [CusDeb Anonymous](https://github.com/tolstoyevsky/cusdeb-anonymous) service.                                      | `http://localhost:8007`                     |
+| `CUSDEB_API_URL`       | The address of the [CusDeb API](https://github.com/tolstoyevsky/cusdeb-api) service.                                                  | `http://localhost:8001`                     |
+| `CUSDEB_HELPIK_URL`    | The address of the [CusDeb Helpik](https://github.com/tolstoyevsky/cusdeb-helpik) service.                                            | `http://localhost:8005`                     |
+| `CUSDEB_TZ_URL`        | The address of the [CusDeb Tz](https://github.com/tolstoyevsky/cusdeb-tz) service.                                                    | `http://localhost:8006`                     |
+| `DOMINION_URL`         | The URL of the API endpoint provided by the [Dominion](https://github.com/tolstoyevsky/dominion) service.                             | `ws://localhost:8003/dominion/token/%token` |
+| `HOST`                 | The address of the machine Webpack Dev Server is running on. It helps to check CusDeb Web Client on other devices in a local network. | `0.0.0.0`                                   |
+| `PORT`                 | The port which Webpack Dev Server is running on.                                                                                      | `8000`                                      |
+| `SENTRY_DSN`           | A [Sentry](http://sentry.io) DSN (Data Source Name) to tell the Sentry SDK where to send events.                                      |                                             |
 
-## Building
+## Deployment for development purposes
 
-1. Install dependencies by executing
+1. Install [Node](https://nodejs.org) 12.
 
-```
-$ npm install
-```
+2. Install dependencies by executing.
 
-2. Build a development version of the client (with running [Webpack Dev Server](https://webpack.js.org/configuration/dev-server/)), executing
+    ```
+    $ npm install
+    ```
 
-```
-$ env CUSDEB_API_URL=/api/v1 BM_RPC_URL=ws://127.0.0.1:8002/rpc/token/%token npm run dev
-```
+    Note that CusDeb Web Client contains optional dependencies. Here is an alternative command to ignore them:
 
-or build a production version of the client, executing something like the following
+    ```
+    $ npm install --no-optional
+    ```
 
-```
-$ env CUSDEB_API_URL=https://ng.cusdeb.com/api/v1 BM_RPC_URL=wss://ng.cusdeb.com/rpc/token/%token npm run build
-```
+3. Define environment variables in the `.env` file in the project root directory.
 
-In the second case, [Nginx](https://nginx.org) (or or any other web server) will have to serve the content of the `dist` directory.
+4. Run [Webpack Dev Server](https://webpack.js.org/configuration/dev-server) by executing.
+
+    ```
+    $ npm run dev
+    ```
 
 ## Authors
 
