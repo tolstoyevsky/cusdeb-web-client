@@ -29,7 +29,7 @@ const Header = ({ children, fluid, user }) => (
                                 {user.username}
                             </Dropdown.Toggle>
                             <Dropdown.Menu className="border-0 shadow">
-                                <Dropdown.Item href="/settings/profile">Settings</Dropdown.Item>
+                                <Dropdown.Item href="/settings/profile">Profile</Dropdown.Item>
                                 <Dropdown.Item onClick={signOut}>Sign out</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
