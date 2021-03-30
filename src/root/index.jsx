@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 
 import App from "modules/App/components/App/App";
+import "./i18n";
 import rootReducer from "./rootReducer";
 import rootSaga from "./rootSaga";
 import * as sentry from "./sentry";
