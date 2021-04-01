@@ -7,6 +7,7 @@ import {
     setDeviceList,
     setDistroShortName,
     setDistroList,
+    setLatestBuildImage,
     toggleContinueBuildModal,
 } from "../../actions/initialization";
 
@@ -129,6 +130,20 @@ describe("Initialization reducer", () => {
         };
         const reducer = InitializationReducer({}, setDistroList(distroList));
         expect(reducer).toEqual({ distroList });
+    });
+
+    it("SET_LATEST_BUILD_IMAGE", () => {
+        const latestBuildImage = {
+            image_id: "xxxxxxxx-xxxx-4xxx-xxxx-xxxxxxxxxxx",
+            device_name: "rpi-3-b-plus",
+            distro_name: "ubuntu-bionic-armhf",
+            flavour: "Classic",
+            started_at: null,
+            status: "Undefined",
+            notes: "",
+        };
+        const reducer = InitializationReducer({}, setLatestBuildImage(latestBuildImage));
+        expect(reducer).toEqual({ latestBuildImage });
     });
 
     it("TOGGLE_CONTINUE_BUILD_MODAL with false initial value", () => {
