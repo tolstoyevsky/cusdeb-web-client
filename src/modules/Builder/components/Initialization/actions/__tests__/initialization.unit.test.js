@@ -5,7 +5,9 @@ import {
     setDeviceShortName,
     setDeviceList,
     setDistroShortName,
-    setDistroList, toggleContinueBuildModal,
+    setDistroList,
+    setLatestBuildImage,
+    toggleContinueBuildModal,
 } from "../initialization";
 import {
     SET_BUILD_TYPE,
@@ -14,7 +16,9 @@ import {
     SET_DEVICE_SHORT_NAME,
     SET_DEVICE_LIST,
     SET_DISTRO_SHORT_NAME,
-    SET_DISTRO_LIST, TOGGLE_CONTINUE_BUILD_MODAL,
+    SET_DISTRO_LIST,
+    SET_LATEST_BUILD_IMAGE,
+    TOGGLE_CONTINUE_BUILD_MODAL,
 } from "../../constants/initialization";
 
 describe("Initialization actions", () => {
@@ -145,6 +149,23 @@ describe("Initialization actions", () => {
             payload: distroList,
         };
         expect(setDistroList(distroList)).toEqual(expectedAction);
+    });
+
+    it("setLatestBuildImage", () => {
+        const latestBuildImage = {
+            image_id: "xxxxxxxx-xxxx-4xxx-xxxx-xxxxxxxxxxx",
+            device_name: "rpi-3-b-plus",
+            distro_name: "ubuntu-bionic-armhf",
+            flavour: "Classic",
+            started_at: null,
+            status: "Undefined",
+            notes: "",
+        };
+        const expectedAction = {
+            type: SET_LATEST_BUILD_IMAGE,
+            payload: latestBuildImage,
+        };
+        expect(setLatestBuildImage(latestBuildImage)).toEqual(expectedAction);
     });
 
     it("toggleContinueBuildModal", () => {
