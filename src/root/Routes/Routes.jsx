@@ -1,3 +1,4 @@
+import i18next from "i18next";
 import React from "react";
 import {
     BrowserRouter as Router,
@@ -27,7 +28,7 @@ const Builder = React.lazy(() => (
 const UserSettings = React.lazy(() => import("modules/UserSettings/UserSettings"));
 
 const Routes = () => (
-    <Router>
+    <Router basename={`/${i18next.language.split("-")[0]}`}>
         <React.Suspense fallback={<Fallback />}>
             <Switch>
                 <Route exact path="/signin" component={SignIn} />
