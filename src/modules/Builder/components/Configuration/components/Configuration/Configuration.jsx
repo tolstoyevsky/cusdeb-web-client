@@ -11,7 +11,7 @@ import Main from "../Main/Main";
 import Wireless from "../Wireless/Wireless";
 
 const wirelessSupportOS = [
-    "raspbian-buster-armhf",
+    "raspberrypios-buster-armhf",
 ];
 
 const wirelessSupportDevices = [
