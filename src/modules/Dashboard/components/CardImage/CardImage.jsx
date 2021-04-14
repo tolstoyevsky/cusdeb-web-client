@@ -21,12 +21,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { parseDateString } from "utils/date";
 import { formatDeviceTitle, formatDistroTitle } from "modules/Builder/helpers/format";
+import { buildResultUrl } from "../../../../../config/main"; // TODO: resolve path to config
 import { deleteImage, hideNotesSucceededMessage, updateNotes } from "../../actions/dashboard";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
 import DownloadInfoModal from "../DownloadInfoModal/DownloadInfoModal";
 import NotesModal from "../NotesModal/NotesModal";
 
-const downloadImageUrl = "/download-image";
 const imageFileExtension = ".img.gz";
 
 const statusIcon = {
@@ -117,7 +117,7 @@ const CardImage = ({
                         <Col xs={6}>
                             <Button
                                 onClick={downloadAction}
-                                href={`${downloadImageUrl}/${image.image_id}${imageFileExtension}`}
+                                href={`${buildResultUrl}/${image.image_id}${imageFileExtension}`}
                                 download
                             >
                                 <FontAwesomeIcon icon={faDownload} className="mr-sm-1" />
