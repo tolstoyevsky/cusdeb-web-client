@@ -16,6 +16,8 @@ export const cusdebTzPrefix = "/tz";
 
 export const blackmagicUrl = process.env.BLACKMAGIC_URL || "ws://localhost:8002/bm/token/%token";
 
+export const buildResultUrl = process.env.BUILD_RESULT_URL || "http://localhost:8008";
+
 export const dominionUrl = process.env.DOMINION_URL || "ws://localhost:8003/dominion/token/%token";
 
 export const cusdebAnonymousUrl = process.env.CUSDEB_ANONYMOUS_URL || "http://localhost:8007";
