@@ -65,6 +65,7 @@ export default {
             jQuery: "jquery",
         }),
         new webpack.EnvironmentPlugin({
+            BUILD_RESULT_URL: mainConfig.buildResultUrl,
             BLACKMAGIC_URL: mainConfig.blackmagicUrl,
             DOMINION_URL: mainConfig.dominionUrl,
 
