@@ -6,6 +6,7 @@ import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
 import { cleanup } from "@testing-library/react";
 
+import { buildResultUrl } from "../../../../../../config/main"; // TODO: resolve path to config
 import CardImage from "../CardImage";
 import ConfirmDeleteModal from "../../ConfirmDeleteModal/ConfirmDeleteModal";
 import DownloadInfoModal from "../../DownloadInfoModal/DownloadInfoModal";
@@ -70,7 +71,7 @@ describe("CardImage", () => {
     it("Download Button attributes is valid", () => {
         const component = render({ imageStatus: "Succeeded" });
         const downloadButton = component.find(Button).at(0);
-        expect(downloadButton.prop("href")).toBe(`/download-image/${image().image_id}.img.gz`);
+        expect(downloadButton.prop("href")).toBe(`${buildResultUrl}/${image().image_id}.img.gz`);
         expect(downloadButton.prop("download")).toBe(true);
     });
 
