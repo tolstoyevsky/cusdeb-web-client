@@ -28,9 +28,11 @@ describe("NotesModal", () => {
             <Provider store={store}>
                 <NotesModal
                     handleClose={jest.fn()}
+                    handleSubmit={jest.fn()}
                     show={show}
                     imageId={imageId}
                     initialValue={initialValue}
+                    showNotesSucceededMessage={showNotesSucceededMessage}
                 />
             </Provider>,
         );
