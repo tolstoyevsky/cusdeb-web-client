@@ -21,7 +21,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { parseDateString } from "utils/date";
 import { formatDeviceTitle, formatDistroTitle } from "modules/Builder/helpers/format";
-import { deleteImage } from "../../actions/dashboard";
+import { deleteImage, hideNotesSucceededMessage, updateNotes } from "../../actions/dashboard";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
 import DownloadInfoModal from "../DownloadInfoModal/DownloadInfoModal";
 import NotesModal from "../NotesModal/NotesModal";
@@ -38,10 +38,21 @@ const statusIcon = {
     Succeeded: [faCheck, "text-success"],
 };
 
-const CardImage = ({ deviceList, deleteCurrentImageAction, image }) => {
+const CardImage = ({
+    deviceList,
+    deleteCurrentImageAction,
+    image,
+    hideNotesSucceededMessageAction,
+    updateNotesAction,
+    showNotesSucceededMessage,
+}) => {
     const [showNotesModal, setNotesModal] = useState(false);
     const openNotesModal = () => setNotesModal(true);
-    const closeNotesModal = () => setNotesModal(false);
+    const closeNotesModal = () => {
+        hideNotesSucceededMessageAction();
+        setNotesModal(false);
+    };
+    const saveNotes = (value) => updateNotesAction(image.image_id, value);
 
     const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false);
     const openConfirmDeleteModal = () => setShowConfirmDeleteModal(true);
@@ -141,8 +152,10 @@ const CardImage = ({ deviceList, deleteCurrentImageAction, image }) => {
             <NotesModal
                 imageId={image.image_id}
                 handleClose={closeNotesModal}
+                handleSubmit={saveNotes}
                 show={showNotesModal}
                 initialValue={image.notes}
+                showNotesSucceededMessage={showNotesSucceededMessage}
             />
             <DownloadInfoModal
                 handleClose={closeDownloadInfoModal}
@@ -170,16 +183,21 @@ CardImage.propTypes = {
         started_at: PropTypes.string,
         status: PropTypes.string,
     }).isRequired,
+    showNotesSucceededMessage: PropTypes.bool.isRequired,
+    hideNotesSucceededMessageAction: PropTypes.func.isRequired,
+    updateNotesAction: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({ dashboard, initialization }) => ({
     deviceList: initialization.deviceList,
     dispatch: PropTypes.func.isRequired,
-    showNotesModal: dashboard.showNotesModal,
+    showNotesSucceededMessage: dashboard.showNotesSucceededMessage,
 });
 
 const mapDispatchToProps = (dispatch) => ({
     deleteCurrentImageAction: (imageId) => dispatch(deleteImage(imageId)),
+    hideNotesSucceededMessageAction: () => dispatch(hideNotesSucceededMessage()),
+    updateNotesAction: (imageId, notes) => dispatch(updateNotes({ imageId, notes })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CardImage);
