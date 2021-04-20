@@ -109,6 +109,12 @@ const CardImage = ({
                                     {parseDateString(image.started_at)}
                                 </p>
                             )}
+                            {!!image.finished_at && (
+                                <p className="mb-1">
+                                    <strong>Finished at: </strong>
+                                    {parseDateString(image.finished_at)}
+                                </p>
+                            )}
                         </Col>
                     </Row>
                 </Card.Body>
@@ -181,6 +187,7 @@ CardImage.propTypes = {
         image_id: PropTypes.string,
         notes: PropTypes.string,
         started_at: PropTypes.string,
+        finished_at: PropTypes.string,
         status: PropTypes.string,
     }).isRequired,
     showNotesSucceededMessage: PropTypes.bool.isRequired,
