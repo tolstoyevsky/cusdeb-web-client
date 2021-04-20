@@ -47,11 +47,11 @@ describe("CardImage", () => {
 
     const render = ({ imageStatus }) => {
         const initialState = {
-            dashboard: {
-                showNotesSucceededMessage: false,
-            },
-            initialization: {
+            common: {
                 deviceList,
+            },
+            image: {
+                showNotesSucceededMessage: false,
             },
         };
         const store = mockStore(initialState);

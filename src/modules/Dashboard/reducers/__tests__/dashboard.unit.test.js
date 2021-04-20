@@ -2,7 +2,6 @@ import DashboardReducer from "../dashboard";
 import {
     deleteImageSucceeded,
     fetchImagesListSucceeded,
-    hideNotesSucceededMessage,
     updateNotesSucceeded,
 } from "../../actions/dashboard";
 
@@ -10,7 +9,6 @@ describe("Dashboard reducer", () => {
     it("Default state", () => {
         expect(DashboardReducer(undefined, {})).toEqual({
             images: {},
-            showNotesSucceededMessage: false,
         });
     });
 
@@ -96,14 +94,6 @@ describe("Dashboard reducer", () => {
         expect(reducer).toEqual({ images });
     });
 
-    it("HIDE_NOTES_SUCCEEDED_MESSAGE", () => {
-        const reducer = DashboardReducer(
-            { showNotesSucceededMessage: true },
-            hideNotesSucceededMessage(),
-        );
-        expect(reducer).toEqual({ showNotesSucceededMessage: false });
-    });
-
     it("UPDATE_NOTES_SUCCEEDED", () => {
         const imageId = "123e4567-e89b-12d3-a456-426614174000";
         const notes = "Some notes here";
@@ -148,15 +138,11 @@ describe("Dashboard reducer", () => {
             },
         };
         const reducer = DashboardReducer(
-            {
-                showNotesSucceededMessage: false,
-                images,
-            },
+            { images },
             updateNotesSucceeded({ imageId, notes }),
         );
         expect(reducer).toEqual({
             images: expectedImages,
-            showNotesSucceededMessage: true,
         });
     });
 });
