@@ -1,18 +1,15 @@
 import {
     all,
-    call,
     fork,
     put,
     select,
     takeEvery,
 } from "redux-saga/effects";
 
-import { listDevice } from "api/http/images";
 import Blackmagic from "api/rpc/blackmagic";
 import {
     setBuildType,
     setBuildUUID,
-    setDeviceList,
     setDeviceShortName,
     setDistroShortName,
     setLatestBuildImage,
@@ -21,7 +18,6 @@ import {
 import { latestBuildUUDKey } from "../components/Initialization/Initialization";
 import {
     EXECUTE_STAGE,
-    FETCH_DEVICE_LIST,
     IMAGE_IS_AVAILABLE_FOR_RECOVERY,
     INIT_EXISTING_IMAGE,
 } from "../constants/initialization";
@@ -48,11 +44,6 @@ function* executeStage({ payload: callback }) {
     yield put(setBuildUUID(buildUUID));
 
     return callback();
-}
-
-function* fetchListDevice() {
-    const { data: deviceList } = yield call(listDevice);
-    yield put(setDeviceList(deviceList));
 }
 
 function* isImageAvailableForRecovery({ payload: imageId }) {
@@ -88,10 +79,6 @@ function* watchExecuteStage() {
     yield takeEvery(EXECUTE_STAGE, executeStage);
 }
 
-function* watchFetchListDevice() {
-    yield takeEvery(FETCH_DEVICE_LIST, fetchListDevice);
-}
-
 function* watchIsImageAvailableForRecovery() {
     yield takeEvery(IMAGE_IS_AVAILABLE_FOR_RECOVERY, isImageAvailableForRecovery);
 }
@@ -103,7 +90,6 @@ function* watchInitExistingImage() {
 export default function* builderSaga() {
     yield all([
         fork(watchExecuteStage),
-        fork(watchFetchListDevice),
         fork(watchIsImageAvailableForRecovery),
         fork(watchInitExistingImage),
     ]);

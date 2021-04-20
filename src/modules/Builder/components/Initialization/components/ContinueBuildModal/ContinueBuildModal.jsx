@@ -76,8 +76,8 @@ ContinueBuildModal.propTypes = {
     toggleContinueBuildModalAction: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ initialization }) => ({
-    deviceList: initialization.deviceList,
+const mapStateToProps = ({ common, initialization }) => ({
+    deviceList: common.deviceList,
     latestBuildImage: initialization.latestBuildImage,
     show: initialization.showContinueBuildModal,
 });

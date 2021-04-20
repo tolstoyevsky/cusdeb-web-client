@@ -5,7 +5,6 @@ import {
     SET_BUILD_TYPE_LIST,
     SET_BUILD_UUID,
     SET_DEVICE_SHORT_NAME,
-    SET_DEVICE_LIST,
     SET_DISTRO_SHORT_NAME,
     SET_DISTRO_LIST,
     SET_LATEST_BUILD_IMAGE,
@@ -17,7 +16,6 @@ const defaultState = {
     buildTypeList: [],
     buildUUID: null,
     deviceShortName: null,
-    deviceList: {},
     distroShortName: null,
     distroList: {},
     latestBuildImage: {},
@@ -41,10 +39,6 @@ export default handleActions(
         [SET_DEVICE_SHORT_NAME]: (state, { payload: deviceShortName }) => ({
             ...state,
             deviceShortName,
-        }),
-        [SET_DEVICE_LIST]: (state, { payload: deviceList }) => ({
-            ...state,
-            deviceList,
         }),
         [SET_DISTRO_SHORT_NAME]: (state, { payload: distroShortName }) => ({
             ...state,
