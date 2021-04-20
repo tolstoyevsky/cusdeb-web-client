@@ -11,8 +11,8 @@ import {
     formatDeviceList,
     formatDistroList,
 } from "modules/Builder/helpers/format";
+import { fetchDeviceList } from "common/engines/Common/actions/common";
 import {
-    fetchDeviceList,
     isImageAvailableForRecovery,
     initExistingImage,
     setBuildType,
@@ -138,8 +138,8 @@ Initialization.propTypes = {
     setDistroListAction: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ initialization }) => ({
-    deviceList: initialization.deviceList,
+const mapStateToProps = ({ common, initialization }) => ({
+    deviceList: common.deviceList,
     distroList: initialization.distroList,
     buildTypeList: initialization.buildTypeList,
 });
