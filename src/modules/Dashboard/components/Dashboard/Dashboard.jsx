@@ -12,7 +12,7 @@ import { faWrench } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Regular from "common/containers/Regular";
-import { fetchDeviceList } from "modules/Builder/components/Initialization/actions/initialization";
+import { fetchDeviceList } from "common/engines/Common/actions/common";
 import { urls } from "root/Routes/Routes";
 import { fetchImagesList } from "../../actions/dashboard";
 import CardImage from "../CardImage/CardImage";

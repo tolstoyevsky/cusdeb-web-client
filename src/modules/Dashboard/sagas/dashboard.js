@@ -6,18 +6,9 @@ import {
     takeEvery,
 } from "redux-saga/effects";
 
-import { listImages, updateImageNotes, deleteImage as deleteImageAPI } from "api/http/images";
-import { fetchImagesListSucceeded, deleteImageSucceeded, updateNotesSucceeded } from "../actions/dashboard";
-import { FETCH_IMAGES_LIST, UPDATE_NOTES, DELETE_IMAGE } from "../constants/dashboard";
-
-function* deleteImage({ payload: imageId }) {
-    try {
-        yield call(() => deleteImageAPI(imageId));
-        yield put(deleteImageSucceeded(imageId));
-    } catch {
-        // TODO: handle error
-    }
-}
+import { listImages } from "api/http/images";
+import { fetchImagesListSucceeded } from "../actions/dashboard";
+import { FETCH_IMAGES_LIST } from "../constants/dashboard";
 
 function* fetchImagesList() {
     try {
@@ -28,31 +19,12 @@ function* fetchImagesList() {
     }
 }
 
-function* updateNotes({ payload: { imageId, notes } }) {
-    try {
-        yield call(() => updateImageNotes(imageId, notes));
-        yield put(updateNotesSucceeded({ imageId, notes }));
-    } catch (_error) {
-        // TODO: handle error
-    }
-}
-
-function* watchDeleteImage() {
-    yield takeEvery(DELETE_IMAGE, deleteImage);
-}
-
 function* watchFetchImagesList() {
     yield takeEvery(FETCH_IMAGES_LIST, fetchImagesList);
-}
-
-function* watchUpdateNotes() {
-    yield takeEvery(UPDATE_NOTES, updateNotes);
 }
 
 export default function* dashboardSaga() {
     yield all([
         fork(watchFetchImagesList),
-        fork(watchUpdateNotes),
-        fork(watchDeleteImage),
     ]);
 }

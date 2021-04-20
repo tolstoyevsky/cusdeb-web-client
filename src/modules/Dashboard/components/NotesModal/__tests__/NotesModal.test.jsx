@@ -18,7 +18,7 @@ describe("NotesModal", () => {
 
     const render = ({ initialValue, show = true, showNotesSucceededMessage = false }) => {
         const initialState = {
-            dashboard: {
+            image: {
                 showNotesSucceededMessage,
             },
         };

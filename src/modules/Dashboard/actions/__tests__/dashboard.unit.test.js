@@ -1,13 +1,11 @@
 import {
     deleteImageSucceeded,
     fetchImagesListSucceeded,
-    hideNotesSucceededMessage,
     updateNotesSucceeded,
 } from "../dashboard";
 import {
     DELETE_IMAGE_SUCCEEDED,
     FETCH_IMAGES_LIST_SUCCEEDED,
-    HIDE_NOTES_SUCCEEDED_MESSAGE,
     UPDATE_NOTES_SUCCEEDED,
 } from "../../constants/dashboard";
 
@@ -38,13 +36,6 @@ describe("Dashboard actions", () => {
             payload: imagesList,
         };
         expect(fetchImagesListSucceeded(imagesList)).toEqual(expectedAction);
-    });
-
-    it("hideNotesSucceededMessage", () => {
-        const expectedAction = {
-            type: HIDE_NOTES_SUCCEEDED_MESSAGE,
-        };
-        expect(hideNotesSucceededMessage()).toEqual(expectedAction);
     });
 
     it("updateNotesSucceeded", () => {

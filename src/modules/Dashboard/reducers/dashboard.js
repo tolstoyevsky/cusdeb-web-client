@@ -3,13 +3,11 @@ import { handleActions } from "redux-actions";
 import {
     DELETE_IMAGE_SUCCEEDED,
     FETCH_IMAGES_LIST_SUCCEEDED,
-    HIDE_NOTES_SUCCEEDED_MESSAGE,
     UPDATE_NOTES_SUCCEEDED,
 } from "../constants/dashboard";
 
 const defaultState = {
     images: {},
-    showNotesSucceededMessage: false,
 };
 
 export default handleActions(
@@ -28,10 +26,6 @@ export default handleActions(
 
             return { ...state, images };
         },
-        [HIDE_NOTES_SUCCEEDED_MESSAGE]: (state) => ({
-            ...state,
-            showNotesSucceededMessage: false,
-        }),
         [UPDATE_NOTES_SUCCEEDED]: (state, { payload: { imageId, notes } }) => ({
             ...state,
             images: {
@@ -41,7 +35,6 @@ export default handleActions(
                     notes,
                 },
             },
-            showNotesSucceededMessage: true,
         }),
     },
     defaultState,
