@@ -122,27 +122,23 @@ const CardImage = ({
                 <Card.Footer>
                     <Row>
                         <Col xs={6}>
-                            <Button
-                                onClick={downloadAction}
-                                href={`${buildResultUrl}/${image.image_id}${imageFileExtension}`}
-                                download
-                            >
-                                <FontAwesomeIcon icon={faDownload} className="mr-sm-1" />
-                                <span className="d-none d-sm-inline">Download</span>
-                            </Button>
-                            <Button variant="primary" className="ml-1" onClick={openNotesModal}>
+                            <Button variant="primary" onClick={openNotesModal}>
                                 <FontAwesomeIcon icon={faStickyNote} className="mr-1" />
                                 Add note
                             </Button>
                         </Col>
                         <Col xs={6} className="d-flex flex-row justify-content-end">
                             <Button
-                                variant="primary"
-                                className="pl-3"
-                                onClick={openConfirmDeleteModal}
+                                variant="success"
+                                className="mr-1"
+                                onClick={downloadAction}
+                                href={`${buildResultUrl}/${image.image_id}${imageFileExtension}`}
+                                download
                             >
-                                <FontAwesomeIcon icon={faTrash} className="fa-flip-horizontal mr-sm-1" />
-                                <span className="d-none d-sm-inline">Delete</span>
+                                <FontAwesomeIcon icon={faDownload} />
+                            </Button>
+                            <Button variant="danger" onClick={openConfirmDeleteModal}>
+                                <FontAwesomeIcon icon={faTrash} />
                             </Button>
                         </Col>
                     </Row>
