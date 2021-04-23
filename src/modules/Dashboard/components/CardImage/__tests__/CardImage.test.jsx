@@ -70,7 +70,7 @@ describe("CardImage", () => {
      */
     it("Download Button attributes is valid", () => {
         const component = render({ imageStatus: "Succeeded" });
-        const downloadButton = component.find(Button).at(0);
+        const downloadButton = component.find(Button).at(1);
         expect(downloadButton.prop("href")).toBe(`${buildResultUrl}/${image().image_id}.img.gz`);
         expect(downloadButton.prop("download")).toBe(true);
     });
@@ -86,7 +86,7 @@ describe("CardImage", () => {
         const nestedHiddenDownloadImageModal = hiddenDownloadImageModal.children();
         expect(nestedHiddenDownloadImageModal.children().length).toEqual(0);
 
-        const addNotesButton = component.find(Button).at(0);
+        const addNotesButton = component.find(Button).at(1);
         addNotesButton.simulate("click");
 
         const showedDownloadImageModal = component.find(DownloadInfoModal).find(Modal);
@@ -104,7 +104,7 @@ describe("CardImage", () => {
         const nestedHiddenNotesModal = hiddenNotesModal.children();
         expect(nestedHiddenNotesModal.children().length).toEqual(0);
 
-        const addNotesButton = component.find(Button).at(1);
+        const addNotesButton = component.find(Button).at(0);
         addNotesButton.simulate("click");
 
         const showedNotesModal = component.find(NotesModal).find(Modal);
