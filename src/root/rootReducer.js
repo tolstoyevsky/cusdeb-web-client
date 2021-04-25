@@ -8,6 +8,7 @@ import confirmEmailReducer from "modules/ConfirmEmail/reducers/confirmEmail";
 import dashboardReducer from "modules/Dashboard/reducers/dashboard";
 import imageReducer from "common/engines/Image/reducers/image";
 import initializationReducer from "modules/Builder/components/Initialization/reducers/initialization";
+import kernelConfigurationReducer from "modules/Builder/components/KernelConfiguration/reducers/kernelConfiguration";
 
 const rootReducer = combineReducers({
     app: appReducer,
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
     dashboard: dashboardReducer,
     image: imageReducer,
     initialization: initializationReducer,
+    kernelConfiguration: kernelConfigurationReducer,
 });
 
 export default rootReducer;

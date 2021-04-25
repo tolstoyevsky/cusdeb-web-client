@@ -28,4 +28,6 @@ export const cusdebHelpikUrl = process.env.CUSDEB_HELPIK_URL || "http://localhos
 
 export const cusdebTzURL = process.env.CUSDEB_TZ_URL || "http://localhost:8006";
 
+export const gisUrl = process.env.GIS_URL || "ws://localhost:8011/gis/token/%token";
+
 export const sentryDSN = process.env.SENTRY_DSN;
