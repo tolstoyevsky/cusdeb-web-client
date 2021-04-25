@@ -20,6 +20,11 @@ export const stages = {
         prevStageAvailable: true,
         nextStageAvailable: true,
     },
+    kernelConfiguration: {
+        path: "/builder/kernelconfiguration",
+        prevStageAvailable: true,
+        nextStageAvailable: true,
+    },
     configuration: {
         path: "/builder/configuration",
         prevStageAvailable: true,

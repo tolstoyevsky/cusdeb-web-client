@@ -10,6 +10,7 @@ import {
     withRouter,
 } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLinux } from "@fortawesome/free-brands-svg-icons";
 import {
     faMicrochip,
     faList,
@@ -24,6 +25,7 @@ import Authorization from "../../../Authorization/components/Authorization/Autho
 import Build from "../../../Build/Build";
 import Configuration from "../../../Configuration/components/Configuration/Configuration";
 import Initialization from "../../../Initialization/components/Initialization/Initialization";
+import Kernel from "../../../KernelConfiguration/components/Kernel/Kernel";
 import PackageList from "../../../PackageList/PackageList";
 import Users from "../../../Users/Users";
 import {
@@ -141,6 +143,19 @@ class Builder extends React.Component {
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link
+                                data-href={stages.kernelConfiguration.path}
+                                className="nav-link"
+                                active={Builder.isActiveSidebarLink(
+                                    stages.kernelConfiguration.path,
+                                )}
+                                onClick={this.onSidebarLinkClick}
+                            >
+                                <FontAwesomeIcon className="nav-icon fas" icon={faLinux} />
+                                <p className="sidebar-text collapse show">Kernel configuration</p>
+                            </Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link
                                 data-href={stages.configuration.path}
                                 className="nav-link"
                                 active={Builder.isActiveSidebarLink(stages.configuration.path)}
@@ -170,6 +185,7 @@ class Builder extends React.Component {
                                         <Route path={stages.initialization.path} render={() => "Initialization"} />
                                         <Route path={stages.packagelist.path} render={() => "Package list"} />
                                         <Route path={stages.users.path} render={() => "Users"} />
+                                        <Route path={stages.kernelConfiguration.path} render={() => "Kernel Configuration"} />
                                         <Route path={stages.configuration.path} render={() => "Configuration"} />
                                         <Route path={stages.build.path} render={() => "Build"} />
                                     </Switch>
@@ -185,6 +201,10 @@ class Builder extends React.Component {
                                     />
                                     <Route path={stages.packagelist.path} component={PackageList} />
                                     <Route path={stages.users.path} component={Users} />
+                                    <Route
+                                        path={stages.kernelConfiguration.path}
+                                        component={Kernel}
+                                    />
                                     <Route
                                         path={stages.configuration.path}
                                         component={Configuration}
