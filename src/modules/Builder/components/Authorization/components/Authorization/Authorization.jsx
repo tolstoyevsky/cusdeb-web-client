@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import * as React from "react";
 import { withRouter } from "react-router-dom";
 
-import { urls } from "root/Routes/Routes";
+import urls from "root/Routes/urls";
 
 const Authorization = ({ history }) => {
     const toSignIn = (event) => {
