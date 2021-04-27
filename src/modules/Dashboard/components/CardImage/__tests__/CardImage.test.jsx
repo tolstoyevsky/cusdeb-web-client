@@ -5,6 +5,7 @@ import { Button, Modal } from "react-bootstrap";
 import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
 import { cleanup } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
 
 import ConfirmDeleteModal from "common/engines/Image/components/ConfirmDeleteModal/ConfirmDeleteModal";
 import DownloadInfoModal from "common/engines/Image/components/DownloadInfoModal/DownloadInfoModal";
@@ -58,9 +59,11 @@ describe("CardImage", () => {
 
         return mount(
             <Provider store={store}>
-                <CardImage
-                    image={image(imageStatus)}
-                />
+                <BrowserRouter>
+                    <CardImage
+                        image={image(imageStatus)}
+                    />
+                </BrowserRouter>
             </Provider>,
         );
     };
