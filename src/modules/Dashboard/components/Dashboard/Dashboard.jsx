@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Regular from "common/containers/Regular";
 import { fetchDeviceList } from "common/engines/Common/actions/common";
-import { urls } from "root/Routes/Routes";
+import urls from "root/Routes/urls";
 import { fetchImagesList } from "../../actions/dashboard";
 import CardImage from "../CardImage/CardImage";
 
