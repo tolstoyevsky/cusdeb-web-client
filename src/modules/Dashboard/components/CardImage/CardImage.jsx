@@ -22,11 +22,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { parseDateString } from "utils/date";
 import { formatDeviceTitle, formatDistroTitle } from "modules/Builder/helpers/format";
 import { deleteImage, toggleNotesSucceededMessage, updateNotes } from "common/engines/Image/actions/image";
+import ConfirmDeleteModal from "common/engines/Image/components/ConfirmDeleteModal/ConfirmDeleteModal";
+import DownloadInfoModal from "common/engines/Image/components/DownloadInfoModal/DownloadInfoModal";
+import NotesModal from "common/engines/Image/components/NotesModal/NotesModal";
 import { deleteImageSucceeded, updateNotesSucceeded } from "../../actions/dashboard";
 import { buildResultUrl } from "../../../../../config/main"; // TODO: resolve path to config
-import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
-import DownloadInfoModal from "../DownloadInfoModal/DownloadInfoModal";
-import NotesModal from "../NotesModal/NotesModal";
 
 const imageFileExtension = ".img.gz";
 

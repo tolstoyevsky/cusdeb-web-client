@@ -6,11 +6,11 @@ import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
 import { cleanup } from "@testing-library/react";
 
+import ConfirmDeleteModal from "common/engines/Image/components/ConfirmDeleteModal/ConfirmDeleteModal";
+import DownloadInfoModal from "common/engines/Image/components/DownloadInfoModal/DownloadInfoModal";
+import NotesModal from "common/engines/Image/components/NotesModal/NotesModal";
 import { buildResultUrl } from "../../../../../../config/main"; // TODO: resolve path to config
 import CardImage from "../CardImage";
-import ConfirmDeleteModal from "../../ConfirmDeleteModal/ConfirmDeleteModal";
-import DownloadInfoModal from "../../DownloadInfoModal/DownloadInfoModal";
-import NotesModal from "../../NotesModal/NotesModal";
 
 configure({ adapter: new Adapter() });
 
