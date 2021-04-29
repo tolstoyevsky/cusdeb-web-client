@@ -1,34 +1,23 @@
 import PropTypes from "prop-types";
-import React, { useState } from "react";
-import {
-    Button,
-    Card,
-    Col,
-    Row,
-} from "react-bootstrap";
+import React from "react";
+import { Card, Col, Row } from "react-bootstrap";
 import { connect } from "react-redux";
 import {
-    faDownload,
     faCheck,
     faHammer,
     faHourglass,
     faQuestion,
-    faStickyNote,
     faTimesCircle,
-    faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { parseDateString } from "utils/date";
 import { formatDeviceTitle, formatDistroTitle } from "modules/Builder/helpers/format";
-import { deleteImage, toggleNotesSucceededMessage, updateNotes } from "common/engines/Image/actions/image";
-import ConfirmDeleteModal from "common/engines/Image/components/ConfirmDeleteModal/ConfirmDeleteModal";
-import DownloadInfoModal from "common/engines/Image/components/DownloadInfoModal/DownloadInfoModal";
-import NotesModal from "common/engines/Image/components/NotesModal/NotesModal";
+import { deleteImage, updateNotes } from "common/engines/Image/actions/image";
+import AddNotesButton from "common/engines/Image/components/AddNotesButton/AddNotesButton";
+import DeleteButton from "common/engines/Image/components/DeleteButton/DeleteButton";
+import DownloadButton from "common/engines/Image/components/DownloadButton/DownloadButton";
 import { deleteImageSucceeded, updateNotesSucceeded } from "../../actions/dashboard";
-import { buildResultUrl } from "../../../../../config/main"; // TODO: resolve path to config
-
-const imageFileExtension = ".img.gz";
 
 const statusIcon = {
     Undefined: [faQuestion, "text-muted"],
@@ -43,32 +32,9 @@ const CardImage = ({
     deviceList,
     deleteCurrentImageAction,
     image,
-    showNotesSucceededMessage,
-    toggleNotesSucceededMessageAction,
     updateNotesAction,
 }) => {
-    const [showNotesModal, setNotesModal] = useState(false);
-    const openNotesModal = () => setNotesModal(true);
-    const closeNotesModal = () => {
-        toggleNotesSucceededMessageAction(false);
-        setNotesModal(false);
-    };
     const saveNotes = (value) => updateNotesAction(image.image_id, value);
-
-    const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false);
-    const openConfirmDeleteModal = () => setShowConfirmDeleteModal(true);
-    const closeConfirmDeleteModal = () => setShowConfirmDeleteModal(false);
-
-    const [showDownloadInfoModal, setDownloadInfoModal] = useState(false);
-    const openDownloadInfoModal = () => setDownloadInfoModal(true);
-    const closeDownloadInfoModal = () => setDownloadInfoModal(false);
-
-    const downloadAction = (event) => {
-        if (image.status !== "Succeeded") {
-            event.preventDefault();
-            openDownloadInfoModal();
-        }
-    };
 
     const [icon, iconClass] = statusIcon[image.status];
 
@@ -122,49 +88,27 @@ const CardImage = ({
                 <Card.Footer>
                     <Row>
                         <Col xs={6}>
-                            <Button variant="primary" onClick={openNotesModal}>
-                                <FontAwesomeIcon icon={faStickyNote} className="mr-1" />
-                                Add note
-                            </Button>
+                            <AddNotesButton
+                                imageId={image.image_id}
+                                handleSubmit={saveNotes}
+                                initialValue={image.notes}
+                            />
                         </Col>
                         <Col xs={6} className="d-flex flex-row justify-content-end">
-                            <Button
-                                variant="success"
+                            <DownloadButton
+                                imageId={image.image_id}
+                                imageStatus={image.status}
                                 className="mr-1"
-                                onClick={downloadAction}
-                                href={`${buildResultUrl}/${image.image_id}${imageFileExtension}`}
-                                download
-                            >
-                                <FontAwesomeIcon icon={faDownload} />
-                            </Button>
-                            <Button variant="danger" onClick={openConfirmDeleteModal}>
-                                <FontAwesomeIcon icon={faTrash} />
-                            </Button>
+                                short
+                            />
+                            <DeleteButton
+                                onSubmit={() => deleteCurrentImageAction(image.image_id)}
+                                short
+                            />
                         </Col>
                     </Row>
                 </Card.Footer>
             </Card>
-            <ConfirmDeleteModal
-                handleClose={closeConfirmDeleteModal}
-                handleSubmit={() => {
-                    deleteCurrentImageAction(image.image_id);
-                    closeConfirmDeleteModal();
-                }}
-                show={showConfirmDeleteModal}
-            />
-            <NotesModal
-                imageId={image.image_id}
-                handleClose={closeNotesModal}
-                handleSubmit={saveNotes}
-                show={showNotesModal}
-                initialValue={image.notes}
-                showNotesSucceededMessage={showNotesSucceededMessage}
-            />
-            <DownloadInfoModal
-                handleClose={closeDownloadInfoModal}
-                show={showDownloadInfoModal}
-                imageStatus={image.status}
-            />
         </>
     );
 };
@@ -187,22 +131,18 @@ CardImage.propTypes = {
         finished_at: PropTypes.string,
         status: PropTypes.string,
     }).isRequired,
-    showNotesSucceededMessage: PropTypes.bool.isRequired,
-    toggleNotesSucceededMessageAction: PropTypes.func.isRequired,
     updateNotesAction: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ common, image }) => ({
+const mapStateToProps = ({ common }) => ({
     deviceList: common.deviceList,
     dispatch: PropTypes.func.isRequired,
-    showNotesSucceededMessage: image.showNotesSucceededMessage,
 });
 
 const mapDispatchToProps = (dispatch) => ({
     deleteCurrentImageAction: (imageId) => dispatch(deleteImage({
         imageId, onSuccess: deleteImageSucceeded,
     })),
-    toggleNotesSucceededMessageAction: (isShow) => dispatch(toggleNotesSucceededMessage(isShow)),
     updateNotesAction: (imageId, notes) => dispatch(updateNotes({
         imageId, notes, onSuccess: updateNotesSucceeded,
     })),
