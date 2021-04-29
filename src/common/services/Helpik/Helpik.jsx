@@ -39,6 +39,7 @@ export default class Helpik extends Component {
             .catch((error) => {
                 if (error.response.status === 404) {
                     const article = `${pageName}${section ? `#${section}` : ""}`;
+                    // eslint-disable-next-line no-console
                     console.warn(`CusDeb Helpik: Article "${article}" is not found`);
                 }
             });
@@ -85,6 +86,7 @@ export default class Helpik extends Component {
                                     iconTarget={this.helpikRef.current}
                                 >
                                     <Popover.Content>
+                                        {/* eslint-disable-next-line react/no-danger */}
                                         <div dangerouslySetInnerHTML={{ __html: helpikContent }} />
                                         <hr />
                                         <a href={`${helpikURL}`} rel="noopener noreferrer" target="_blank">

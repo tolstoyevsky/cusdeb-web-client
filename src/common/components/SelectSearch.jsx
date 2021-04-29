@@ -13,7 +13,7 @@ export default class SelectSearch extends Select {
         const { id, onChange, defaultValue } = this.props;
         $(`#${id}`).select2({
             width: "100%",
-        }).on("change", function () {
+        }).on("change", function () { // eslint-disable-line func-names
             onChange(this.value);
         });
 
