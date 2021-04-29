@@ -8,6 +8,7 @@ try {
     // eslint-disable-next-line global-require,import/no-extraneous-dependencies
     Integrations = require("@sentry/tracing").Integrations;
 } catch (error) {
+    // eslint-disable-next-line no-console
     console.warn(`Unable to initialize Sentry. ${error.message}.`);
 }
 
