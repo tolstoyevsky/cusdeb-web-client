@@ -29,6 +29,7 @@ import Users from "../../../Users/Users";
 import {
     getStages,
     stages,
+    toBuildStage,
     toNextStage,
     toPrevStage,
 } from "../../helpers/stages";
@@ -59,8 +60,13 @@ class Builder extends React.Component {
 
         const { dispatch, history } = this.props;
         const { dataset: { href } } = event.currentTarget;
-        if (!matchPath(window.location.pathname, stages.initialization.path)
-            && !matchPath(window.location.pathname, stages.build.path)) {
+
+        if (!matchPath(window.location.pathname, stages.initialization.path)) {
+            if (matchPath(href, stages.build.path)) {
+                toBuildStage(history);
+                return;
+            }
+
             if (this.currentStage.action) {
                 dispatch(this.currentStage.action(
                     () => history.push(href),
@@ -146,8 +152,10 @@ class Builder extends React.Component {
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link
+                                data-href={stages.build.path}
                                 className="nav-link"
                                 active={Builder.isActiveSidebarLink(stages.build.path)}
+                                onClick={this.onSidebarLinkClick}
                             >
                                 <FontAwesomeIcon className="nav-icon fas" icon={faWrench} />
                                 <p className="sidebar-text collapse show">Build</p>

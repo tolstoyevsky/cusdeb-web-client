@@ -64,6 +64,12 @@ export const getStages = (path_ = null) => {
     ];
 };
 
+export const toBuildStage = (history) => {
+    const stageValues = getFilteredStageValues();
+    const nextStage = stageValues.find((stage) => !stage.nextStageAvailable);
+    history.push(nextStage.path);
+};
+
 export const toNextStage = (history) => {
     // eslint-disable-next-line no-unused-vars
     const [_prevStage, _currentStage, nextStage] = getStages();
