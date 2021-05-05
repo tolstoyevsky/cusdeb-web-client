@@ -38,8 +38,7 @@ export const stages = {
     },
 };
 
-export const getStages = (path_ = null) => {
-    const path = path_ || window.location.pathname;
+const getFilteredStageValues = () => {
     let stageValues = Object.values(stages);
 
     const store = configureStore();
@@ -47,6 +46,13 @@ export const getStages = (path_ = null) => {
     if (user) {
         stageValues = stageValues.filter((stage) => (!stage.skipForAuthorized));
     }
+
+    return stageValues;
+};
+
+export const getStages = (path_ = null) => {
+    const path = path_ || window.location.pathname;
+    const stageValues = getFilteredStageValues();
 
     const currentStageIndex = stageValues.findIndex(
         (stage) => matchPath(stage.path, path),
