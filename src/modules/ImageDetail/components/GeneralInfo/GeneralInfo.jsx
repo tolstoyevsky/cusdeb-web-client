@@ -8,7 +8,10 @@ import { formatDeviceTitle, formatDistroTitle } from "modules/Builder/helpers/fo
 import AddNotesButton from "common/engines/Image/components/AddNotesButton/AddNotesButton";
 import DeleteButton from "common/engines/Image/components/DeleteButton/DeleteButton";
 import DownloadButton from "common/engines/Image/components/DownloadButton/DownloadButton";
+import ImageConfiguration from "../ImageConfiguration/ImageConfiguration";
 import ImageInfo from "../ImageInfo/ImageInfo";
+import ImagePackages from "../ImagePackages/ImagePackages";
+import ImageUsers from "../ImageUsers/ImageUsers";
 import { updateNotesSucceeded } from "../../actions/imageDetail";
 
 const GeneralInfo = ({
@@ -56,6 +59,15 @@ const GeneralInfo = ({
             <Row xs={1} lg={2} className="mt-3">
                 <Col>
                     <ImageInfo />
+                </Col>
+                <Col>
+                    <ImagePackages />
+                </Col>
+                <Col>
+                    <ImageUsers />
+                </Col>
+                <Col>
+                    <ImageConfiguration />
                 </Col>
             </Row>
         </>

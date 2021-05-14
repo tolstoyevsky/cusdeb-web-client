@@ -16,6 +16,7 @@ import SidebarPage from "common/containers/SidebarPage";
 import Error404 from "modules/Error404/components/Error404/Error404";
 import { fetchDeviceList } from "common/engines/Common/actions/common";
 import { fetchImage } from "../../actions/imageDetail";
+import BuildLogs from "../BuildLogs/BuildLogs";
 import GeneralInfo from "../GeneralInfo/GeneralInfo";
 
 const pages = [
@@ -23,6 +24,11 @@ const pages = [
         path: "/image-detail/:imageId/general_info",
         title: "General information",
         content: GeneralInfo,
+    },
+    {
+        path: "/image-detail/:imageId/build_logs",
+        title: "Build logs",
+        content: BuildLogs,
     },
 ];
 
