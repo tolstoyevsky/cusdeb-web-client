@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import React from "react";
 import { Card, Col, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import {
     faCheck,
@@ -12,6 +13,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { parseDateString } from "utils/date";
+import urls from "root/Routes/urls";
 import { formatDeviceTitle, formatDistroTitle } from "modules/Builder/helpers/format";
 import { deleteImage, updateNotes } from "common/engines/Image/actions/image";
 import AddNotesButton from "common/engines/Image/components/AddNotesButton/AddNotesButton";
@@ -48,11 +50,13 @@ const CardImage = ({
                 <Card.Header>
                     <Row>
                         <Col xs={11}>
-                            <h4 className="text-dark d-inline mb-0">
-                                <strong>{fullDistroName}</strong>
-                                &nbsp;for&nbsp;
-                                <strong>{fullDeviceName}</strong>
-                            </h4>
+                            <Link to={`${urls.imageDetail}/${image.image_id}`} className="text-dark">
+                                <h4 className="d-inline mb-0">
+                                    <strong>{fullDistroName}</strong>
+                                    &nbsp;for&nbsp;
+                                    <strong>{fullDeviceName}</strong>
+                                </h4>
+                            </Link>
                         </Col>
                         <Col xs={1} className="d-flex flex-row justify-content-end align-items-center">
                             <FontAwesomeIcon icon={icon} size="lg" className={iconClass} />

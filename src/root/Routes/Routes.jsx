@@ -10,6 +10,7 @@ import Fallback from "common/components/Fallback";
 
 import Dashboard from "modules/Dashboard/components/Dashboard/Dashboard";
 import Error404 from "modules/Error404/components/Error404/Error404";
+import ImageDetail from "modules/ImageDetail/components/ImageDetail/ImageDetail";
 import ResetPassword from "modules/ResetPassword/ResetPassword";
 import ResetPasswordConfirm from "modules/ResetPasswordConfirm/ResetPasswordConfirm";
 import SignIn from "modules/SignIn/components/SignIn/SignIn";
@@ -61,6 +62,8 @@ const Routes = () => (
 
                     <Redirect exact from="/" to="/dashboard" />
                     <Route exact path="/dashboard" component={Dashboard} />
+
+                    <Route path="/image-detail/:imageId" component={ImageDetail} />
 
                     <Route exact path="*" component={Error404} />
                 </AuthRoute>
