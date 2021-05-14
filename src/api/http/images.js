@@ -19,6 +19,10 @@ export const listImages = async () => (
     authFetch.get("/images/all/")
 );
 
+export const getImageDetail = async (imageId) => (
+    authFetch.get(`images/image_detail/${imageId}`)
+);
+
 export const deleteImage = async (imageId) => (
     authFetch.delete("/images/delete/", {
         data: {
