@@ -68,6 +68,7 @@ export default {
             BUILD_RESULT_URL: mainConfig.buildResultUrl,
             BLACKMAGIC_URL: mainConfig.blackmagicUrl,
             DOMINION_URL: mainConfig.dominionUrl,
+            GIS_URL: mainConfig.gisUrl,
 
             CUSDEB_ANONYMOUS_URL: mainConfig.cusdebAnonymousUrl,
             CUSDEB_API_URL: mainConfig.cusdebApiUrl,
