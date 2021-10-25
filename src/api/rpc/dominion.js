@@ -8,7 +8,7 @@ export default class Dominion {
     constructor() {
         if (!Dominion.prototype.connection) {
             const token = getAccessToken();
-            Dominion.prototype.connection = new Shirow(dominionUrl.replace("%token", token));
+            Dominion.prototype.connection = Shirow(dominionUrl.replace("%token", token));
         }
     }
 

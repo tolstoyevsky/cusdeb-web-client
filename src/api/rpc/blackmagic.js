@@ -27,7 +27,7 @@ export default class Blackmagic {
     constructor() {
         if (!Blackmagic.prototype.connection) {
             const token = getAccessToken();
-            Blackmagic.prototype.connection = new Shirow(blackmagicUrl.replace("%token", token));
+            Blackmagic.prototype.connection = Shirow(blackmagicUrl.replace("%token", token));
         }
 
         this.fetchPackagesList = this.fetchPackagesList.bind(this);
