@@ -45,6 +45,12 @@ const Initialization = ({
     setDistroShortNameAction,
     setDistroListAction,
 }) => {
+    const onDeviceChange = (value) => {
+        const currentDevice = deviceList[value];
+        setDeviceShortNameAction(value);
+        setDistroListAction(currentDevice.distros);
+    };
+
     useEffect(() => {
         // Try connect to blackmagic immediately after loading the page
         // eslint-disable-next-line no-new
@@ -64,12 +70,6 @@ const Initialization = ({
             isImageAvailableForRecoveryAction(latestBuildUUID);
         }
     }, []);
-
-    function onDeviceChange(value) {
-        const currentDevice = deviceList[value];
-        setDeviceShortNameAction(value);
-        setDistroListAction(currentDevice.distros);
-    }
 
     const onDistroChange = (value) => {
         const currentDistro = distroList[value];
