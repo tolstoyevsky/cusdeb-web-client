@@ -3,7 +3,6 @@ import { Card, Table } from "react-bootstrap";
 
 import Blackmagic from "api/rpc/blackmagic";
 
-import Helpik from "common/services/Helpik/Helpik";
 import OrdinaryModal from "./components/OrdinaryModal/OrdinaryModal";
 import RootModal from "./components/RootModal/RootModal";
 
@@ -211,8 +210,6 @@ export default class Users extends Component {
                         </thead>
                         <tbody>
                             {users.map((user) => {
-                                const { username } = user;
-
                                 if (Users.isRootUser(user.uid)) {
                                     // eslint-disable-next-line no-param-reassign
                                     user = this.formatUser(user, "root");
@@ -224,11 +221,6 @@ export default class Users extends Component {
                                         {Object.values(TABLE_COLUMNS).map((key) => (
                                             <td key={key}>
                                                 {user[key]}
-                                                {key === "username" && (
-                                                    <span className="ml-1">
-                                                        <Helpik pageName="Users in Linux-based operating systems" section={username} />
-                                                    </span>
-                                                )}
                                             </td>
                                         ))}
                                     </tr>
